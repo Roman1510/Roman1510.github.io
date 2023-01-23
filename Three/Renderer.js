@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import ThreeManager from './Three'
+import ThreeManager from './ThreeManager'
 
 export default class Renderer {
   constructor() {
