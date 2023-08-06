@@ -2,64 +2,18 @@
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
+  Bars3Icon
 } from '@heroicons/react/24/outline'
 import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
+  ChevronDownIcon
 } from '@heroicons/react/20/solid'
 
 import rocket from '@/assets/rocket.svg'
 import DialogBox from '@/components/dialog/DialogBox'
+import callsToAction from '@/constants/callsToAction.js'
+import products from '@/constants/products.js'
 
-
-
-const products = [
-  {
-    name: 'Analytics',
-    description: 'Get a better understanding of your traffic',
-    href: '#',
-    icon: ChartPieIcon,
-  },
-  {
-    name: 'Engagement',
-    description: 'Speak directly to your customers',
-    href: '#',
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: 'Security',
-    description: 'Your customers’ data will be safe and secure',
-    href: '#',
-    icon: FingerPrintIcon,
-  },
-  {
-    name: 'Integrations',
-    description: 'Connect with third-party tools',
-    href: '#',
-    icon: SquaresPlusIcon,
-  },
-  {
-    name: 'Automations',
-    description: 'Build strategic funnels that will convert',
-    href: '#',
-    icon: ArrowPathIcon,
-  },
-]
-const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-]
 export default function Navbar() {
-
-
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -95,7 +49,7 @@ export default function Navbar() {
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-              Product
+              Projects
               <ChevronDownIcon
                 className="h-5 w-5 flex-none text-gray-400"
                 aria-hidden="true"
@@ -156,13 +110,13 @@ export default function Navbar() {
           </Popover>
 
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            Features
+            About me
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            Marketplace
+            Experience
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            Company
+            Coming up...
           </a>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
