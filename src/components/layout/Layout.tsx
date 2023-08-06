@@ -70,16 +70,14 @@ export default function Layout() {
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
             <div className='flex'>
-            <span className="sr-only">Roman Vinnick</span>
-            
-            <img
-              className="h-8 w-auto"
-              src={rocket}
-              alt="icon"
-            />
-            <div className="text-lg ml-2  text-white">Roman Vinnick</div>
+              <span className="sr-only">Roman Vinnick</span>
+              <img
+                className="h-8 w-auto"
+                src={rocket}
+                alt="icon"
+              />
+              <div className="text-lg ml-2  text-white">Roman Vinnick</div>
             </div>
-            
           </a>
         </div>
         <div className="flex lg:hidden">
@@ -101,7 +99,6 @@ export default function Layout() {
                 aria-hidden="true"
               />
             </Popover.Button>
-
             <Transition
               as={Fragment}
               enter="transition ease-out duration-200"
