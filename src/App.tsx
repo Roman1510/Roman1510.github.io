@@ -1,10 +1,12 @@
-import Layout from '@/components/layout/Layout'
+import Navbar from '@/components/navbar/Navbar'
+import Content from './components/content/Content'
 
 function App() {
 
   return (
     <>
-      <Layout />
+      <Navbar />
+      <Content />
     </>
   )
 }
