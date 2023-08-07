@@ -5,8 +5,9 @@ import {
 } from '@heroicons/react/20/solid'
 
 const  actions: Action[] = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
+  // { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
+  // { name: 'Contact sales', href: '#', icon: PhoneIcon },
+  // { name: 'Contact sales', href: '#', icon: PhoneIcon },
 ]
 
 type Action = {

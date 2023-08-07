@@ -1,43 +1,43 @@
 import {
-  ArrowPathIcon,
-  ChartPieIcon,
+  DevicePhoneMobileIcon,
+  PuzzlePieceIcon,
   CursorArrowRaysIcon,
-  FingerPrintIcon,
   SquaresPlusIcon,
+  CubeIcon
 } from '@heroicons/react/24/outline'
 
 
 
 const projects:Project[] = [
   {
-    name: 'Analytics',
-    description: 'Get a better understanding of your traffic',
+    name: '3D',
+    description: 'Interactive 3d features',
     href: '#',
-    icon: ChartPieIcon,
+    icon: CubeIcon,
   },
   {
-    name: 'Engagement',
-    description: 'Speak directly to your customers',
+    name: 'Custom cursors',
+    description: 'A good addition for a custom web app',
     href: '#',
     icon: CursorArrowRaysIcon,
   },
   {
-    name: 'Security',
-    description: 'Your customers’ data will be safe and secure',
+    name: 'Auth',
+    description: 'Mobile apps',
     href: '#',
-    icon: FingerPrintIcon,
+    icon: DevicePhoneMobileIcon,
   },
   {
-    name: 'Integrations',
-    description: 'Connect with third-party tools',
+    name: 'Add-ons',
+    description: 'Chrome and VSCode extensions',
     href: '#',
     icon: SquaresPlusIcon,
   },
   {
-    name: 'Automations',
-    description: 'Build strategic funnels that will convert',
+    name: 'Mini games',
+    description: 'Mini games created with Javascript',
     href: '#',
-    icon: ArrowPathIcon,
+    icon: PuzzlePieceIcon,
   },
 ]
 
@@ -45,7 +45,7 @@ type Project = {
   name: string,
   description: string,
   href: string,
-  icon: string
+  icon: React.ElementType
 }
 
 export default projects

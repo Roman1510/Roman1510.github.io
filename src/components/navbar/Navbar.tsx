@@ -1,5 +1,3 @@
-
-import React from 'react'
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
@@ -127,7 +125,7 @@ const Navbar: React.FC = () => {
           </a>
         </div>
       </nav>
-      <DialogBox mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={(e) => { setMobileMenuOpen(e) }} />
+      <DialogBox mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={(e: boolean) => { setMobileMenuOpen(e) }} />
     </header>
   )
 }
