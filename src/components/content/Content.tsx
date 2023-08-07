@@ -1,6 +1,6 @@
 
 function Content() {
-  return <>KLSJD</>
+  return <></>
 }
 
 export default Content

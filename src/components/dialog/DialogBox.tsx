@@ -15,10 +15,9 @@ import {
 } from '@heroicons/react/20/solid'
 
 type Props = {
-  mobileMenuOpen: true | false,
+  mobileMenuOpen: boolean,
   setMobileMenuOpen: (input: boolean) => void
 }
-
 
 const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
