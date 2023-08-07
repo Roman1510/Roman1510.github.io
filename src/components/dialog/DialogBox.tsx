@@ -13,7 +13,14 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from '@heroicons/react/20/solid'
-function DialogBox({ mobileMenuOpen, setMobileMenuOpen }) {
+
+type Props = {
+  mobileMenuOpen: true | false,
+  setMobileMenuOpen: (input: boolean) => void
+}
+
+
+const DialogBox: React.FC = ({ mobileMenuOpen, setMobileMenuOpen }: Props) => {
 
 
   const products = [
@@ -144,5 +151,7 @@ function DialogBox({ mobileMenuOpen, setMobileMenuOpen }) {
     </Dialog.Panel>
   </Dialog>
 }
+
+
 
 export default DialogBox
