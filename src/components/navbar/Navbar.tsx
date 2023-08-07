@@ -109,9 +109,7 @@ const Navbar: React.FC = () => {
               </Popover.Panel>
             </Transition>
           </Popover>
-
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-
             <Link to="/about">About me</Link>
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
