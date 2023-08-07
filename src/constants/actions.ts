@@ -4,9 +4,15 @@ import {
   PlayCircleIcon,
 } from '@heroicons/react/20/solid'
 
-const  callsToAction = [
+const  actions: Action[] = [
   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
   { name: 'Contact sales', href: '#', icon: PhoneIcon },
 ]
 
-export default callsToAction
+type Action = {
+  name: string,
+  href: string,
+  icon: string
+}
+
+export default actions

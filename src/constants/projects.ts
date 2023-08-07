@@ -6,7 +6,9 @@ import {
   SquaresPlusIcon,
 } from '@heroicons/react/24/outline'
 
-const products = [
+
+
+const projects:Project[] = [
   {
     name: 'Analytics',
     description: 'Get a better understanding of your traffic',
@@ -39,4 +41,11 @@ const products = [
   },
 ]
 
-export default products
+type Project = {
+  name: string,
+  description: string,
+  href: string,
+  icon: string
+}
+
+export default projects

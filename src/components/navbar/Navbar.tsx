@@ -1,4 +1,5 @@
 
+import React from 'react'
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
@@ -10,10 +11,10 @@ import {
 
 import rocket from '@/assets/rocket.svg'
 import DialogBox from '@/components/dialog/DialogBox'
-import callsToAction from '@/constants/callsToAction.js'
-import products from '@/constants/products.js'
+import actions from '@/constants/actions'
+import projects from '@/constants/projects'
 
-export default function Navbar() {
+const Navbar:React.FC = ()=> {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -66,7 +67,7 @@ export default function Navbar() {
             >
               <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                 <div className="p-4">
-                  {products.map((item) => (
+                  {projects.map((item) => (
                     <div
                       key={item.name}
                       className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
@@ -91,7 +92,7 @@ export default function Navbar() {
                   ))}
                 </div>
                 <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                  {callsToAction.map((item) => (
+                  {actions.map((item) => (
                     <a
                       key={item.name}
                       href={item.href}
@@ -129,3 +130,5 @@ export default function Navbar() {
     </header>
   )
 }
+
+export default Navbar
