@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
+import { Link } from "react-router-dom";
 import {
   Bars3Icon
 } from '@heroicons/react/24/outline'
@@ -24,7 +25,7 @@ const Navbar: React.FC = () => {
       >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <div className='flex'>
+            <Link to='/' className='flex'>
               <span className="sr-only">Roman Vinnick</span>
               <img
                 className="h-8 w-auto"
@@ -32,7 +33,7 @@ const Navbar: React.FC = () => {
                 alt="icon"
               />
               <div className="text-lg ml-2  text-white">Roman Vinnick</div>
-            </div>
+            </Link>
           </a>
         </div>
         <div className="flex lg:hidden">
@@ -110,18 +111,19 @@ const Navbar: React.FC = () => {
           </Popover>
 
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            About me
+
+            <Link to="/about">About me</Link>
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            Experience
+            <Link to="/experience">Experience</Link>
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            Coming up...
+            <Link to="/coming-up">Coming up...</Link>
           </a>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            Contact me <span aria-hidden="true">&rarr;</span>
+            <Link to="/contact">Contact me <span aria-hidden="true">&rarr;</span></Link>
           </a>
         </div>
       </nav>
