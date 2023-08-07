@@ -125,7 +125,12 @@ const Navbar: React.FC = () => {
           </a>
         </div>
       </nav>
-      <DialogBox mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={(e: boolean) => { setMobileMenuOpen(e) }} />
+      <DialogBox
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={(e: boolean) => {
+          setMobileMenuOpen(e);
+        }}
+      />
     </header>
   )
 }

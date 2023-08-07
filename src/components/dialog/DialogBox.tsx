@@ -20,7 +20,7 @@ type Props = {
 }
 
 
-const DialogBox: React.FC = ({ mobileMenuOpen, setMobileMenuOpen }: Props) => {
+const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
 
   const products = [
