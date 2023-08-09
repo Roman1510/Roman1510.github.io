@@ -24,17 +24,17 @@ const Navbar: React.FC = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <Link to='/' className='flex'>
-              <span className="sr-only">Roman Vinnick</span>
-              <img
-                className="h-8 w-auto"
-                src={rocket}
-                alt="icon"
-              />
-              <div className="text-lg ml-2  text-white">Roman Vinnick</div>
-            </Link>
-          </a>
+
+          <Link to='/' className='flex -m-1.5 p-1.5'>
+            <span className="sr-only">Roman Vinnick</span>
+            <img
+              className="h-8 w-auto"
+              src={rocket}
+              alt="icon"
+            />
+            <div className="text-lg ml-2  text-white">Roman Vinnick</div>
+          </Link>
+
         </div>
         <div className="flex lg:hidden">
           <button
@@ -109,20 +109,19 @@ const Navbar: React.FC = () => {
               </Popover.Panel>
             </Transition>
           </Popover>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            <Link to="/about">About me</Link>
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            <Link to="/experience">Experience</Link>
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            <Link to="/coming-up">Coming up...</Link>
-          </a>
+
+          <Link to="/about" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">About me</Link>
+
+          <Link to="/experience" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">Experience</Link>
+
+
+          <Link to="/coming-up" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">Coming up...</Link>
+
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
-            <Link to="/contact">Contact me <span aria-hidden="true">&rarr;</span></Link>
-          </a>
+
+          <Link to="/contact" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">Contact me <span aria-hidden="true">&rarr;</span></Link>
+
         </div>
       </nav>
       <DialogBox
