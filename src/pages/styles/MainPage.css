@@ -1,4 +1,4 @@
 .main-page{
-  background-color: black;
-  height: 100vh;
+  background: radial-gradient(circle at 10% 20%, #060b11 0%, rgb(18, 18, 18) 90.2%);
+  height: 100%;
 }
