@@ -24,7 +24,7 @@ const ParticleBackground: React.FC = () => {
     const particles = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
-    const particleTexture = textureLoader.load('../../public/particles.png');
+    const particleTexture = textureLoader.load('../../public/particle.png');
 
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
