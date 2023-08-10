@@ -6,7 +6,7 @@ const ParticleBackground: React.FC = () => {
   const mouseX = useRef<number>(0);
   const mouseY = useRef<number>(0);
   const mouseMoving = useRef<boolean>(false);
-  let mouseClick = false;
+  const mouseClick = useRef<boolean>(false);
 
   const MAX_MOUSE_MOVE = 0.1;
   const MOUSE_MOVE_THRESHOLD = 0.0001;
@@ -20,11 +20,11 @@ const ParticleBackground: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     containerRef.current?.appendChild(renderer.domElement);
 
-    const particleCount = 300;
+    const particleCount = 260;
     const particles = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
-    const particleTexture = textureLoader.load('../../public/particle.png');
+    const particleTexture = textureLoader.load('../../public/particle-min.png');
 
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -40,7 +40,7 @@ const ParticleBackground: React.FC = () => {
 
     const particleMaterial = new THREE.PointsMaterial({
       color: 0xFFFFFF,
-      size: 0.04,
+      size: 0.055,
       map: particleTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -67,10 +67,10 @@ const ParticleBackground: React.FC = () => {
     };
 
     const handleMouseStop = () => {
-      if (!mouseClick) {
+      if (!mouseClick.current) {
         mouseMoving.current = false;
       }
-      mouseClick = false;
+      mouseClick.current = false;
     };
 
     const updateParticleRotation = () => {
@@ -79,15 +79,13 @@ const ParticleBackground: React.FC = () => {
           particles.rotation.x *= 0.55;
           particles.rotation.y *= 0.55;
         }
-        return;
       }
-
     };
 
     const animate = () => {
       requestAnimationFrame(animate);
 
-      // Update camera 
+      // Update camera position based on mouse position
       camera.position.x += (mouseX.current * 5 - camera.position.x) * 0.05;
       camera.position.y += (-mouseY.current * 5 - camera.position.y) * 0.05;
 
@@ -96,7 +94,10 @@ const ParticleBackground: React.FC = () => {
 
       updateParticleRotation();
 
-      renderer.render(scene, camera);
+      // Only render when the mouse is moving or particles need an update
+      if (mouseMoving.current || Math.abs(particles.rotation.x) > MOUSE_MOVE_THRESHOLD || Math.abs(particles.rotation.y) > MOUSE_MOVE_THRESHOLD) {
+        renderer.render(scene, camera);
+      }
     };
 
     animate();
@@ -115,7 +116,7 @@ const ParticleBackground: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseStop);
 
-    // here i just reset all
+    // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);

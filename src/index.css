@@ -10,3 +10,6 @@ html, body, #root {
 body {
   overflow: hidden;
 }
+/* *{
+  cursor:none;
+} */
