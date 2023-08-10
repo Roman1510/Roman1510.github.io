@@ -20,7 +20,7 @@ const ParticleBackground: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     containerRef.current?.appendChild(renderer.domElement);
 
-    const particleCount = 250;
+    const particleCount = 300;
     const particles = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
