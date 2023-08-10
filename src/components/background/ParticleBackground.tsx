@@ -6,6 +6,7 @@ const ParticleBackground: React.FC = () => {
   const mouseX = useRef<number>(0);
   const mouseY = useRef<number>(0);
   const mouseMoving = useRef<boolean>(false); // Track if the mouse is moving
+  const mouseClick = useRef<boolean>(false); // Track if a click occurred
 
   const MAX_MOUSE_MOVE = 0.1;
   const MOUSE_MOVE_THRESHOLD = 0.0001; // Set a small threshold for mouse movement
@@ -66,9 +67,14 @@ const ParticleBackground: React.FC = () => {
     };
 
     const handleMouseStop = () => {
-      // Mark the mouse as stopped
-      mouseMoving.current = false;
+      // Mark the mouse as stopped, but check if a click occurred
+      if (!mouseClick.current) {
+        mouseMoving.current = false;
+      }
+      mouseClick.current = false;
     };
+
+
 
     const updateParticleRotation = () => {
       if (mouseMoving.current) {
@@ -124,7 +130,6 @@ const ParticleBackground: React.FC = () => {
   const containerStyle: React.CSSProperties = {
     zIndex: -1,
   };
-
 
   return <div ref={containerRef} style={containerStyle} />;
 };
