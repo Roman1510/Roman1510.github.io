@@ -5,11 +5,11 @@ const ParticleBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mouseX = useRef<number>(0);
   const mouseY = useRef<number>(0);
-  const mouseMoving = useRef<boolean>(false); // Track if the mouse is moving
-  const mouseClick = useRef<boolean>(false); // Track if a click occurred
+  const mouseMoving = useRef<boolean>(false);
+  let mouseClick = false;
 
   const MAX_MOUSE_MOVE = 0.1;
-  const MOUSE_MOVE_THRESHOLD = 0.0001; // Set a small threshold for mouse movement
+  const MOUSE_MOVE_THRESHOLD = 0.0001;
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -20,7 +20,7 @@ const ParticleBackground: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     containerRef.current?.appendChild(renderer.domElement);
 
-    const particleCount = 400;
+    const particleCount = 250;
     const particles = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
@@ -67,30 +67,27 @@ const ParticleBackground: React.FC = () => {
     };
 
     const handleMouseStop = () => {
-      // Mark the mouse as stopped, but check if a click occurred
-      if (!mouseClick.current) {
+      if (!mouseClick) {
         mouseMoving.current = false;
       }
-      mouseClick.current = false;
+      mouseClick = false;
     };
 
-
-
     const updateParticleRotation = () => {
-      if (mouseMoving.current) {
-        particles.rotation.x = mouseY.current * 0.1;
-        particles.rotation.y = mouseX.current * 0.1;
-      } else if (Math.abs(particles.rotation.x) > MOUSE_MOVE_THRESHOLD || Math.abs(particles.rotation.y) > MOUSE_MOVE_THRESHOLD) {
-        // Gradually reduce particle rotation when the mouse stops and the rotation is above the threshold
-        particles.rotation.x *= 0.55;
-        particles.rotation.y *= 0.55;
+      if (!mouseMoving.current) {
+        if (Math.abs(particles.rotation.x) > MOUSE_MOVE_THRESHOLD || Math.abs(particles.rotation.y) > MOUSE_MOVE_THRESHOLD) {
+          particles.rotation.x *= 0.55;
+          particles.rotation.y *= 0.55;
+        }
+        return;
       }
+
     };
 
     const animate = () => {
       requestAnimationFrame(animate);
 
-      // Update camera position based on mouse position
+      // Update camera 
       camera.position.x += (mouseX.current * 5 - camera.position.x) * 0.05;
       camera.position.y += (-mouseY.current * 5 - camera.position.y) * 0.05;
 
@@ -118,7 +115,7 @@ const ParticleBackground: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseStop);
 
-    // Cleanup
+    // here i just reset all
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
