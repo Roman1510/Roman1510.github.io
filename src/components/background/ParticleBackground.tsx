@@ -8,7 +8,7 @@ const ParticleBackground: React.FC = () => {
   const mouseMoving = useRef<boolean>(false); // Track if the mouse is moving
 
   const MAX_MOUSE_MOVE = 0.1;
-  const MOUSE_MOVE_THRESHOLD = 0.001; // Set a small threshold for mouse movement
+  const MOUSE_MOVE_THRESHOLD = 0.0001; // Set a small threshold for mouse movement
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -19,7 +19,7 @@ const ParticleBackground: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     containerRef.current?.appendChild(renderer.domElement);
 
-    const particleCount = 1000;
+    const particleCount = 400;
     const particles = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
@@ -39,7 +39,7 @@ const ParticleBackground: React.FC = () => {
 
     const particleMaterial = new THREE.PointsMaterial({
       color: 0xFFFFFF,
-      size: 0.05,
+      size: 0.04,
       map: particleTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -76,8 +76,8 @@ const ParticleBackground: React.FC = () => {
         particles.rotation.y = mouseX.current * 0.1;
       } else if (Math.abs(particles.rotation.x) > MOUSE_MOVE_THRESHOLD || Math.abs(particles.rotation.y) > MOUSE_MOVE_THRESHOLD) {
         // Gradually reduce particle rotation when the mouse stops and the rotation is above the threshold
-        particles.rotation.x *= 0.95;
-        particles.rotation.y *= 0.95;
+        particles.rotation.x *= 0.55;
+        particles.rotation.y *= 0.55;
       }
     };
 
@@ -121,7 +121,12 @@ const ParticleBackground: React.FC = () => {
     };
   }, []);
 
-  return <div ref={containerRef} />;
+  const containerStyle: React.CSSProperties = {
+    zIndex: -1,
+  };
+
+
+  return <div ref={containerRef} style={containerStyle} />;
 };
 
 export default ParticleBackground;
