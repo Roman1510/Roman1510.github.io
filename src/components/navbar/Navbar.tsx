@@ -10,7 +10,6 @@ import {
 
 import rocket from '@/assets/rocket.svg'
 import DialogBox from '@/components/dialog/DialogBox'
-import actions from '@/constants/actions'
 import projects from '@/constants/projects'
 
 const Navbar: React.FC = () => {
@@ -28,11 +27,11 @@ const Navbar: React.FC = () => {
           <Link to='/' className='flex -m-1.5 p-1.5'>
             <span className="sr-only">Roman Vinnick</span>
             <img
-              className="h-8 w-auto"
+              className="h-9 w-auto"
               src={rocket}
               alt="icon"
             />
-            <div className="text-lg ml-2  text-white">Roman Vinnick</div>
+            <div className="text-lg ml-2 mt-1  text-white">Howdie!</div>
           </Link>
 
         </div>
@@ -92,21 +91,7 @@ const Navbar: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                  {actions.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400 hover:bg-gray-100"
-                    >
-                      <div className="h-5 w-5 flex-none text-gray-400">
-                        <item.icon
-                          aria-hidden="true"
-                        /></div>
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
+
               </Popover.Panel>
             </Transition>
           </Popover>

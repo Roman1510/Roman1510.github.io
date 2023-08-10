@@ -1,11 +1,6 @@
 import { Dialog, Disclosure } from '@headlessui/react'
 import rocket from '@/assets/rocket.svg'
 import {
-  ArrowPathIcon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import {
@@ -13,6 +8,7 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from '@heroicons/react/20/solid'
+import projects from '@/constants/projects'
 
 type Props = {
   mobileMenuOpen: boolean,
@@ -22,38 +18,6 @@ type Props = {
 const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
 
-  const products = [
-    {
-      name: 'Analytics',
-      description: 'Get a better understanding of your traffic',
-      href: '#',
-      icon: ChartPieIcon,
-    },
-    {
-      name: 'Engagement',
-      description: 'Speak directly to your customers',
-      href: '#',
-      icon: CursorArrowRaysIcon,
-    },
-    {
-      name: 'Security',
-      description: 'Your customers’ data will be safe and secure',
-      href: '#',
-      icon: FingerPrintIcon,
-    },
-    {
-      name: 'Integrations',
-      description: 'Connect with third-party tools',
-      href: '#',
-      icon: SquaresPlusIcon,
-    },
-    {
-      name: 'Automations',
-      description: 'Build strategic funnels that will convert',
-      href: '#',
-      icon: ArrowPathIcon,
-    },
-  ]
   const callsToAction = [
     { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
     { name: 'Contact sales', href: '#', icon: PhoneIcon },
@@ -68,7 +32,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     onClose={setMobileMenuOpen}
   >
     <div className="fixed inset-0 z-10" />
-    <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white dark:bg-slate-800 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+    <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white dark:bg-slate-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div className="flex items-center justify-between">
         <a href="#" className="-m-1.5 p-1.5">
           <span className="sr-only">Roman Vinnick</span>
@@ -94,7 +58,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               {({ open }) => (
                 <>
                   <Disclosure.Button className="text-gray-900 dark:text-slate-400 flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7  hover:bg-gray-50">
-                    Product
+                    Projects
                     <ChevronDownIcon
                       className={classNames(
                         open ? 'rotate-180' : '',
@@ -104,7 +68,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="mt-2 space-y-2">
-                    {[...products, ...callsToAction].map((item) => (
+                    {[...projects, ...callsToAction].map((item) => (
                       <Disclosure.Button
                         key={item.name}
                         as="a"
@@ -122,19 +86,19 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               href="#"
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
-              Features
+              About me
             </a>
             <a
               href="#"
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
-              Marketplace
+              Experience
             </a>
             <a
               href="#"
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
-              Company
+              Coming up...
             </a>
           </div>
           <div className="py-6">
@@ -142,7 +106,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               href="#"
               className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
-              Log in
+              Contact me <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </div>
