@@ -25,7 +25,7 @@ const About: React.FC = () => {
   const handleHover = (square: HTMLDivElement) => {
     gsap.to(square, {
       scale: 1.05,
-      boxShadow: '0 0 20px rgba(0, 0, 0, 0.3)',
+      boxShadow: '0 0 10px rgba(137, 134, 87, 0.617)',
       duration: 0.1,
     });
   };
@@ -45,7 +45,6 @@ const About: React.FC = () => {
           'Sup! so this is what I actually do on a daily basis:
         </p>
         <div className="grid grid-cols-3 gap-4 mt-8">
-
           <div
             ref={(el) => (squaresRef.current[0] = el!)}
             className="bg-yellow-300 rounded-lg p-4 text-center transition-transform transform"
@@ -57,7 +56,6 @@ const About: React.FC = () => {
               Creating beautiful, user-friendly websites that work seamlessly across all devices.
             </p>
           </div>
-
           <div
             ref={(el) => (squaresRef.current[1] = el!)}
             className="bg-white rounded-lg p-4 text-center transition-transform transform"
@@ -69,7 +67,6 @@ const About: React.FC = () => {
               Building interactive and dynamic web applications using the latest frontend technologies.
             </p>
           </div>
-
           <div
             ref={(el) => (squaresRef.current[2] = el!)}
             className="bg-yellow-300 rounded-lg p-4 text-center transition-transform transform"
