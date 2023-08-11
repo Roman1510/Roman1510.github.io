@@ -41,13 +41,13 @@ const About: React.FC = () => {
   return (
     <div className="hero-section bg-indigo-900 bg-opacity-50 text-white h-screen flex flex-col justify-center items-center absolute inset-0">
       <div className="container-margin max-w-screen-lg mx-auto px-4">
-        <p className="text-white text-lg text-center">
+        <p className="text-white text-lg text-center cursor-default">
           'Sup! so this is what I actually do on a daily basis:
         </p>
         <div className="grid grid-cols-3 gap-4 mt-8">
           <div
             ref={(el) => (squaresRef.current[0] = el!)}
-            className="bg-yellow-300 rounded-lg p-4 text-center transition-transform transform"
+            className="bg-yellow-300 rounded-lg p-4 text-center transition-transform transform cursor-pointer"
             onMouseEnter={() => handleHover(squaresRef.current[0]!)}
             onMouseLeave={() => handleHoverEnd(squaresRef.current[0]!)}
           >
@@ -58,7 +58,7 @@ const About: React.FC = () => {
           </div>
           <div
             ref={(el) => (squaresRef.current[1] = el!)}
-            className="bg-white rounded-lg p-4 text-center transition-transform transform"
+            className="bg-white rounded-lg p-4 text-center transition-transform transform cursor-pointer"
             onMouseEnter={() => handleHover(squaresRef.current[1]!)}
             onMouseLeave={() => handleHoverEnd(squaresRef.current[1]!)}
           >
@@ -69,7 +69,7 @@ const About: React.FC = () => {
           </div>
           <div
             ref={(el) => (squaresRef.current[2] = el!)}
-            className="bg-yellow-300 rounded-lg p-4 text-center transition-transform transform"
+            className="bg-yellow-300 rounded-lg p-4 text-center transition-transform transform cursor-pointer"
             onMouseEnter={() => handleHover(squaresRef.current[2]!)}
             onMouseLeave={() => handleHoverEnd(squaresRef.current[2]!)}
           >
