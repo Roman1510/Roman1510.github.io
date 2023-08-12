@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
+import particle from '@/assets/particle-min.png'
 
 const ParticleBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -27,7 +28,7 @@ const ParticleBackground: React.FC = () => {
     particles.current = new THREE.Group();
 
     const textureLoader = new THREE.TextureLoader();
-    const particleTexture = textureLoader.load('../../public/particle-min.png');
+    const particleTexture = textureLoader.load(particle);
 
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
