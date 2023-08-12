@@ -68,7 +68,16 @@ const ParticleBackground: React.FC = () => {
       // Mark the mouse as moving
       mouseMoving.current = true;
     };
+    const simulateInitialMouseMove = () => {
+      const initialMouseMoveEvent = new MouseEvent('mousemove', {
+        clientX: window.innerWidth / 2,  // Initial X position
+        clientY: window.innerHeight / 2, // Initial Y position
+      });
+      handleMouseMove(initialMouseMoveEvent);
+    };
 
+    // Call the function to simulate the initial mouse position
+    simulateInitialMouseMove();
     const handleMouseStop = () => {
       if (!mouseClick.current) {
         mouseMoving.current = false;

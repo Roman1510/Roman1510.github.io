@@ -17,18 +17,18 @@ const Content: React.FC = () => {
 
   return (
     <div className="hero-section px-5 text-center bg-indigo-900 bg-opacity-50 text-white h-screen flex flex-col justify-center items-center absolute inset-0">
-      <h1
+      <span
         ref={headerRef}
         className="container-margin text-3xl text-yellow-300 font-bold mb-4 cursor-default"
       >
         {/* Placeholder text */}
-      </h1>
-      <p
+      </span>
+      <span
         ref={contentRef1}
         className="text-white text-lg text-center cursor-default"
       >
         {/* Placeholder text */}
-      </p>
+      </span>
     </div>
   );
 };
