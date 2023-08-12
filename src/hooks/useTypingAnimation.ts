@@ -1,7 +1,11 @@
-import  { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-const useTypingAnimation = (text: string, delayFactor: number, startDelay: number) => {
+const useTypingAnimation = (
+  text: string,
+  delayFactor: number,
+  startDelay: number
+): React.RefObject<HTMLSpanElement> => {
   const textRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -21,8 +25,8 @@ const useTypingAnimation = (text: string, delayFactor: number, startDelay: numbe
 
         typingAnimation.to(span, {
           opacity: 1,
-          duration: 0.05 / delayFactor, // Adjust the duration based on delayFactor
-          delay: index * 0.001 * delayFactor, // Delay between letters
+          duration: 0.002 / delayFactor,
+          delay: index * 0.001 * delayFactor,
           ease: "power1.in",
         });
       });
@@ -32,4 +36,4 @@ const useTypingAnimation = (text: string, delayFactor: number, startDelay: numbe
   return textRef;
 };
 
-export default useTypingAnimation
+export default useTypingAnimation;

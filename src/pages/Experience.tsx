@@ -74,7 +74,7 @@ const Experience: React.FC = () => {
           onClick={cleanAnimation}
           className="mt-8 bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          C'mon!
+          C'mon! Fix it!
         </button>
       </div>
     </div>
