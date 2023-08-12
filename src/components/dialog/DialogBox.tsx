@@ -5,10 +5,10 @@ import {
 } from '@heroicons/react/24/outline'
 import {
   ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
 } from '@heroicons/react/20/solid'
-import projects from '@/constants/projects'
+import getProjects from '@/constants/projects'
+
+const projects = getProjects(true)
 
 type Props = {
   mobileMenuOpen: boolean,
@@ -17,11 +17,6 @@ type Props = {
 
 const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
-
-  const callsToAction = [
-    { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-    { name: 'Contact sales', href: '#', icon: PhoneIcon },
-  ]
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
   }
@@ -68,7 +63,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="mt-2 space-y-2">
-                    {[...projects, ...callsToAction].map((item) => (
+                    {[...projects].map((item) => (
                       <Disclosure.Button
                         key={item.name}
                         as="a"

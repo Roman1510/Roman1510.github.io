@@ -10,7 +10,9 @@ import {
 
 import rocket from '@/assets/rocket.svg'
 import DialogBox from '@/components/dialog/DialogBox'
-import projects from '@/constants/projects'
+import getProjects from '@/constants/projects'
+
+const projects = getProjects(false)
 
 const Navbar: React.FC = () => {
 
