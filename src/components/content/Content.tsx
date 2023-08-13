@@ -21,13 +21,13 @@ const Content: React.FC = () => {
         ref={headerRef}
         className="container-margin text-3xl text-yellow-300 font-bold mb-4 cursor-default"
       >
-        {/* Placeholder text */}
+
       </span>
       <span
         ref={contentRef1}
         className="text-white text-lg text-center cursor-default"
       >
-        {/* Placeholder text */}
+        🚀
       </span>
     </div>
   );
