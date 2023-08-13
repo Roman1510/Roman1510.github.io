@@ -1,5 +1,6 @@
 {
   "name": "github.io",
+  "homepage": "https://Roman1510.github.io/github.io",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,8 +9,9 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "tailwind": "npx tailwindcss -i ./src/index.css -o ./dist/output.css --watch"
-    
+    "tailwind": "npx tailwindcss -i ./src/index.css -o ./dist/output.css --watch",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.16",
@@ -31,6 +33,7 @@
     "eslint": "^8.46.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "gh-pages": "^6.0.0",
     "postcss": "^8.4.27",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
