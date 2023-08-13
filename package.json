@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "tailwind": "npx tailwindcss -i ./src/index.css -o ./dist/output.css --watch"
+    "tailwind": "npx tailwindcss -i ./src/index.css -o ./css-output/output.css --watch"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.16",

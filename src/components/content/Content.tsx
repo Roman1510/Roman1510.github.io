@@ -27,7 +27,7 @@ const Content: React.FC = () => {
         ref={contentRef1}
         className="text-white text-lg text-center cursor-default"
       >
-        🚀
+
       </span>
     </div>
   );
