@@ -4,7 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://Roman1510.github.io/',
+  base: 'https://Roman1510.github.io/github.io',
   plugins: [react()],
   resolve: {
     alias: {
