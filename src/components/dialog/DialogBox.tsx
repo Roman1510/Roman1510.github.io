@@ -7,6 +7,7 @@ import {
   ChevronDownIcon,
 } from '@heroicons/react/20/solid'
 import getProjects from '@/constants/projects'
+import { Link } from "react-router-dom";
 
 const projects = getProjects(true)
 
@@ -77,32 +78,28 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                 </>
               )}
             </Disclosure>
-            <a
-              href="#"
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)}
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
               About me
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link to="/experience" onClick={() => setMobileMenuOpen(false)}
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
               Experience
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link to="/coming-up" onClick={() => setMobileMenuOpen(false)}
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
               Coming up...
-            </a>
+            </Link>
           </div>
           <div className="py-6">
-            <a
-              href="#"
+            <Link to="/contact" onClick={() => setMobileMenuOpen(false)}
               className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
             >
               Contact me <span aria-hidden="true">&rarr;</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
