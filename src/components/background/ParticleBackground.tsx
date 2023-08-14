@@ -10,14 +10,43 @@ const ParticleBackground: React.FC = () => {
   const mouseMoving = useRef<boolean>(false);
   const mouseClick = useRef<boolean>(false);
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
-  const scene = useRef<THREE.Scene | null>(null);
   const particles = useRef<THREE.Group | null>(null);
 
   const MAX_MOUSE_MOVE = 0.1;
   const MOUSE_MOVE_THRESHOLD = 0.0001;
 
+  const SWIPE_SENSITIVITY = 0.005;
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  const detectSwipe = (touchEvent: TouchEvent) => {
+    console.log(touchEvent)
+    if (touchEvent.touches.length !== 1) {
+      return;
+    }
+
+    const touch = touchEvent.touches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    const threshold = Math.max(window.innerWidth, window.innerHeight) * 0.1; // Adjust the swipe threshold
+
+    if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
+      // Detect the swipe direction (horizontal or vertical)
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        camera.current!.position.x += deltaX * SWIPE_SENSITIVITY;
+      } else {
+        // Vertical swipe
+        camera.current!.position.y -= deltaY * SWIPE_SENSITIVITY;
+      }
+
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }
+  };
+
   useEffect(() => {
-    scene.current = new THREE.Scene();
+    const scene = new THREE.Scene();
     camera.current = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.current.position.z = 5;
 
@@ -54,7 +83,7 @@ const ParticleBackground: React.FC = () => {
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
     particles.current.add(particleSystem);
 
-    scene.current.add(particles.current);
+    scene.add(particles.current);
 
     const handleMouseMove = (event: MouseEvent) => {
       const windowHalfX = window.innerWidth / 2;
@@ -105,13 +134,13 @@ const ParticleBackground: React.FC = () => {
         camera.current.position.y += (-mouseY.current * 5 - camera.current.position.y) * 0.05;
 
 
-        if (camera.current) camera.current.lookAt(scene.current!.position);
+        if (camera.current) camera.current.lookAt(scene.position);
 
         updateParticleRotation();
 
 
         if (mouseMoving.current || (particles.current && (Math.abs(particles.current.rotation.x) > MOUSE_MOVE_THRESHOLD || Math.abs(particles.current.rotation.y) > MOUSE_MOVE_THRESHOLD))) {
-          renderer.render(scene.current!, camera.current);
+          renderer.render(scene, camera.current);
         }
       }
     };
@@ -128,40 +157,34 @@ const ParticleBackground: React.FC = () => {
         renderer.setSize(newWidth, newHeight);
       }
     };
-    window.addEventListener('deviceorientation', handleDeviceOrientation);
+    const handleTouchStart = (event: TouchEvent) => {
+      console.log(event)
+      const touch = event.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      detectSwipe(event);
+    };
+    containerRef.current?.addEventListener('touchstart', handleTouchStart);
+    containerRef.current?.addEventListener('touchmove', handleTouchMove);
+
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
 
 
+
+
     return () => {
-      window.removeEventListener('deviceorientation', handleDeviceOrientation);
+      containerRef.current?.removeEventListener('touchstart', handleTouchStart);
+      containerRef.current?.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseStop);
       containerRef.current?.removeChild(renderer.domElement);
     };
   }, []);
-
-  const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-    if (camera.current && scene.current) {
-      const { beta, gamma } = event;
-
-      // Normalize beta and gamma values to be within the desired range
-      const normalizedBeta = (beta || 0) / 90; // Normalize to [-1, 1]
-      const normalizedGamma = (gamma || 0) / 90; // Normalize to [-1, 1]
-
-      // Adjust the camera position based on device orientation
-      camera.current.position.x = normalizedGamma * 5; // Horizontal tilt
-      camera.current.position.y = normalizedBeta * 5; // Vertical tilt
-      camera.current.lookAt(scene.current.position);
-
-      // Update the particle rotation based on camera movement
-      if (particles.current) {
-        particles.current.rotation.x = camera.current.position.y;
-        particles.current.rotation.y = camera.current.position.x;
-      }
-    }
-  };
 
   useEffect(() => {
     // GSAP 
