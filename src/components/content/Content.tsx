@@ -25,7 +25,7 @@ const Content: React.FC = () => {
       </span>
       <span
         ref={contentRef1}
-        className="text-white text-lg text-center cursor-default"
+        className="font-mono text-white text-lg text-center cursor-default"
       >
 
       </span>
