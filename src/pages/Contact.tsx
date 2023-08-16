@@ -9,6 +9,7 @@ const twitterLink = import.meta.env.VITE_TWITTERLINK
 
 
 const Contact: React.FC = () => {
+  console.log(import.meta.env)
   const squaresRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
