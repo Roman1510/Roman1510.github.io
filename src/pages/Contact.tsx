@@ -16,7 +16,6 @@ const Contact: React.FC = () => {
   console.log(import.meta)
   console.log('email')
   console.log(email)
-  console.log(process.env)
   const squaresRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
