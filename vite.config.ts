@@ -11,4 +11,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  define: {
+    'import.meta.env.VITE_EMAIL': JSON.stringify(process.env.VITE_EMAIL)
+  }
 })
