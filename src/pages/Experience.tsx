@@ -65,7 +65,7 @@ const Experience: React.FC = () => {
             >
               <h2 className="text-indigo-900 text-lg font-semibold mb-2">Project {String.fromCharCode(65 + index)}</h2>
               <p className="text-gray-700">
-                Placeholder description for Project {String.fromCharCode(65 + index)}.
+                Here I'm supposed to map a project #{String.fromCharCode(65 + index)}. Hehe
               </p>
             </div>
           ))}

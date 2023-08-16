@@ -12,14 +12,14 @@ const ComingUp: React.FC = () => {
     1
   );
   const contentRef2 = useTypingAnimation(
-    "I'm working on a full course related to animations. Please stay tuned",
+    "... the typing thingy that you see, is also an animation tho",
     1,
-    7
+    5
   );
   const contentRef3 = useTypingAnimation(
-    "I'm working on a full course related to animations. Please stay tuned",
+    "It's done with a wonderful thingy called GSAP",
     1,
-    12
+    8
   );
 
   return (
