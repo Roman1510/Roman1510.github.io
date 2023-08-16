@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="bg-white dark:bg-slate-900">
+    <header className="bg-slate-900">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
         </div>
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
-            <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">
+            <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-slate-400">
               Github
               <ChevronDownIcon
                 className="h-5 w-5 flex-none text-gray-400"
@@ -98,17 +98,17 @@ const Navbar: React.FC = () => {
             </Transition>
           </Popover>
 
-          <Link to="/about" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">About me</Link>
+          <Link to="/about" className="text-sm font-semibold leading-6 text-slate-400">About me</Link>
 
-          <Link to="/experience" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">Experience</Link>
+          <Link to="/experience" className="text-sm font-semibold leading-6 text-slate-400">Experience</Link>
 
 
-          <Link to="/coming-up" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">Coming up...</Link>
+          <Link to="/coming-up" className="text-sm font-semibold leading-6 text-slate-400">Coming up...</Link>
 
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
 
-          <Link to="/contact" className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-400">Contact me <span aria-hidden="true">&rarr;</span></Link>
+          <Link to="/contact" className="text-sm font-semibold leading-6 text-slate-400">Contact me <span aria-hidden="true">&rarr;</span></Link>
 
         </div>
       </nav>

@@ -28,7 +28,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
     onClose={setMobileMenuOpen}
   >
     <div className="fixed inset-0 z-10" />
-    <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white dark:bg-slate-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+    <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-slate-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       <div className="flex items-center justify-between">
         <a href="#" className="-m-1.5 p-1.5">
           <span className="sr-only">Roman Vinnick</span>
@@ -40,7 +40,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
         </a>
         <button
           type="button"
-          className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-slate-400"
+          className="-m-2.5 rounded-md p-2.5 text-slate-400"
           onClick={() => setMobileMenuOpen(false)}
         >
           <span className="sr-only">Close menu</span>
@@ -53,7 +53,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             <Disclosure as="div" className="-mx-3">
               {({ open }) => (
                 <>
-                  <Disclosure.Button className="text-gray-900 dark:text-slate-400 flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7  hover:bg-gray-50">
+                  <Disclosure.Button className="text-slate-400 flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7  hover:bg-gray-50">
                     Projects
                     <ChevronDownIcon
                       className={classNames(
@@ -69,7 +69,7 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
                         key={item.name}
                         as="a"
                         href={item.href}
-                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
+                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-slate-400 hover:bg-gray-50"
                       >
                         {item.name}
                       </Disclosure.Button>
@@ -79,24 +79,24 @@ const DialogBox: React.FC<Props> = ({ mobileMenuOpen, setMobileMenuOpen }) => {
               )}
             </Disclosure>
             <Link to="/about" onClick={() => setMobileMenuOpen(false)}
-              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
+              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-400 hover:bg-gray-50"
             >
               About me
             </Link>
             <Link to="/experience" onClick={() => setMobileMenuOpen(false)}
-              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
+              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-400 hover:bg-gray-50"
             >
               Experience
             </Link>
             <Link to="/coming-up" onClick={() => setMobileMenuOpen(false)}
-              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
+              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-400 hover:bg-gray-50"
             >
               Coming up...
             </Link>
           </div>
           <div className="py-6">
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}
-              className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-slate-400 hover:bg-gray-50"
+              className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-slate-400 hover:bg-gray-50"
             >
               Contact me <span aria-hidden="true">&rarr;</span>
             </Link>
