@@ -20,35 +20,40 @@ const projects:Project[] = [
     description: 'Interactive 3d features',
     href: '#',
     icon: CubeIcon,
-    desktopOnly: false
+    desktopOnly: false,
+    link:''
   },
   {
     name: 'Custom cursors',
     description: 'A good addition for a custom web app',
     href: '#',
     icon: CursorArrowRaysIcon,
-    desktopOnly: true
+    desktopOnly: true,
+    link:''
   },
   {
     name: 'Auth',
     description: 'Mobile apps',
     href: '#',
     icon: DevicePhoneMobileIcon,
-    desktopOnly: false
+    desktopOnly: false,
+    link:''
   },
   {
     name: 'Add-ons',
     description: 'Chrome and VSCode extensions',
     href: '#',
     icon: SquaresPlusIcon,
-    desktopOnly: false
+    desktopOnly: false,
+    link:''
   },
   {
     name: 'Mini games',
     description: 'Mini games created with Javascript',
     href: '#',
     icon: PuzzlePieceIcon,
-    desktopOnly: false
+    desktopOnly: false,
+    link:'https://github.com/Roman1510/memory-card-game/tree/main'
   },
 ]
 
@@ -57,7 +62,8 @@ type Project = {
   description: string,
   href: string,
   icon: React.ElementType
-  desktopOnly: boolean
+  desktopOnly: boolean,
+  link: string 
 }
 
 export default getProjects

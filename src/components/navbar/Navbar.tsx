@@ -82,7 +82,7 @@ const Navbar: React.FC = () => {
                       </div>
                       <div className="flex-auto">
                         <a
-                          href={item.href}
+                          href={item.link}
                           className="block font-semibold text-white "
                         >
                           {item.name}
