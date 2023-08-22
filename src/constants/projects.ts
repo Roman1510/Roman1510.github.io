@@ -6,22 +6,22 @@ import {
   CubeIcon
 } from '@heroicons/react/24/outline'
 
-const getProjects = (isMobile:boolean):Project[]=>{
-  if(!isMobile){
-    return projects 
+const getProjects = (isMobile: boolean): Project[] => {
+  if (!isMobile) {
+    return projects
   } else {
-    return projects.filter((item)=>!item.desktopOnly)
+    return projects.filter((item) => !item.desktopOnly)
   }
 }
 
-const projects:Project[] = [
+const projects: Project[] = [
   {
     name: '3D',
     description: 'Interactive 3d features',
     href: '#',
     icon: CubeIcon,
     desktopOnly: false,
-    link:''
+    link: ''
   },
   {
     name: 'Custom cursors',
@@ -29,23 +29,23 @@ const projects:Project[] = [
     href: '#',
     icon: CursorArrowRaysIcon,
     desktopOnly: true,
-    link:''
+    link: ''
   },
   {
     name: 'Auth',
-    description: 'Mobile apps',
+    description: 'Authentication examples',
     href: '#',
     icon: DevicePhoneMobileIcon,
     desktopOnly: false,
-    link:''
+    link: ''
   },
   {
-    name: 'Add-ons',
-    description: 'Chrome and VSCode extensions',
+    name: 'Extensions',
+    description: 'VSCode extensions',
     href: '#',
     icon: SquaresPlusIcon,
     desktopOnly: false,
-    link:''
+    link: ''
   },
   {
     name: 'Mini games',
@@ -53,7 +53,7 @@ const projects:Project[] = [
     href: '#',
     icon: PuzzlePieceIcon,
     desktopOnly: false,
-    link:'https://github.com/Roman1510/memory-card-game/tree/main'
+    link: 'https://github.com/Roman1510/memory-card-game/tree/main'
   },
 ]
 
@@ -63,7 +63,7 @@ type Project = {
   href: string,
   icon: React.ElementType
   desktopOnly: boolean,
-  link: string 
+  link: string
 }
 
 export default getProjects
