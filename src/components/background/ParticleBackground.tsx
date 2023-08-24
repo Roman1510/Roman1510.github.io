@@ -97,17 +97,12 @@ const ParticleBackground: React.FC = () => {
 
     const animate = () => {
       requestAnimationFrame(animate);
-
-
       if (camera.current) {
         camera.current.position.x += (mouseX.current * 5 - camera.current.position.x) * 0.05;
         camera.current.position.y += (-mouseY.current * 5 - camera.current.position.y) * 0.05;
-
-
         if (camera.current) camera.current.lookAt(scene.position);
 
         updateParticleRotation();
-
 
         if (mouseMoving.current || (particles.current && (Math.abs(particles.current.rotation.x) > MOUSE_MOVE_THRESHOLD || Math.abs(particles.current.rotation.y) > MOUSE_MOVE_THRESHOLD))) {
           renderer.render(scene, camera.current);
