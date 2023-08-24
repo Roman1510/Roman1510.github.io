@@ -15,36 +15,6 @@ const ParticleBackground: React.FC = () => {
   const MAX_MOUSE_MOVE = 0.1;
   const MOUSE_MOVE_THRESHOLD = 0.0001;
 
-  const SWIPE_SENSITIVITY = 0.005;
-  let touchStartX = 0;
-  let touchStartY = 0;
-
-  const detectSwipe = (touchEvent: TouchEvent) => {
-    console.log(touchEvent)
-    if (touchEvent.touches.length !== 1) {
-      return;
-    }
-
-    const touch = touchEvent.touches[0];
-    const deltaX = touch.clientX - touchStartX;
-    const deltaY = touch.clientY - touchStartY;
-    const threshold = Math.max(window.innerWidth, window.innerHeight) * 0.1; // Adjust the swipe threshold
-
-    if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
-      // Detect the swipe direction (horizontal or vertical)
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Horizontal swipe
-        camera.current!.position.x += deltaX * SWIPE_SENSITIVITY;
-      } else {
-        // Vertical swipe
-        camera.current!.position.y -= deltaY * SWIPE_SENSITIVITY;
-      }
-
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-    }
-  };
-
   useEffect(() => {
     const scene = new THREE.Scene();
     camera.current = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -157,28 +127,11 @@ const ParticleBackground: React.FC = () => {
         renderer.setSize(newWidth, newHeight);
       }
     };
-    const handleTouchStart = (event: TouchEvent) => {
-      console.log(event)
-      const touch = event.touches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-    };
-
-    const handleTouchMove = (event: TouchEvent) => {
-      detectSwipe(event);
-    };
-    containerRef.current?.addEventListener('touchstart', handleTouchStart);
-    containerRef.current?.addEventListener('touchmove', handleTouchMove);
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
 
-
-
-
     return () => {
-      containerRef.current?.removeEventListener('touchstart', handleTouchStart);
-      containerRef.current?.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseStop);
@@ -193,7 +146,6 @@ const ParticleBackground: React.FC = () => {
 
     if (particlesCurrent) {
       gsap.set(particlesCurrent.rotation, initialRotation); // Initial rotation
-
       // cosmic rotation animation
       gsap.from(camera.current!.position, {
         z: 20, // start posetion
