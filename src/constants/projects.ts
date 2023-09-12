@@ -21,7 +21,7 @@ const projects: Project[] = [
     href: '#',
     icon: CubeIcon,
     desktopOnly: false,
-    link: ''
+    link: 'https://roman1510.github.io/whirl/'
   },
   {
     name: 'Custom cursors',
