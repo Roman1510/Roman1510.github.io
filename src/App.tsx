@@ -7,15 +7,16 @@ import { OrbitSpace } from 'orbit-space'
 function App() {
   return (
     <>
-      <Navbar />
-      <div style={{ position: 'relative' }}>
-        <Routes>
-          {publicRoutes.map((route) => (
-            <Route key={route.path} element={route.element} path={route.path} />
-          ))}
-        </Routes>
-      </div>
-      <OrbitSpace />
+      <OrbitSpace>
+        <Navbar />
+        <div style={{ position: 'relative' }}>
+          <Routes>
+            {publicRoutes.map((route) => (
+              <Route key={route.path} element={route.element} path={route.path} />
+            ))}
+          </Routes>
+        </div>
+      </OrbitSpace>
     </>
   );
 }
