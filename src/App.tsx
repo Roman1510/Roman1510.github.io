@@ -1,27 +1,33 @@
-import React from 'react'
 import useAnimatedFavicon from './hooks/useAnimatedFavicon'
 
-const App: React.FC = () => {
+const App = () => {
   useAnimatedFavicon()
 
   return (
     <div>
       <div
-        style={{ height: '100vh', backgroundColor: 'black', color: 'white' }}
+        style={{
+          height: '100vh',
+          backgroundColor: 'black',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
       >
-        <p style={{ padding: '50px' }}>Black section for scroll testing</p>
+        Yo, the page is under construction!
+        <p style={{ padding: '50px' }}></p>
       </div>
       <div style={{ height: '100vh', backgroundColor: 'gray' }}>
-        <p style={{ padding: '50px' }}>Gray section for scroll testing</p>
+        <p style={{ padding: '50px' }}></p>
       </div>
       <div style={{ height: '100vh', backgroundColor: 'lightblue' }}>
-        <p style={{ padding: '50px' }}>Lightblue section for scroll testing</p>
+        <p style={{ padding: '50px' }}></p>
       </div>
       <div style={{ height: '100vh', backgroundColor: 'lightgreen' }}>
-        <p style={{ padding: '50px' }}>Lightgreen section for scroll testing</p>
+        <p style={{ padding: '50px' }}></p>
       </div>
       <div style={{ height: '100vh', backgroundColor: 'orange' }}>
-        <p style={{ padding: '50px' }}>Orange section for scroll testing</p>
+        <p style={{ padding: '50px' }}></p>
       </div>
     </div>
   )
