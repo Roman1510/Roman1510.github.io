@@ -1,24 +1,30 @@
-import Navbar from '@/components/navbar/Navbar';
-import { publicRoutes } from '@/router/routes';
-import { Route, Routes } from 'react-router-dom';
-import { OrbitSpace } from 'orbit-space'
+import React from 'react'
+import useAnimatedFavicon from './hooks/useAnimatedFavicon'
 
+const App: React.FC = () => {
+  useAnimatedFavicon()
 
-function App() {
   return (
-    <>
-      <OrbitSpace>
-        <Navbar />
-        <div style={{ position: 'relative' }}>
-          <Routes>
-            {publicRoutes.map((route) => (
-              <Route key={route.path} element={route.element} path={route.path} />
-            ))}
-          </Routes>
-        </div>
-      </OrbitSpace>
-    </>
-  );
+    <div>
+      <div
+        style={{ height: '100vh', backgroundColor: 'black', color: 'white' }}
+      >
+        <p style={{ padding: '50px' }}>Black section for scroll testing</p>
+      </div>
+      <div style={{ height: '100vh', backgroundColor: 'gray' }}>
+        <p style={{ padding: '50px' }}>Gray section for scroll testing</p>
+      </div>
+      <div style={{ height: '100vh', backgroundColor: 'lightblue' }}>
+        <p style={{ padding: '50px' }}>Lightblue section for scroll testing</p>
+      </div>
+      <div style={{ height: '100vh', backgroundColor: 'lightgreen' }}>
+        <p style={{ padding: '50px' }}>Lightgreen section for scroll testing</p>
+      </div>
+      <div style={{ height: '100vh', backgroundColor: 'orange' }}>
+        <p style={{ padding: '50px' }}>Orange section for scroll testing</p>
+      </div>
+    </div>
+  )
 }
 
-export default App;
+export default App

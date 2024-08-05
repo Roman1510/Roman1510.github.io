@@ -2,14 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
-  height: 100%;
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
 }
-body {
-  overflow: hidden;
-}
-/* *{
-  cursor:none;
-} */
