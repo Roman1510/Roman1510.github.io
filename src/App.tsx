@@ -1,8 +1,7 @@
-import useAnimatedFavicon from './hooks/useAnimatedFavicon'
+import useAnimatedFavicon from './hooks/useAnimatedFavicon';
 
 const App = () => {
-  useAnimatedFavicon()
-
+  useAnimatedFavicon();
   return (
     <div>
       <div
@@ -30,7 +29,7 @@ const App = () => {
         <p style={{ padding: '50px' }}></p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
