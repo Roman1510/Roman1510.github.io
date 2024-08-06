@@ -1,35 +1,42 @@
-import useAnimatedFavicon from './hooks/useAnimatedFavicon';
+import useDeviceType from './hooks/useDeviceType'
+import DesktopWrapper from './components/DesktopWrapper'
+import MobileWrapper from './components/MobileWrapper'
+import './index.css'
+import useAnimatedFavicon from './hooks/useAnimatedFavicon'
+import useScrollingBehavior from './hooks/useScrollingBehavior'
 
 const App = () => {
-  useAnimatedFavicon();
-  return (
-    <div>
-      <div
-        style={{
-          height: '100vh',
-          backgroundColor: 'black',
-          color: 'white',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+  const deviceType = useDeviceType()
+  useAnimatedFavicon()
+
+  useScrollingBehavior()
+
+  const content = (
+    <>
+      <div className="section" style={{ backgroundColor: 'purple' }}>
         Yo, the page is under construction!
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div style={{ height: '100vh', backgroundColor: 'gray' }}>
+      <div className="section" style={{ backgroundColor: 'gray' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div style={{ height: '100vh', backgroundColor: 'lightblue' }}>
+      <div className="section" style={{ backgroundColor: 'lightblue' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div style={{ height: '100vh', backgroundColor: 'lightgreen' }}>
+      <div className="section" style={{ backgroundColor: 'lightgreen' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div style={{ height: '100vh', backgroundColor: 'orange' }}>
+      <div className="section" style={{ backgroundColor: 'orange' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-    </div>
-  );
-};
+    </>
+  )
 
-export default App;
+  return deviceType === 'desktop' ? (
+    <DesktopWrapper>{content}</DesktopWrapper>
+  ) : (
+    <MobileWrapper>{content}</MobileWrapper>
+  )
+}
+
+export default App

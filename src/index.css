@@ -2,9 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
-#root {
+html {
   margin: 0;
   padding: 0;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.desktop-container {
+  display: flex;
+  height: 100vh;
+  width: 500vw;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+}
+
+.mobile-container {
+  display: block;
+  width: 100vw;
+  overflow-y: auto;
+}
+
+.section {
+  scroll-snap-align: start;
+  flex: 0 0 100vw;
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .desktop-container {
+    display: none;
+  }
+  .mobile-container .section {
+    flex: 0 0 auto;
+  }
 }
