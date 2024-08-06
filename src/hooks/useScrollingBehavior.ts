@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
-import { useMedia } from 'react-use'
+
 import { gsap } from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import useDeviceType from './useDeviceType'
 
 gsap.registerPlugin(ScrollToPlugin)
 
 const useGsapScrollingBehavior = () => {
-  const isMobile = useMedia('(max-width: 768px)')
+  const deviceType = useDeviceType()
 
   useEffect(() => {
-    if (!isMobile) {
+    if (deviceType === 'desktop') {
       const handleScroll = (event: WheelEvent) => {
         event.preventDefault()
         const scrollAmount = event.deltaY * 10
@@ -25,7 +26,7 @@ const useGsapScrollingBehavior = () => {
         window.removeEventListener('wheel', handleScroll)
       }
     }
-  }, [isMobile])
+  }, [])
 }
 
 export default useGsapScrollingBehavior

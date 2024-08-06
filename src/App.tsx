@@ -13,8 +13,9 @@ const App = () => {
   const content = (
     <>
       <div className="section" style={{ backgroundColor: 'purple' }}>
-        Yo, the page is under construction!
-        <p style={{ padding: '50px' }}></p>
+        <div className="text-parallax" style={{ padding: '50px' }}>
+          <p> Roman Vinnick</p>
+        </div>
       </div>
       <div className="section" style={{ backgroundColor: 'gray' }}>
         <p style={{ padding: '50px' }}></p>
