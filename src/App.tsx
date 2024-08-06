@@ -1,15 +1,14 @@
 import useDeviceType from './hooks/useDeviceType'
 import DesktopWrapper from './components/DesktopWrapper'
 import MobileWrapper from './components/MobileWrapper'
-import './index.css'
 import useAnimatedFavicon from './hooks/useAnimatedFavicon'
-import useScrollingBehavior from './hooks/useScrollingBehavior'
+import useGsapScrollingBehavior from './hooks/useScrollingBehavior'
+import './index.css'
 
 const App = () => {
-  const deviceType = useDeviceType()
   useAnimatedFavicon()
-
-  useScrollingBehavior()
+  useGsapScrollingBehavior()
+  const deviceType = useDeviceType()
 
   const content = (
     <>

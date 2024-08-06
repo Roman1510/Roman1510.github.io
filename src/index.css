@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  margin: 0;
-  padding: 0;
-}
-
 body {
   margin: 0;
   overflow-x: hidden;
@@ -15,7 +10,7 @@ body {
 .desktop-container {
   display: flex;
   height: 100vh;
-  width: 500vw;
+  width: 500vw; /* Assuming 5 sections, each full viewport width */
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
 }
