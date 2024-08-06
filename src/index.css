@@ -26,12 +26,3 @@ body {
   flex: 0 0 100vw;
   height: 100vh;
 }
-
-@media (max-width: 768px) {
-  .desktop-container {
-    display: none;
-  }
-  .mobile-container .section {
-    flex: 0 0 auto;
-  }
-}
