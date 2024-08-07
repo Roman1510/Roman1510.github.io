@@ -534,41 +534,86 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.flex {
-  display: flex;
+.container {
+  width: 100%;
 }
 
-html {
-  margin: 0;
-  padding: 0;
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+.visible {
+  visibility: visible;
+}
+
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
 }
 
 body {
   margin: 0;
   overflow-x: hidden;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.app-container {
+.desktop-container {
   display: flex;
   height: 100vh;
   width: 500vw;
-  overflow-x: scroll;
   scroll-snap-type: x mandatory;
+  overflow-y: hidden;
+}
+
+.mobile-container {
+  display: block;
+  width: 100vw;
+  overflow-y: auto;
 }
 
 .section {
   scroll-snap-align: start;
   flex: 0 0 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .app-container {
-    display: block;
-    width: 100vw;
-  }
-
-  .section {
-    flex: 0 0 auto;
-  }
+.title {
+  font-family: 'Comic Neue', sans-serif;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  position: relative;
 }
