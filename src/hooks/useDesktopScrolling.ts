@@ -9,6 +9,12 @@ export const useDesktopScrolling = () => {
   const deviceType = useDeviceType()
 
   useEffect(() => {
+    const resetScrollPosition = () => {
+      window.scrollTo(0, 0)
+    }
+    //workaround for chrome browsers just to make scrollTo(0,0)
+    setTimeout(resetScrollPosition, 50)
+
     if (deviceType === 'desktop') {
       const desktopContainer = document.querySelector(
         '.desktop-container'

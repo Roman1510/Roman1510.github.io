@@ -7,7 +7,6 @@ import './index.css'
 
 const App = () => {
   useAnimatedFavicon()
-
   const deviceType = useDeviceType()
 
   const content = (
