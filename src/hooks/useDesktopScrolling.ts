@@ -12,7 +12,7 @@ export const useDesktopScrolling = () => {
     const resetScrollPosition = () => {
       window.scrollTo(0, 0)
     }
-    //workaround for chrome browsers just to make scrollTo(0,0)
+
     setTimeout(resetScrollPosition, 50)
 
     if (deviceType === 'desktop') {
@@ -39,6 +39,8 @@ export const useDesktopScrolling = () => {
           end: () => '+=' + desktopContainer.offsetWidth,
         },
       })
+    } else {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
     }
   }, [deviceType])
 }
