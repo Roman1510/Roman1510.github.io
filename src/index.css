@@ -13,7 +13,6 @@ body {
   display: flex;
   height: 100vh;
   width: 500vw;
-  overflow-x: scroll;
   scroll-snap-type: x mandatory;
 }
 
@@ -32,28 +31,10 @@ body {
   justify-content: center;
 }
 
-.text-parallax {
+.title {
   font-family: 'Comic Neue', sans-serif;
   font-size: 3rem;
   font-weight: bold;
   color: white;
   position: relative;
-  overflow: hidden;
-}
-
-.text-parallax::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: -1;
-  transform: translateY(-20%);
-  transition: transform 0.2s;
-}
-
-.section:hover .text-parallax::before {
-  transform: translateY(0);
 }
