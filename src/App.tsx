@@ -18,16 +18,24 @@ const App = () => {
         </div>
       </div>
       <div className="section" style={{ backgroundColor: '#9b72cf' }}>
-        <p style={{ padding: '50px' }}>Tha</p>
+        <div className="title" style={{ padding: '50px' }}>
+          <p style={{ padding: '50px' }}>Tha</p>
+        </div>
       </div>
       <div className="section" style={{ backgroundColor: '#9fffcb' }}>
-        <p style={{ padding: '50px' }}>Best</p>
+        <div className="title" style={{ padding: '50px' }}>
+          <p style={{ padding: '50px' }}>Best</p>
+        </div>
       </div>
       <div className="section" style={{ backgroundColor: '#c8b1e4' }}>
-        <p style={{ padding: '50px' }}>Developer</p>
+        <div className="title" style={{ padding: '50px' }}>
+          <p style={{ padding: '50px' }}>Developer</p>
+        </div>
       </div>
       <div className="section" style={{ backgroundColor: '#c7f9cc' }}>
-        <p style={{ padding: '50px' }}>Out there</p>
+        <div className="title" style={{ padding: '50px' }}>
+          <p style={{ padding: '50px' }}>Out there</p>
+        </div>
       </div>
     </>
   )
