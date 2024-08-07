@@ -12,21 +12,21 @@ const App = () => {
 
   const content = (
     <>
-      <div className="section" style={{ backgroundColor: '#331e36ff' }}>
+      <div className="section" style={{ backgroundColor: '#532b88' }}>
         <div className="title" style={{ padding: '50px' }}>
           <p> Roman Vinnick</p>
         </div>
       </div>
-      <div className="section" style={{ backgroundColor: '#41337aff' }}>
+      <div className="section" style={{ backgroundColor: '#9b72cf' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div className="section" style={{ backgroundColor: '#6ea4bfff' }}>
+      <div className="section" style={{ backgroundColor: '#9fffcb' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div className="section" style={{ backgroundColor: '#c2efebff' }}>
+      <div className="section" style={{ backgroundColor: '#c8b1e4' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
-      <div className="section" style={{ backgroundColor: '#ecfee8ff' }}>
+      <div className="section" style={{ backgroundColor: '#c7f9cc' }}>
         <p style={{ padding: '50px' }}></p>
       </div>
     </>
