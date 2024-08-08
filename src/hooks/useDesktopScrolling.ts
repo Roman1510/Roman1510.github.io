@@ -48,14 +48,6 @@ export const useDesktopScrolling = () => {
       })
 
       const handleKeydown = (event: KeyboardEvent) => {
-        const isHorizontalScroll = ['ArrowLeft', 'ArrowRight'].includes(
-          event.key
-        )
-
-        if (isHorizontalScroll) {
-          event.preventDefault()
-        }
-
         if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
           gsap.to(window, {
             scrollTo: { y: '+=' + window.innerWidth / 8, autoKill: false },
