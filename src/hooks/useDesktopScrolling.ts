@@ -11,8 +11,6 @@ export const useDesktopScrolling = () => {
   //here im making the horizontal scroll work the same as vertical (for touchpads it's logical)
   window.addEventListener('wheel', (event) => {
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
-      event.preventDefault()
-
       window.scrollBy(0, event.deltaX)
     }
   })
