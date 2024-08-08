@@ -53,3 +53,26 @@ body::-webkit-scrollbar-track {
   color: white;
   position: relative;
 }
+
+.contact-me {
+  /* position: absolute; */
+}
+
+.linkedin-button {
+  border-radius: 50%;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0077b5;
+  color: white;
+  border: none;
+  padding: 20px;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.linkedin-button:hover {
+  background-color: #005582;
+}
