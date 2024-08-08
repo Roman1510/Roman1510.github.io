@@ -8,21 +8,33 @@ gsap.registerPlugin(ScrollToPlugin, ScrollTrigger)
 export const useDesktopScrolling = () => {
   const deviceType = useDeviceType()
 
-  //here im making the horizontal scroll work the same as vertical (for touchpads it's logical)
-  window.addEventListener('wheel', (event) => {
-    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
-      window.scrollBy(0, event.deltaX)
-    }
-  })
-
   useEffect(() => {
     const resetScrollPosition = () => {
       window.scrollTo(0, 0)
     }
-
     setTimeout(resetScrollPosition, 50)
 
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+        window.scrollBy(0, event.deltaX)
+      }
+    }
+
     if (deviceType === 'desktop') {
+      window.addEventListener('wheel', handleWheel)
+    }
+
+    return () => {
+      if (deviceType === 'desktop') {
+        window.removeEventListener('wheel', handleWheel)
+      }
+    }
+  }, [deviceType])
+
+  useEffect(() => {
+    const mm = gsap.matchMedia()
+
+    mm.add('(min-width: 700px)', () => {
       const desktopContainer = document.querySelector(
         '.desktop-container'
       ) as HTMLElement | null
@@ -65,9 +77,10 @@ export const useDesktopScrolling = () => {
 
       return () => {
         window.removeEventListener('keydown', handleKeydown)
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
       }
-    } else {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
-    }
+    })
+
+    return () => mm.revert()
   }, [deviceType])
 }
