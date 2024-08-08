@@ -8,6 +8,15 @@ gsap.registerPlugin(ScrollToPlugin, ScrollTrigger)
 export const useDesktopScrolling = () => {
   const deviceType = useDeviceType()
 
+  //here im making the horizontal scroll work the same as vertical (for touchpads it's logical)
+  window.addEventListener('wheel', (event) => {
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+      event.preventDefault()
+
+      window.scrollBy(0, event.deltaX)
+    }
+  })
+
   useEffect(() => {
     const resetScrollPosition = () => {
       window.scrollTo(0, 0)
