@@ -48,11 +48,11 @@ export const useDesktopScrolling = () => {
         scrollTrigger: {
           trigger: desktopContainer,
           pin: true,
-          scrub: 0.85,
-          anticipatePin: 0.01,
+          scrub: 0.5,
+          anticipatePin: 0.9,
           snap: {
             snapTo: 1 / (sections.length - 1),
-            duration: { min: 0.15, max: 0.3 },
+            duration: { min: 0.3, max: 0.55 },
             ease: 'power1.inOut',
           },
           end: () => '+=' + desktopContainer.offsetWidth,
