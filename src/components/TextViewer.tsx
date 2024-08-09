@@ -6,7 +6,7 @@ export const TextViewer = () => {
   return (
     <div style={{ width: '100%', height: '300px' }}>
       <Canvas
-        style={{ background: 'white' }}
+        style={{ background: '#532b88' }}
         camera={{ position: [2, 2, 2], fov: 75 }}
       >
         <RotatingBox />
@@ -27,8 +27,8 @@ const RotatingBox = () => {
 
   return (
     <mesh ref={ref}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="red" />
+      <boxGeometry args={[2, 2, 2]} />
+      <meshStandardMaterial color="blue" wireframe />
     </mesh>
   );
 };
