@@ -16,6 +16,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.16",
     "@heroicons/react": "^2.0.18",
+    "@react-three/fiber": "^8.16.8",
     "@types/three": "^0.155.0",
     "gsap": "^3.12.2",
     "orbit-space": "^1.1.0",

@@ -5,6 +5,7 @@ import useAnimatedFavicon from './hooks/useAnimatedFavicon'
 
 import './index.css'
 import { FaLinkedin } from 'react-icons/fa'
+import { TextViewer } from './components/TextViewer'
 
 const App = () => {
   useAnimatedFavicon()
@@ -15,6 +16,7 @@ const App = () => {
       <div className="section" style={{ backgroundColor: '#532b88' }}>
         <div className="title" style={{ padding: '50px' }}>
           <p> Roman Vinnick</p>
+          <TextViewer />
         </div>
       </div>
       <div className="section" style={{ backgroundColor: '#9b72cf' }}>
