@@ -1,7 +1,9 @@
+/* Apply Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* General body styling */
 body {
   margin: 0;
   padding: 0;
@@ -10,15 +12,14 @@ body {
   overflow-y: auto;
 }
 
+/* Hide scrollbars */
 body::-webkit-scrollbar {
   width: 0rem;
   height: 0rem;
 }
-
 body::-webkit-scrollbar-thumb {
   background-color: transparent;
 }
-
 body::-webkit-scrollbar-track {
   background: transparent;
 }
@@ -44,25 +45,24 @@ body::-webkit-scrollbar-track {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .title {
   font-family: 'Comic Neue', sans-serif;
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: bold;
   color: white;
-  position: relative;
 }
 
 .contact-me {
-  /* position: absolute; */
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 
 .linkedin-button {
   border-radius: 50%;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
   background-color: #0077b5;
   color: white;
   border: none;
