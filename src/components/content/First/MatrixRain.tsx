@@ -11,7 +11,7 @@ export const MatrixRain: React.FC = () => {
     if (!context) return
 
     const katakana =
-      'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'
+      'アイウエオカキクケコлサシЪスセソタチツテ日トナニヌネノハヒフヘホマ012з45789ミムメモヤｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝЙユヨラリルレロワヲン'
     const latin = katakana.split('')
 
     const fontSize = 16
@@ -27,7 +27,7 @@ export const MatrixRain: React.FC = () => {
     const rainDrops = Array(columns).fill(1)
 
     const draw = () => {
-      context.fillStyle = 'rgba(83, 43, 136, 0.1)'
+      context.fillStyle = 'rgba(83, 43, 136, 0.21)'
       context.fillRect(0, 0, canvas.width, canvas.height)
 
       context.fillStyle = '#FFFFFF'
