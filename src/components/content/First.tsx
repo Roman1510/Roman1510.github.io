@@ -35,8 +35,8 @@ const styles = {
   } as React.CSSProperties,
 
   wrapper: {
-    width: '55rem',
-    height: '55rem',
+    width: '50rem',
+    height: '50rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
