@@ -1,9 +1,7 @@
-/* Apply Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* General body styling */
 body {
   margin: 0;
   padding: 0;
@@ -12,7 +10,6 @@ body {
   overflow-y: auto;
 }
 
-/* Hide scrollbars */
 body::-webkit-scrollbar {
   width: 0rem;
   height: 0rem;
@@ -40,7 +37,6 @@ body::-webkit-scrollbar-track {
 
 .section {
   scroll-snap-align: start;
-  flex: 0 0 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
