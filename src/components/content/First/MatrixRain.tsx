@@ -15,6 +15,7 @@ export const MatrixRain: React.FC = () => {
     const latin = katakana.split('')
 
     const fontSize = 16
+
     const resizeCanvas = () => {
       canvas.width = canvas.clientWidth
       canvas.height = canvas.clientHeight
@@ -26,10 +27,10 @@ export const MatrixRain: React.FC = () => {
     const rainDrops = Array(columns).fill(1)
 
     const draw = () => {
-      context.fillStyle = 'rgba(155, 114, 207, 0.1)'
+      context.fillStyle = 'rgba(83, 43, 136, 0.1)'
       context.fillRect(0, 0, canvas.width, canvas.height)
 
-      context.fillStyle = '#0F0'
+      context.fillStyle = '#FFFFFF'
       context.font = `${fontSize}px monospace`
 
       for (let i = 0; i < rainDrops.length; i++) {
@@ -41,7 +42,7 @@ export const MatrixRain: React.FC = () => {
         const y = rainDrops[i] * fontSize
 
         context.translate(x + fontSize / 2, y + fontSize / 2)
-        context.rotate(Math.PI)
+        context.rotate(-Math.PI / 2.1)
         context.translate(-fontSize / 2, -fontSize / 2)
 
         context.fillText(text, 0, 0)
@@ -55,7 +56,7 @@ export const MatrixRain: React.FC = () => {
       }
     }
 
-    const intervalId = setInterval(draw, 30)
+    const intervalId = setInterval(draw, 60)
 
     const handleResize = () => {
       resizeCanvas()
@@ -86,7 +87,6 @@ const styles = {
     height: '100%',
     borderRadius: '50%',
     overflow: 'hidden',
-    backgroundColor: '#9b72cf',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -95,7 +95,8 @@ const styles = {
   } as React.CSSProperties,
 
   canvas: {
-    width: '100%',
+    width: '110%',
     height: '110%',
+    backgroundColor: 'transparent',
   } as React.CSSProperties,
 }
