@@ -31,14 +31,15 @@ const styles = {
     position: 'absolute',
     color: '#fff',
     fontSize: '5rem',
+    zIndex: '11',
   } as React.CSSProperties,
 
   wrapper: {
-    width: '1000px',
-    height: '1000px',
+    width: '55rem',
+    height: '55rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: '-1',
+    zIndex: '10',
   } as React.CSSProperties,
 }

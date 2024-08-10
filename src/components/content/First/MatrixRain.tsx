@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 
 export const MatrixRain: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const rainDropsRef = useRef<number[]>([])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -15,16 +16,24 @@ export const MatrixRain: React.FC = () => {
     const latin = katakana.split('')
 
     const fontSize = 19
+    let columns = Math.floor(canvas.width / fontSize)
+    rainDropsRef.current = Array(columns).fill(1)
 
     const resizeCanvas = () => {
+      const newColumns = Math.floor(canvas.clientWidth / fontSize)
       canvas.width = canvas.clientWidth
       canvas.height = canvas.clientHeight
+
+      if (newColumns > rainDropsRef.current.length) {
+        rainDropsRef.current.push(
+          ...Array(newColumns - rainDropsRef.current.length).fill(1)
+        )
+      } else {
+        rainDropsRef.current.length = newColumns
+      }
     }
 
     resizeCanvas()
-
-    let columns = Math.floor(canvas.width / fontSize)
-    const rainDrops = Array(columns).fill(1)
 
     const draw = () => {
       context.fillStyle = 'rgba(83, 43, 136, 0.21)'
@@ -33,26 +42,18 @@ export const MatrixRain: React.FC = () => {
       context.fillStyle = '#9fffcb'
       context.font = `${fontSize}px monospace`
 
-      for (let i = 0; i < rainDrops.length; i++) {
+      for (let i = 0; i < rainDropsRef.current.length; i++) {
         const text = latin[Math.floor(Math.random() * latin.length)]
 
-        context.save()
-
         const x = i * fontSize
-        const y = rainDrops[i] * fontSize
+        const y = rainDropsRef.current[i] * fontSize
 
-        context.translate(x + fontSize / 2, y + fontSize / 2)
-        context.rotate(-Math.PI / 2.1)
-        context.translate(-fontSize / 2, -fontSize / 2)
+        context.fillText(text, x, y)
 
-        context.fillText(text, 0, 0)
-
-        context.restore()
-
-        if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          rainDrops[i] = 0
+        if (y > canvas.height && Math.random() > 0.975) {
+          rainDropsRef.current[i] = 0
         }
-        rainDrops[i]++
+        rainDropsRef.current[i]++
       }
     }
 
