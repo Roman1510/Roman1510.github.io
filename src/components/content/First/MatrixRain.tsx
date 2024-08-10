@@ -34,7 +34,19 @@ export const MatrixRain: React.FC = () => {
 
       for (let i = 0; i < rainDrops.length; i++) {
         const text = latin[Math.floor(Math.random() * latin.length)]
-        context.fillText(text, i * fontSize, rainDrops[i] * fontSize)
+
+        context.save()
+
+        const x = i * fontSize
+        const y = rainDrops[i] * fontSize
+
+        context.translate(x + fontSize / 2, y + fontSize / 2)
+        context.rotate(Math.PI)
+        context.translate(-fontSize / 2, -fontSize / 2)
+
+        context.fillText(text, 0, 0)
+
+        context.restore()
 
         if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           rainDrops[i] = 0
@@ -79,10 +91,11 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+    boxSizing: 'border-box',
   } as React.CSSProperties,
 
   canvas: {
     width: '100%',
-    height: '100%',
+    height: '110%',
   } as React.CSSProperties,
 }
