@@ -28,16 +28,17 @@ const styles = {
   } as React.CSSProperties,
 
   title: {
-    marginBottom: '20px',
+    position: 'absolute',
     color: '#fff',
-    fontSize: '2rem',
+    fontSize: '5rem',
   } as React.CSSProperties,
 
   wrapper: {
-    width: '40rem',
-    height: '40rem',
+    width: '1000px',
+    height: '1000px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: '-1',
   } as React.CSSProperties,
 }

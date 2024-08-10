@@ -12,14 +12,14 @@ const useDeviceType = () => {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [deviceType])
 
   return deviceType
 }
 
 const getDeviceType = () => {
   const width = window.innerWidth
-  return width >= 650 ? 'desktop' : 'mobile'
+  return width >= 720 ? 'desktop' : 'mobile'
 }
 
 export default useDeviceType

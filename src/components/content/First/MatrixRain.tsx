@@ -14,7 +14,7 @@ export const MatrixRain: React.FC = () => {
       'アイウエオカキクケコлサシЪスセソタチツテ日トナニヌネノハヒフヘホマ012з45789ミムメモヤｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝЙユヨラリルレロワヲン'
     const latin = katakana.split('')
 
-    const fontSize = 16
+    const fontSize = 19
 
     const resizeCanvas = () => {
       canvas.width = canvas.clientWidth
@@ -30,7 +30,7 @@ export const MatrixRain: React.FC = () => {
       context.fillStyle = 'rgba(83, 43, 136, 0.21)'
       context.fillRect(0, 0, canvas.width, canvas.height)
 
-      context.fillStyle = '#FFFFFF'
+      context.fillStyle = '#9fffcb'
       context.font = `${fontSize}px monospace`
 
       for (let i = 0; i < rainDrops.length; i++) {
@@ -60,10 +60,6 @@ export const MatrixRain: React.FC = () => {
 
     const handleResize = () => {
       resizeCanvas()
-
-      columns = Math.floor(canvas.width / fontSize)
-      rainDrops.length = columns
-      rainDrops.fill(1)
     }
 
     window.addEventListener('resize', handleResize)

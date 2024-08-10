@@ -34,7 +34,7 @@ export const useDesktopScrolling = () => {
   useEffect(() => {
     const mm = gsap.matchMedia()
 
-    mm.add('(min-width: 700px)', () => {
+    mm.add('(min-width: 721px)', () => {
       const desktopContainer = document.querySelector(
         '.desktop-container'
       ) as HTMLElement | null
