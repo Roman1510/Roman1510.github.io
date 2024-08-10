@@ -82,8 +82,8 @@ export const MatrixRain: React.FC = () => {
 
 const styles = {
   container: {
-    width: '40rem',
-    height: '40rem',
+    width: '100%',
+    height: '100%',
     borderRadius: '50%',
     overflow: 'hidden',
     backgroundColor: '#9b72cf',
