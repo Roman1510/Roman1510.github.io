@@ -28,6 +28,7 @@ const styles = {
   } as React.CSSProperties,
 
   title: {
+    padding: '1rem',
     position: 'absolute',
     color: '#fff',
     fontSize: '5rem',
