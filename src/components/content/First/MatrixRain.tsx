@@ -97,12 +97,12 @@ export const MatrixRain: React.FC = () => {
     }
 
     window.addEventListener('resize', handleResize)
-    canvas.addEventListener('click', handleClick)
+    window.addEventListener('click', handleClick)
 
     return () => {
       clearInterval(intervalId)
       window.removeEventListener('resize', handleResize)
-      canvas.removeEventListener('click', handleClick)
+      window.removeEventListener('click', handleClick)
     }
   }, [])
 

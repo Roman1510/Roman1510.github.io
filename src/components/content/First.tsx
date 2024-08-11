@@ -1,14 +1,44 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { MatrixRain } from './First/MatrixRain'
 
 export const First = () => {
+  const [isVisible, setIsVisible] = useState(false)
+  const matrixRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        } else {
+          setIsVisible(false)
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.7,
+      }
+    )
+
+    if (matrixRef.current) {
+      observer.observe(matrixRef.current)
+    }
+
+    return () => {
+      if (matrixRef.current) {
+        observer.unobserve(matrixRef.current)
+      }
+    }
+  }, [])
+
   return (
     <div className="section" style={styles.container}>
       <div className="title" style={styles.title}>
         <p>Roman Vinnick</p>
       </div>
-      <div style={styles.wrapper}>
-        <MatrixRain />
+      <div style={styles.wrapper} ref={matrixRef}>
+        {isVisible && <MatrixRain />}
       </div>
     </div>
   )
