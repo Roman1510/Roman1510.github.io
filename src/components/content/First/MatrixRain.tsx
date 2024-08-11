@@ -48,7 +48,15 @@ export const MatrixRain: React.FC = () => {
         const x = i * fontSize
         const y = rainDropsRef.current[i] * fontSize
 
-        context.fillText(text, x, y)
+        context.save()
+
+        context.translate(x, y)
+
+        context.rotate(Math.PI)
+
+        context.fillText(text, 0, 0)
+
+        context.restore()
 
         if (y > canvas.height && Math.random() > 0.975) {
           rainDropsRef.current[i] = 0
