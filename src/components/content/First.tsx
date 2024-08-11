@@ -41,6 +41,6 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: '10',
+    zIndex: '12',
   } as React.CSSProperties,
 }

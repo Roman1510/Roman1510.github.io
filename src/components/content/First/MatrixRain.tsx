@@ -1,8 +1,15 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 export const MatrixRain: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const rainDropsRef = useRef<number[]>([])
+  const glitchEffectRef = useRef<{
+    x: number
+    y: number
+    radius: number
+    active: boolean
+  }>({ x: 0, y: 0, radius: 0, active: false })
+  const [glitchColor, setGlitchColor] = useState<string>('#ff0000') // Red color for glitch effect
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -39,9 +46,6 @@ export const MatrixRain: React.FC = () => {
       context.fillStyle = 'rgba(83, 43, 136, 0.21)'
       context.fillRect(0, 0, canvas.width, canvas.height)
 
-      context.fillStyle = '#9fffcb'
-      context.font = `${fontSize}px monospace`
-
       for (let i = 0; i < rainDropsRef.current.length; i++) {
         const text = latin[Math.floor(Math.random() * latin.length)]
 
@@ -52,7 +56,21 @@ export const MatrixRain: React.FC = () => {
 
         context.translate(x, y)
 
-        context.rotate(Math.PI)
+        context.rotate(Math.PI) // Rotate by 180 degrees
+
+        const distance = Math.hypot(
+          x - glitchEffectRef.current.x,
+          y - glitchEffectRef.current.y
+        )
+
+        if (
+          glitchEffectRef.current.active &&
+          distance < glitchEffectRef.current.radius
+        ) {
+          context.fillStyle = glitchColor
+        } else {
+          context.fillStyle = '#9fffcb'
+        }
 
         context.fillText(text, 0, 0)
 
@@ -63,6 +81,13 @@ export const MatrixRain: React.FC = () => {
         }
         rainDropsRef.current[i]++
       }
+
+      if (glitchEffectRef.current.active) {
+        glitchEffectRef.current.radius += 10
+        if (glitchEffectRef.current.radius > canvas.width) {
+          glitchEffectRef.current.active = false
+        }
+      }
     }
 
     const intervalId = setInterval(draw, 60)
@@ -71,11 +96,30 @@ export const MatrixRain: React.FC = () => {
       resizeCanvas()
     }
 
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      glitchEffectRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        radius: 0,
+        active: true,
+      }
+
+      // Randomize glitch color for a more dynamic effect
+      setGlitchColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
+
+      setTimeout(() => {
+        glitchEffectRef.current.active = false
+      }, 300) // Glitch effect lasts for 300ms
+    }
+
     window.addEventListener('resize', handleResize)
+    canvas.addEventListener('click', handleClick)
 
     return () => {
       clearInterval(intervalId)
       window.removeEventListener('resize', handleResize)
+      canvas.removeEventListener('click', handleClick)
     }
   }, [])
 
