@@ -534,6 +534,60 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}
+
+.resize {
+  resize: both;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -571,17 +625,38 @@ body::-webkit-scrollbar-track {
 
 .section {
   scroll-snap-align: start;
-  flex: 0 0 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .title {
   font-family: 'Comic Neue', sans-serif;
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: bold;
   color: white;
-  position: relative;
+}
+
+.contact-me {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.linkedin-button {
+  border-radius: 50%;
+  background-color: #0077b5;
+  color: white;
+  border: none;
+  padding: 20px;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.linkedin-button:hover {
+  background-color: #005582;
 }

@@ -1,36 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { MatrixRain } from './First/MatrixRain'
+import useDeviceType from '@/hooks/useDeviceType'
 
 export const First = () => {
   const [isVisible, setIsVisible] = useState(false)
   const matrixRef = useRef<HTMLDivElement | null>(null)
-
+  const observerRef = useRef<IntersectionObserver | null>(null)
+  const deviceType = useDeviceType()
   useEffect(() => {
+    const handleResize = () => {
+      if (matrixRef.current && observerRef.current) {
+        observerRef.current.observe(matrixRef.current)
+      }
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        } else {
-          setIsVisible(false)
-        }
+        setIsVisible(entry.isIntersecting)
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.4,
+        threshold: 0.6,
       }
     )
+
+    observerRef.current = observer
 
     if (matrixRef.current) {
       observer.observe(matrixRef.current)
     }
 
+    window.addEventListener('resize', handleResize)
+
     return () => {
-      if (matrixRef.current) {
-        observer.unobserve(matrixRef.current)
+      if (matrixRef.current && observerRef.current) {
+        observerRef.current.unobserve(matrixRef.current)
       }
+      window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [deviceType])
 
   return (
     <div className="section" style={styles.container}>

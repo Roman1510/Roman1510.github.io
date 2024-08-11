@@ -19,7 +19,7 @@ const useDeviceType = () => {
 
 const getDeviceType = () => {
   const width = window.innerWidth
-  return width >= 620 ? 'desktop' : 'mobile'
+  return width >= 550 ? 'desktop' : 'mobile'
 }
 
 export default useDeviceType
