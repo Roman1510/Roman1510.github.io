@@ -3,9 +3,8 @@ import React, { useEffect, useRef } from 'react'
 export const MatrixRain: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const rainDropsRef = useRef<number[]>([])
-  const glitchSymbolsRef = useRef<
-    { column: number; row: number; timer: number }[]
-  >([])
+  const redSymbolsRef = useRef<Set<string>>(new Set())
+  const currentSymbolIndexRef = useRef<number>(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -15,7 +14,7 @@ export const MatrixRain: React.FC = () => {
     if (!context) return
 
     const katakana =
-      '᨟ཫᨕᨐᨂᨁ アイウエオカキクケコлサシЪスセソタチツテ日トナニヌネノハヒフヘホマ 012з45789 ミムメモヤｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝЙ ユヨラリルレロワヲンアウエオカキケコサシスセソタツテナニヌネハヒホマミムメモヤヨラリ'
+      '᨟ཫᨕᨂᨁ アイウエオカキクケコлサシЪスセソタチツテ日トナニヌネノハヒフヘホマ012з45789ミムメモヤｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝЙ ユヨラリルレロワヲンアウエオカキケコサシスセソタツテナニヌネハヒホマミムメモヤヨラリ'
     const latin = katakana.split('')
 
     const fontSize = 19
@@ -50,26 +49,15 @@ export const MatrixRain: React.FC = () => {
 
         context.save()
         context.translate(x, y)
-        context.rotate(Math.PI) // Rotate by 180 degrees
+        context.rotate(Math.PI)
 
-        // Check if the current symbol is one of the glitch symbols
-        const glitchSymbol = glitchSymbolsRef.current.find(
-          (symbol) =>
-            symbol.column === i && symbol.row === rainDropsRef.current[i]
-        )
+        const row = Math.floor(y / fontSize)
+        const symbolKey = `${i}-${row}`
 
-        if (glitchSymbol) {
-          context.fillStyle = '#ff0000' // Red color for glitch effect
-          glitchSymbol.timer--
-
-          // Remove the symbol from glitchSymbolsRef after the timer is up
-          if (glitchSymbol.timer <= 0) {
-            glitchSymbolsRef.current = glitchSymbolsRef.current.filter(
-              (symbol) => symbol !== glitchSymbol
-            )
-          }
+        if (redSymbolsRef.current.has(symbolKey)) {
+          context.fillStyle = '#ff0000'
         } else {
-          context.fillStyle = '#9fffcb' // Normal color
+          context.fillStyle = '#9fffcb'
         }
 
         context.fillText(text, 0, 0)
@@ -89,20 +77,23 @@ export const MatrixRain: React.FC = () => {
     }
 
     const handleClick = () => {
-      const newGlitchSymbols = []
+      const rows = Math.floor(canvas.height / fontSize)
+      for (let j = 0; j < 50; j++) {
+        if (
+          currentSymbolIndexRef.current <
+          rainDropsRef.current.length * rows
+        ) {
+          const column = Math.floor(currentSymbolIndexRef.current / rows)
+          const row = currentSymbolIndexRef.current % rows
 
-      for (let i = 0; i < 7; i++) {
-        const randomColumn = Math.floor(Math.random() * columns)
-        const randomRow = Math.floor(Math.random() * (canvas.height / fontSize))
-
-        newGlitchSymbols.push({
-          column: randomColumn,
-          row: randomRow,
-          timer: 60, // Show the red glitch effect for 1 second (60 frames)
-        })
+          const symbolKey = `${column}-${row}`
+          redSymbolsRef.current.add(symbolKey)
+          currentSymbolIndexRef.current++
+        } else {
+          console.log('All symbols are red')
+          break
+        }
       }
-
-      glitchSymbolsRef.current.push(...newGlitchSymbols)
     }
 
     window.addEventListener('resize', handleResize)
