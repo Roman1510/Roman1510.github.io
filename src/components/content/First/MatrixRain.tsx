@@ -1,15 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export const MatrixRain: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const rainDropsRef = useRef<number[]>([])
-  const glitchEffectRef = useRef<{
-    x: number
-    y: number
-    radius: number
-    active: boolean
-  }>({ x: 0, y: 0, radius: 0, active: false })
-  const [glitchColor, setGlitchColor] = useState<string>('#ff0000') // Red color for glitch effect
+  const glitchSymbolsRef = useRef<
+    { column: number; row: number; timer: number }[]
+  >([])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -53,40 +49,36 @@ export const MatrixRain: React.FC = () => {
         const y = rainDropsRef.current[i] * fontSize
 
         context.save()
-
         context.translate(x, y)
-
         context.rotate(Math.PI) // Rotate by 180 degrees
 
-        const distance = Math.hypot(
-          x - glitchEffectRef.current.x,
-          y - glitchEffectRef.current.y
+        // Check if the current symbol is one of the glitch symbols
+        const glitchSymbol = glitchSymbolsRef.current.find(
+          (symbol) =>
+            symbol.column === i && symbol.row === rainDropsRef.current[i]
         )
 
-        if (
-          glitchEffectRef.current.active &&
-          distance < glitchEffectRef.current.radius
-        ) {
-          context.fillStyle = glitchColor
+        if (glitchSymbol) {
+          context.fillStyle = '#ff0000' // Red color for glitch effect
+          glitchSymbol.timer--
+
+          // Remove the symbol from glitchSymbolsRef after the timer is up
+          if (glitchSymbol.timer <= 0) {
+            glitchSymbolsRef.current = glitchSymbolsRef.current.filter(
+              (symbol) => symbol !== glitchSymbol
+            )
+          }
         } else {
-          context.fillStyle = '#9fffcb'
+          context.fillStyle = '#9fffcb' // Normal color
         }
 
         context.fillText(text, 0, 0)
-
         context.restore()
 
         if (y > canvas.height && Math.random() > 0.975) {
           rainDropsRef.current[i] = 0
         }
         rainDropsRef.current[i]++
-      }
-
-      if (glitchEffectRef.current.active) {
-        glitchEffectRef.current.radius += 10
-        if (glitchEffectRef.current.radius > canvas.width) {
-          glitchEffectRef.current.active = false
-        }
       }
     }
 
@@ -96,21 +88,21 @@ export const MatrixRain: React.FC = () => {
       resizeCanvas()
     }
 
-    const handleClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      glitchEffectRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        radius: 0,
-        active: true,
+    const handleClick = () => {
+      const newGlitchSymbols = []
+
+      for (let i = 0; i < 7; i++) {
+        const randomColumn = Math.floor(Math.random() * columns)
+        const randomRow = Math.floor(Math.random() * (canvas.height / fontSize))
+
+        newGlitchSymbols.push({
+          column: randomColumn,
+          row: randomRow,
+          timer: 60, // Show the red glitch effect for 1 second (60 frames)
+        })
       }
 
-      // Randomize glitch color for a more dynamic effect
-      setGlitchColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
-
-      setTimeout(() => {
-        glitchEffectRef.current.active = false
-      }, 300) // Glitch effect lasts for 300ms
+      glitchSymbolsRef.current.push(...newGlitchSymbols)
     }
 
     window.addEventListener('resize', handleResize)
