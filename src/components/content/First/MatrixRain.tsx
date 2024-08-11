@@ -70,7 +70,7 @@ export const MatrixRain: React.FC = () => {
       }
     }
 
-    const intervalId = setInterval(draw, 60)
+    const intervalId = setInterval(draw, 67)
 
     const handleResize = () => {
       resizeCanvas()
@@ -78,7 +78,7 @@ export const MatrixRain: React.FC = () => {
 
     const handleClick = () => {
       const rows = Math.floor(canvas.height / fontSize)
-      for (let j = 0; j < 50; j++) {
+      for (let j = 0; j < latin.length; j++) {
         if (
           currentSymbolIndexRef.current <
           rainDropsRef.current.length * rows
@@ -90,7 +90,7 @@ export const MatrixRain: React.FC = () => {
           redSymbolsRef.current.add(symbolKey)
           currentSymbolIndexRef.current++
         } else {
-          console.log('All symbols are red')
+          console.log('glitch')
           break
         }
       }
