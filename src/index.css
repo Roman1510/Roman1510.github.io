@@ -110,6 +110,12 @@ body::-webkit-scrollbar-track {
   }
 }
 
+@media (max-width: 1370px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
 .contact-me {
   position: absolute;
   bottom: 20px;
