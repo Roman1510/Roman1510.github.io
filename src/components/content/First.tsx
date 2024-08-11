@@ -17,7 +17,7 @@ export const First = () => {
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.7,
+        threshold: 0.4,
       }
     )
 
@@ -61,7 +61,7 @@ const styles = {
     padding: '1rem',
     position: 'absolute',
     color: '#fff',
-    fontSize: '5rem',
+    fontSize: '4rem',
     zIndex: '11',
   } as React.CSSProperties,
 
