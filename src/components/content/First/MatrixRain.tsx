@@ -7,6 +7,7 @@ export const MatrixRain: React.FC = () => {
   const currentSymbolIndexRef = useRef<number>(0)
 
   useEffect(() => {
+    console.log('rerender of the component.')
     const canvas = canvasRef.current
     if (!canvas) return
 

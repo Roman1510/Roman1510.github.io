@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MatrixRain } from './First/MatrixRain'
 import useDeviceType from '@/hooks/useDeviceType'
 
-export const First: React.FC = () => {
+export const First = () => {
   const [isVisible, setIsVisible] = useState(false)
   const matrixRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
@@ -11,20 +11,16 @@ export const First: React.FC = () => {
   const deviceType = useDeviceType()
 
   useEffect(() => {
-    const handleResize = () => {
-      if (matrixRef.current && observerRef.current) {
-        observerRef.current.observe(matrixRef.current)
-      }
-    }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting)
+        if (entry.isIntersecting !== isVisible) {
+          setIsVisible(entry.isIntersecting)
+        }
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.35,
+        threshold: 0.1,
       }
     )
 
@@ -32,6 +28,13 @@ export const First: React.FC = () => {
 
     if (matrixRef.current) {
       observer.observe(matrixRef.current)
+    }
+
+    const handleResize = () => {
+      if (matrixRef.current && observerRef.current) {
+        observerRef.current.unobserve(matrixRef.current)
+        observerRef.current.observe(matrixRef.current)
+      }
     }
 
     window.addEventListener('resize', handleResize)
@@ -42,7 +45,7 @@ export const First: React.FC = () => {
       }
       window.removeEventListener('resize', handleResize)
     }
-  }, [deviceType])
+  }, [deviceType, isVisible])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
