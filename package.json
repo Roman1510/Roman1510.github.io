@@ -19,6 +19,7 @@
     "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.109.5",
     "@react-three/fiber": "^8.17.5",
+    "@react-three/rapier": "^1.4.0",
     "@types/three": "^0.155.0",
     "gsap": "^3.12.2",
     "orbit-space": "^1.1.0",

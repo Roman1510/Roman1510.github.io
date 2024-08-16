@@ -1,86 +1,67 @@
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
-import { Physics, useSphere, usePlane } from '@react-three/cannon'
-import { Event, Mesh } from 'three'
-
-interface IBallProps {
-  position: [number, number, number]
-  color: string
-}
-
-const Ball = ({ position, color }: IBallProps) => {
-  const [ref, api] = useSphere<Mesh>(() => ({
-    mass: 1,
-    position,
-    args: [0.5],
-  }))
-
-  const handlePointerDown = (e: Event) => {
-    e.stopPropagation()
-
-    const impulse: [number, number, number] = [
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 10,
-    ]
-
-    api.applyImpulse(impulse, [0, 0, 0])
-  }
-
-  return (
-    <mesh ref={ref} castShadow receiveShadow onPointerDown={handlePointerDown}>
-      <sphereGeometry args={[0.5, 32, 32]} />
-      <meshStandardMaterial color={color} />
-    </mesh>
-  )
-}
-
-const Plane = () => {
-  const [ref] = usePlane<Mesh>(() => ({
-    rotation: [-Math.PI / 2, 0, 0],
-    position: [0, 0, 0],
-  }))
-
-  return (
-    <mesh ref={ref} receiveShadow>
-      <planeGeometry args={[100, 100]} />
-      <shadowMaterial color="#171717" opacity={0.5} />
-    </mesh>
-  )
-}
+import { useEffect, useRef, useState } from 'react'
+import balls from '@/helpers/generateBalls'
+import { Experience } from './Experience'
 
 export const Second = () => {
+  const [isVisible, setIsVisible] = useState(false)
+  const sectionRef = useRef<HTMLDivElement | null>(null)
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      }
+    )
+
+    observerRef.current = observer
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    const handleResize = () => {
+      if (sectionRef.current && observerRef.current) {
+        observerRef.current.unobserve(sectionRef.current)
+        observerRef.current.observe(sectionRef.current)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      if (sectionRef.current && observerRef.current) {
+        observerRef.current.unobserve(sectionRef.current)
+      }
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <div
       className="section"
+      ref={sectionRef}
       style={{ backgroundColor: '#9b72cf', height: '100vh' }}
     >
-      <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
-        <Physics gravity={[0, -9.81, 0]}>
-          <Plane />
-          <Ball position={[0, 2, 0]} color="red" />
-          <Ball position={[2, 5, 0]} color="blue" />
-          <Ball position={[-2, 8, 0]} color="green" />
-        </Physics>
-        <OrbitControls />
-      </Canvas>
-      <div className="title" style={{ padding: '50px' }}>
-        <p
-          style={{
-            padding: '50px',
-            userSelect: 'none',
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            color: 'white',
-            fontSize: '24px',
-          }}
-        >
-          Tha
-        </p>
-      </div>
+      {isVisible && (
+        <div style={styles.wrapper}>
+          <Experience balls={balls} />
+        </div>
+      )}
     </div>
   )
+}
+
+const styles = {
+  wrapper: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    bottom: 0,
+  } as React.CSSProperties,
 }
