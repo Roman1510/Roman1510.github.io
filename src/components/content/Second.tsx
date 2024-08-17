@@ -54,6 +54,9 @@ export const Second = () => {
     >
       {isVisible && (
         <div style={styles.wrapper}>
+          <div style={styles.headerText}>
+            <span className="title"> Hi there</span>
+          </div>
           <Experience balls={balls} />
         </div>
       )}
@@ -67,5 +70,18 @@ const styles = {
     height: '100%',
     position: 'absolute',
     bottom: 0,
+  } as React.CSSProperties,
+
+  headerText: {
+    position: 'absolute',
+    top: '10%',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    fontSize: '64px',
+    fontFamily: "'YourFontName', sans-serif",
+    color: 'white',
+    textAlign: 'center',
+    userSelect: 'none',
+    zIndex: 11,
   } as React.CSSProperties,
 }

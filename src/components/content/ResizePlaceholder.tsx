@@ -10,12 +10,12 @@ const ResizePlaceholder: React.FC = () => {
 
     const handleResize = () => {
       setIsResizing(true)
-
+      // window.scrollTo(0, 0)
       clearTimeout(timeoutId)
 
       timeoutId = setTimeout(() => {
         setIsResizing(false)
-      }, 1000)
+      }, 500)
     }
 
     window.addEventListener('resize', handleResize)
@@ -64,7 +64,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'linear-gradient(135deg, purple, green)',
+    backgroundColor: '#532b88',
     zIndex: 9999,
     pointerEvents: 'none',
   } as React.CSSProperties,
