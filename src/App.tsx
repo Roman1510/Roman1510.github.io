@@ -8,6 +8,7 @@ import { Second } from './components/content/Second'
 import { Third } from './components/content/Third'
 import { Forth } from './components/content/Forth'
 import { Fifth } from './components/content/Fifth'
+import ResizePlaceholder from './components/content/ResizePlaceholder'
 
 const App = () => {
   useAnimatedFavicon()
@@ -24,7 +25,10 @@ const App = () => {
   )
 
   return deviceType === 'desktop' ? (
-    <DesktopWrapper>{content}</DesktopWrapper>
+    <DesktopWrapper>
+      {content}
+      <ResizePlaceholder />
+    </DesktopWrapper>
   ) : (
     <MobileWrapper>{content}</MobileWrapper>
   )

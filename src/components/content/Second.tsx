@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import balls from '@/helpers/generateBalls'
 import { Experience } from './Experience'
+import useDeviceType from '@/hooks/useDeviceType'
 
 export const Second = () => {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
+  const deviceType = useDeviceType()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting)
+        if (entry.isIntersecting !== isVisible) {
+          setIsVisible(entry.isIntersecting)
+        }
       },
       {
         root: null,
@@ -40,7 +44,7 @@ export const Second = () => {
       }
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [deviceType, isVisible])
 
   return (
     <div
