@@ -9,7 +9,12 @@ interface IExperienceProps {
 
 export const Experience = ({ balls }: IExperienceProps) => {
   return (
-    <Canvas shadows orthographic camera={{ position: [0, 0, 12], zoom: 180 }}>
+    <Canvas
+      dpr={1}
+      shadows
+      orthographic
+      camera={{ position: [0, 0, 12], zoom: 180 }}
+    >
       <spotLight decay={0} position={[8, 13, 8.5]} angle={0.4} castShadow />
       <Physics>
         {balls.map((ball, index) => (
