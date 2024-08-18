@@ -3,7 +3,7 @@ import balls from '@/helpers/generateBalls'
 import { Experience } from './Experience'
 import useDeviceType from '@/hooks/useDeviceType'
 
-export const Second = () => {
+export const Page2 = () => {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { MatrixRain } from './First/MatrixRain'
+import { MatrixRain } from './MatrixRain'
 import useDeviceType from '@/hooks/useDeviceType'
 
-export const First = () => {
+export const Page1 = () => {
   const [isVisible, setIsVisible] = useState(false)
   const matrixRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)

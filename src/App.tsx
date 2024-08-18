@@ -3,12 +3,12 @@ import useDeviceType from './hooks/useDeviceType'
 import DesktopWrapper from './components/DesktopWrapper'
 import MobileWrapper from './components/MobileWrapper'
 import useAnimatedFavicon from './hooks/useAnimatedFavicon'
-import { First } from './components/content/First'
-import { Second } from './components/content/Second'
-import { Third } from './components/content/Third'
-import { Forth } from './components/content/Forth'
-import { Fifth } from './components/content/Fifth'
-import ResizePlaceholder from './components/content/ResizePlaceholder'
+import { Page1 } from './components/content/Page1/Page1'
+import { Page2 } from './components/content/Page2/Page2'
+import { Page3 } from './components/content/Page3/Page3'
+import { Page4 } from './components/content/Page4/Page4'
+import { Page5 } from './components/content/Page5/Page5'
+import ResizePlaceholder from './components/ResizePlaceholder'
 
 const App = () => {
   useAnimatedFavicon()
@@ -16,11 +16,11 @@ const App = () => {
 
   const content = (
     <>
-      <First />
-      <Second />
-      <Third />
-      <Forth />
-      <Fifth />
+      <Page1 />
+      <Page2 />
+      <Page3 />
+      <Page4 />
+      <Page5 />
     </>
   )
 
