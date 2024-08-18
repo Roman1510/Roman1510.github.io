@@ -31,8 +31,8 @@ export const Ball = ({ position, texture }: IBallProps) => {
       colliders={false}
       enabledTranslations={[true, true, false]}
       linearDamping={1}
-      angularDamping={1}
-      restitution={0.7}
+      angularDamping={0.8}
+      restitution={0.1}
       position={position}
     >
       <BallCollider args={[deviceType === 'desktop' ? 0.48 : 0.25]} />
