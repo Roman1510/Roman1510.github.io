@@ -15,7 +15,7 @@ const getRandomPosition = () => {
 }
 
 const balls: { position: [number, number, number]; color: string }[] =
-  Array.from({ length: 21 }, () => ({
+  Array.from({ length: 5 }, () => ({
     position: getRandomPosition(),
     color: getRandomColor(),
   }))

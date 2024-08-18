@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-export const MatrixRain: React.FC = () => {
+export const MatrixRain = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const rainDropsRef = useRef<number[]>([])
   const redSymbolsRef = useRef<Set<string>>(new Set())
@@ -18,7 +18,7 @@ export const MatrixRain: React.FC = () => {
       '᨟ཫᨕᨂᨁ アイウエオカキクケコлサシЪスセソタチツテ日トナニヌネノハヒフヘホマ012з45789ミムメモヤｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝЙ ユヨラリルレロワヲンアウエオカキケコサシスセソタツテナニヌネハヒホマミムメモヤヨラリ'
     const latin = katakana.split('')
 
-    const fontSize = 19
+    const fontSize = 13
     let columns = Math.floor(canvas.width / fontSize)
     rainDropsRef.current = Array(columns).fill(1)
 
@@ -41,6 +41,8 @@ export const MatrixRain: React.FC = () => {
     const draw = () => {
       context.fillStyle = 'rgba(83, 43, 136, 0.21)'
       context.fillRect(0, 0, canvas.width, canvas.height)
+
+      // context.font = `${fontSize}px 'MatrixCode'`
 
       for (let i = 0; i < rainDropsRef.current.length; i++) {
         const text = latin[Math.floor(Math.random() * latin.length)]

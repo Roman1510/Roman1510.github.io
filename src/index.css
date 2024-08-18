@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'MatrixCode';
+  src: url('/fonts/MatrixCodeNfi-YPPj.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -52,11 +59,14 @@ body::-webkit-scrollbar-track {
   color: #fafafa;
   font-size: clamp(1.5rem, 5vw, 5rem);
   font-weight: 800;
-  font-family: 'Comic Neue', sans-serif;
+  font-family: 'MatrixCode', sans-serif;
   line-height: 1;
   transform-style: preserve-3d;
   transition: transform 0.1s ease-out;
   opacity: 0.8;
+}
+.title:hover {
+  font-family: 'Comic Neue';
 }
 
 .title span {
