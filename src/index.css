@@ -51,6 +51,7 @@ body::-webkit-scrollbar-track {
   display: inline-block;
   color: #fafafa;
   font-size: 5rem;
+  font-weight: 800;
   font-family: 'Comic Neue', sans-serif;
   line-height: 1;
   transform-style: preserve-3d;

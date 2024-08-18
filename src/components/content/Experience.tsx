@@ -16,7 +16,7 @@ export const Experience = ({ balls }: IExperienceProps) => {
       camera={{ position: [0, 0, 12], zoom: 180 }}
     >
       <spotLight decay={0} position={[8, 13, 8.5]} angle={0.4} castShadow />
-      <Physics>
+      <Physics gravity={[0, -8, 0]}>
         {balls.map((ball, index) => (
           <Ball key={index} position={ball.position} color={ball.color} />
         ))}
