@@ -9,13 +9,8 @@ interface IExperienceProps {
 
 export const Experience = ({ balls }: IExperienceProps) => {
   return (
-    <Canvas
-      dpr={0.8}
-      shadows
-      orthographic
-      camera={{ position: [0, 0, 12], zoom: 180 }}
-    >
-      <spotLight decay={0} position={[8, 13, 8.5]} angle={0.4} castShadow />
+    <Canvas dpr={0.8} orthographic camera={{ position: [0, 0, 12], zoom: 180 }}>
+      <spotLight decay={0} position={[8, 17, 8.5]} angle={0.4} />
       <Physics gravity={[0, -8, 0]}>
         {balls.map((ball, index) => (
           <Ball key={index} position={ball.position} color={ball.color} />

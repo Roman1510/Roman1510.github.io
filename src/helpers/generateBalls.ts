@@ -9,7 +9,7 @@ const getRandomColor = () => {
 
 const getRandomPosition = () => {
   const x = Math.random() * 1
-  const y = Math.random() * 4 + 1
+  const y = Math.random() * 12 + 4
   const z = 0
   return [x, y, z] as [number, number, number]
 }
