@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import balls from '@/helpers/generateBalls'
 import { Experience } from './Experience'
-import useDeviceType from '@/hooks/useDeviceType'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 export const Page2 = () => {
   const [isVisible, setIsVisible] = useState(false)

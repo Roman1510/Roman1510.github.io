@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const useDeviceType = () => {
+export const useDeviceType = () => {
   const [deviceType, setDeviceType] = useState(getDeviceType())
 
   useEffect(() => {
@@ -21,5 +21,3 @@ const getDeviceType = () => {
   const width = window.innerWidth
   return width >= 550 ? 'desktop' : 'mobile'
 }
-
-export default useDeviceType

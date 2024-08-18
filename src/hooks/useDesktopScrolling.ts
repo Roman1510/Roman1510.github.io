@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { gsap } from 'gsap'
 import { ScrollToPlugin, ScrollTrigger } from 'gsap/all'
-import useDeviceType from './useDeviceType'
+import { useDeviceType } from './useDeviceType'
 
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger)
 

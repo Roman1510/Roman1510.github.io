@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { RigidBody, BallCollider, RapierRigidBody } from '@react-three/rapier'
 import { Event } from 'three'
-import useDeviceType from '@/hooks/useDeviceType'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 interface IBallProps {
   position: [number, number, number]

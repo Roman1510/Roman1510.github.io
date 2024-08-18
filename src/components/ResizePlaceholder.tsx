@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, CSSProperties } from 'react'
 import gsap from 'gsap'
 
-const ResizePlaceholder: React.FC = () => {
+export const ResizePlaceholder = () => {
   const [isResizing, setIsResizing] = useState(false)
   const emojiRef = useRef<HTMLSpanElement | null>(null)
 
@@ -67,18 +67,16 @@ const styles = {
     backgroundColor: '#532b88',
     zIndex: 9999,
     pointerEvents: 'none',
-  } as React.CSSProperties,
+  } as CSSProperties,
   text: {
     fontSize: '24px',
     color: 'white',
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
-  } as React.CSSProperties,
+  } as CSSProperties,
   emoji: {
     fontSize: '40px',
     marginRight: '10px',
-  } as React.CSSProperties,
+  } as CSSProperties,
 }
-
-export default ResizePlaceholder

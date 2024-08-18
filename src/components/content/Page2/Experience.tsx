@@ -10,7 +10,7 @@ interface IExperienceProps {
 export const Experience = ({ balls }: IExperienceProps) => {
   return (
     <Canvas
-      dpr={1}
+      dpr={0.8}
       shadows
       orthographic
       camera={{ position: [0, 0, 12], zoom: 180 }}

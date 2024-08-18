@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { MatrixRain } from './MatrixRain'
-import useDeviceType from '@/hooks/useDeviceType'
+import { useDeviceType } from '@/hooks/useDeviceType'
 
 export const Page1 = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -106,7 +106,7 @@ const styles = {
     margin: 0,
     padding: 0,
     position: 'relative',
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   titleContainer: {
     position: 'absolute',
@@ -116,7 +116,7 @@ const styles = {
     zIndex: 11,
     cursor: 'default',
     userSelect: 'none',
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   wrapper: {
     width: '100%',
@@ -128,5 +128,5 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
-  } as React.CSSProperties,
+  } as CSSProperties,
 }
