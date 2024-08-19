@@ -1,15 +1,15 @@
-import { Canvas, useThree } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
-import { Physics, CuboidCollider } from '@react-three/rapier'
-import { Ball } from './Ball'
-import { generateEmojiTextures } from '@/helpers/generateEmojiTexture'
+import { Canvas, useThree } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
+import { Physics, CuboidCollider } from '@react-three/rapier';
+import { Ball } from './Ball';
+import { generateEmojiTextures } from '@/helpers/generateEmojiTexture';
 
 interface IExperienceProps {
-  balls: { position: [number, number, number]; color: string }[]
+  balls: { position: [number, number, number]; color: string }[];
 }
 
 export const Experience = ({ balls }: IExperienceProps) => {
-  const textures = generateEmojiTextures(balls.map((ball) => ball.color))
+  const textures = generateEmojiTextures(balls.map((ball) => ball.color));
 
   return (
     <Canvas dpr={1} orthographic camera={{ position: [0, 0, 12], zoom: 180 }}>
@@ -24,13 +24,13 @@ export const Experience = ({ balls }: IExperienceProps) => {
         ))}
         <Walls />
       </Physics>
-      <Environment preset="forest" />
+      <Environment preset="park" />
     </Canvas>
-  )
-}
+  );
+};
 
 const Walls = () => {
-  const { width, height } = useThree((state) => state.viewport)
+  const { width, height } = useThree((state) => state.viewport);
 
   return (
     <>
@@ -49,5 +49,5 @@ const Walls = () => {
         args={[1, height * 10, 1]}
       />
     </>
-  )
-}
+  );
+};
