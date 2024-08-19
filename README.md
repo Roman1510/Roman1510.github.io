@@ -1,5 +1,5 @@
 # Hi there
 
-Here I present my page which is built with `ThreeJS, React, Vite`
+Here I present my matrix themed page `ThreeJS, React, Vite`
 
-Currently, it's still being developed, hope I'm going to finish it sooner
+You can scroll with whatever means, whether it's arrow keys or touchbar/mouse, it's always going to work :) (well, 99% cases hehe)
