@@ -7,6 +7,8 @@ import {
   ROWS,
   TILE_SIZE,
 } from '@/constants/game-world'
+import { Hero } from './Hero'
+import { GameObject } from './GameObject'
 
 export const PixiGrid = () => {
   return (
@@ -18,12 +20,14 @@ export const PixiGrid = () => {
         antialias: true,
       }}
     >
-      <Container eventMode="static">
+      <Container eventMode="auto">
         <Graphics
           draw={(g) =>
             drawGrid(g, TILE_SIZE, COLS, ROWS, GAME_WIDTH, GAME_HEIGHT)
           }
         />
+        <Hero x={0} y={0} />
+        <GameObject x={TILE_SIZE * 10} y={TILE_SIZE * 5} />
       </Container>
     </Stage>
   )

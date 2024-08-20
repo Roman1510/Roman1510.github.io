@@ -1,4 +1,4 @@
-import { PixiGrid } from './PixiGrid'
+import { PixiGrid } from './Experience/PixiGrid'
 
 export const Page3 = () => {
   return (
