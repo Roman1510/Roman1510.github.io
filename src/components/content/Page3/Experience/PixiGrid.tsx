@@ -20,7 +20,7 @@ export const PixiGrid = () => {
         antialias: true,
       }}
     >
-      <Container eventMode="auto">
+      <Container>
         <Graphics
           draw={(g) =>
             drawGrid(g, TILE_SIZE, COLS, ROWS, GAME_WIDTH, GAME_HEIGHT)
