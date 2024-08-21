@@ -18,6 +18,8 @@ export const PixiGrid = () => {
       options={{
         backgroundAlpha: 0,
         antialias: true,
+        resolution: 1,
+        autoDensity: false,
       }}
     >
       <Container>
