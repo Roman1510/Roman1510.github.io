@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Graphics } from '@pixi/react';
 import { Graphics as GraphicsImpl } from 'pixi.js';
 import { TILE_SIZE } from '@/constants/game-world';
@@ -21,6 +21,12 @@ export const Hero = ({ x, y }: IHeroProps) => {
     g.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
     g.endFill();
   };
+
+  const snapToGrid = useCallback((x: number, y: number) => {
+    const snappedX = Math.round(x / TILE_SIZE) * TILE_SIZE;
+    const snappedY = Math.round(y / TILE_SIZE) * TILE_SIZE;
+    return { x: snappedX, y: snappedY };
+  }, []);
 
   useEffect(() => {
     const updatePosition = () => {
@@ -46,6 +52,10 @@ export const Hero = ({ x, y }: IHeroProps) => {
             y: prevPosition.y + dy,
           };
         });
+      } else {
+        setPosition((prevPosition) =>
+          snapToGrid(prevPosition.x, prevPosition.y)
+        );
       }
     };
 
@@ -70,6 +80,12 @@ export const Hero = ({ x, y }: IHeroProps) => {
 
     const handleKeyUp = (event: KeyboardEvent) => {
       keysPressed.current.delete(event.key);
+
+      if (keysPressed.current.size === 0) {
+        setPosition((prevPosition) =>
+          snapToGrid(prevPosition.x, prevPosition.y)
+        );
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
