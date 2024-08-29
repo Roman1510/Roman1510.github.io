@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Graphics } from '@pixi/react'
-import { Graphics as GraphicsImpl } from 'pixi.js'
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world'
+import { GraphicsOptions } from 'pixi.js'
 
 interface IHeroProps {
   x: number
@@ -15,7 +15,7 @@ export const Hero = ({ x, y }: IHeroProps) => {
   const animFrameRef = useRef<number | null>(null)
   const keysPressed = useRef<Set<string>>(new Set())
 
-  const drawHero = (g: GraphicsImpl) => {
+  const drawHero = (g: GraphicsOptions) => {
     g.clear()
     g.beginFill(0x000000)
     g.drawRect(0, 0, TILE_SIZE, TILE_SIZE)
