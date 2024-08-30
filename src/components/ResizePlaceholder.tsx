@@ -46,7 +46,7 @@ export const ResizePlaceholder = () => {
           style={styles.emoji}
           ref={emojiRef}
         >
-          😊
+          🤖💻
         </span>
         Resizing is being applied
       </div>
