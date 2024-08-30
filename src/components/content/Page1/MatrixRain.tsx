@@ -1,3 +1,4 @@
+import { katakana } from '@/constants/common'
 import React, { useEffect, useRef } from 'react'
 
 export const MatrixRain = () => {
@@ -13,8 +14,6 @@ export const MatrixRain = () => {
     const context = canvas.getContext('2d')
     if (!context) return
 
-    const katakana =
-      '᨟ཫᨕᨂᨁ アイウエオカキクケコлサシЪスセソタチツテ日トナニヌネノハヒフヘホマ012з45789ミムメモヤｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝЙ ユヨラリルレロワヲンアウエオカキケコサシスセソタツテナニヌネハヒホマミムメモヤヨラリ'
     const latin = katakana.split('')
 
     const fontSize = 13

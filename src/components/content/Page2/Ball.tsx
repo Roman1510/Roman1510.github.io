@@ -1,14 +1,13 @@
 import { useRef } from 'react'
 import { RigidBody, BallCollider, RapierRigidBody } from '@react-three/rapier'
-import { Event, CanvasTexture } from 'three'
+import { Event } from 'three'
 import { useDeviceType } from '@/hooks/useDeviceType'
 
 interface IBallProps {
   position: [number, number, number]
-  texture: CanvasTexture
 }
 
-export const Ball = ({ position, texture }: IBallProps) => {
+export const Ball = ({ position }: IBallProps) => {
   const api = useRef<RapierRigidBody>(null)
   const deviceType = useDeviceType()
 
@@ -40,7 +39,7 @@ export const Ball = ({ position, texture }: IBallProps) => {
         <sphereGeometry
           args={[deviceType === 'desktop' ? 0.48 : 0.25, 32, 32]}
         />
-        <meshStandardMaterial map={texture} />
+        <meshStandardMaterial />
       </mesh>
     </RigidBody>
   )
