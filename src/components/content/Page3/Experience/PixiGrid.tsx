@@ -1,4 +1,4 @@
-import { Container, Graphics, Stage } from '@pixi/react'
+import { Container, Graphics, Stage, TilingSprite } from '@pixi/react'
 import { drawGrid } from '@/helpers/drawGrid'
 import {
   COLS,
@@ -27,6 +27,13 @@ export const PixiGrid = () => {
           draw={(g) =>
             drawGrid(g, TILE_SIZE, COLS, ROWS, GAME_WIDTH, GAME_HEIGHT)
           }
+        />
+        <TilingSprite
+          image={'/tilemap.png'}
+          width={GAME_WIDTH}
+          height={GAME_HEIGHT}
+          tilePosition={{ x: 0, y: 0 }}
+          tileScale={{ x: 2, y: 2 }}
         />
         <Hero x={0} y={0} />
         <GameObject x={TILE_SIZE * 10} y={TILE_SIZE * 5} />

@@ -18,7 +18,7 @@ export const Hero = ({ x, y }: IHeroProps) => {
   const drawHero = (g: GraphicsImpl) => {
     g.clear()
     g.beginFill(0x000000)
-    g.drawRect(0, 0, TILE_SIZE, TILE_SIZE)
+    g.drawRect(0, 0, TILE_SIZE * 2, TILE_SIZE * 2)
     g.endFill()
   }
 
