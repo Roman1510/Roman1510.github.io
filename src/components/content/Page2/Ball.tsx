@@ -36,9 +36,7 @@ export const Ball = ({ position }: IBallProps) => {
     >
       <BallCollider args={[deviceType === 'desktop' ? 0.48 : 0.25]} />
       <mesh onClick={handlePointerDown}>
-        <sphereGeometry
-          args={[deviceType === 'desktop' ? 0.48 : 0.25, 16, 16]}
-        />
+        <sphereGeometry args={[deviceType === 'desktop' ? 0.48 : 0.25, 8, 8]} />
         <meshStandardMaterial />
       </mesh>
     </RigidBody>

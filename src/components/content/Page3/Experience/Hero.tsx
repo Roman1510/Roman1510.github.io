@@ -33,14 +33,24 @@ export const Hero = ({ x, y }: IHeroProps) => {
       let xDirection = 0
       let yDirection = 0
 
-      if (keysPressed.current.has('ArrowUp') || keysPressed.current.has('w'))
+      if (keysPressed.current.has('ArrowUp') || keysPressed.current.has('w')) {
         yDirection -= 1
-      if (keysPressed.current.has('ArrowDown') || keysPressed.current.has('s'))
+      } else if (
+        keysPressed.current.has('ArrowDown') ||
+        keysPressed.current.has('s')
+      ) {
         yDirection += 1
-      if (keysPressed.current.has('ArrowLeft') || keysPressed.current.has('a'))
+      } else if (
+        keysPressed.current.has('ArrowLeft') ||
+        keysPressed.current.has('a')
+      ) {
         xDirection -= 1
-      if (keysPressed.current.has('ArrowRight') || keysPressed.current.has('d'))
+      } else if (
+        keysPressed.current.has('ArrowRight') ||
+        keysPressed.current.has('d')
+      ) {
         xDirection += 1
+      }
 
       if (xDirection !== 0 || yDirection !== 0) {
         setPosition((prevPosition) => {
@@ -50,9 +60,14 @@ export const Hero = ({ x, y }: IHeroProps) => {
           const newX = prevPosition.x + dx
           const newY = prevPosition.y + dy
 
-          // Boundary check to ensure hero stays within bounds
-          const clampedX = Math.min(Math.max(newX, 0), GAME_WIDTH - TILE_SIZE)
-          const clampedY = Math.min(Math.max(newY, 0), GAME_HEIGHT - TILE_SIZE)
+          const clampedX = Math.min(
+            Math.max(newX, 0),
+            GAME_WIDTH - TILE_SIZE * 2
+          )
+          const clampedY = Math.min(
+            Math.max(newY, 0),
+            GAME_HEIGHT - TILE_SIZE * 2
+          )
 
           return { x: clampedX, y: clampedY }
         })
