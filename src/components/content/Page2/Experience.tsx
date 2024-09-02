@@ -1,17 +1,17 @@
-import { Canvas, useThree } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
-import { Physics, CuboidCollider } from '@react-three/rapier'
-import { EffectComposer, ASCII } from '@react-three/postprocessing'
-import { Ball } from './Ball'
-import { katakana } from '@/constants/common'
+import { Canvas, useThree } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
+import { Physics, CuboidCollider } from '@react-three/rapier';
+import { EffectComposer, ASCII } from '@react-three/postprocessing';
+import { Ball } from './Ball';
+import { katakana } from '@/constants/common';
 
 interface IExperienceProps {
-  balls: { position: [number, number, number] }[]
+  balls: { position: [number, number, number] }[];
 }
 
 export const Experience = ({ balls }: IExperienceProps) => {
   return (
-    <Canvas dpr={1} orthographic camera={{ position: [0, 0, 12], zoom: 180 }}>
+    <Canvas dpr={0.7} orthographic camera={{ position: [0, 0, 12], zoom: 180 }}>
       <Physics gravity={[0, -8, 0]}>
         {balls.map((ball, index) => (
           <Ball key={index} position={ball.position} />
@@ -23,11 +23,11 @@ export const Experience = ({ balls }: IExperienceProps) => {
         <ASCII color="green" characters={katakana} font="MatrixCode" invert />
       </EffectComposer>
     </Canvas>
-  )
-}
+  );
+};
 
 const Walls = () => {
-  const { width, height } = useThree((state) => state.viewport)
+  const { width, height } = useThree((state) => state.viewport);
 
   return (
     <>
@@ -44,5 +44,5 @@ const Walls = () => {
         args={[1, height * 10, 1]}
       />
     </>
-  )
-}
+  );
+};
