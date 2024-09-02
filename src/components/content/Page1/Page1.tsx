@@ -1,77 +1,77 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react'
-import { MatrixRain } from './MatrixRain'
-import { useDeviceType } from '@/hooks/useDeviceType'
+import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { MatrixRain } from './MatrixRain';
+import { useDeviceType } from '@/hooks/useDeviceType';
 
 export const Page1 = () => {
-  const [isVisible, setIsVisible] = useState(false)
-  const matrixRef = useRef<HTMLDivElement | null>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const titleContainerRef = useRef<HTMLDivElement | null>(null)
-  const titleRef = useRef<HTMLDivElement | null>(null)
-  const deviceType = useDeviceType()
+  const [isVisible, setIsVisible] = useState(false);
+  const matrixRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const titleContainerRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLDivElement | null>(null);
+  const deviceType = useDeviceType();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting !== isVisible) {
-          setIsVisible(entry.isIntersecting)
+          setIsVisible(entry.isIntersecting);
         }
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1,
+        threshold: 0.4,
       }
-    )
+    );
 
-    observerRef.current = observer
+    observerRef.current = observer;
 
     if (matrixRef.current) {
-      observer.observe(matrixRef.current)
+      observer.observe(matrixRef.current);
     }
 
     const handleResize = () => {
       if (matrixRef.current && observerRef.current) {
-        observerRef.current.unobserve(matrixRef.current)
-        observerRef.current.observe(matrixRef.current)
+        observerRef.current.unobserve(matrixRef.current);
+        observerRef.current.observe(matrixRef.current);
       }
-    }
+    };
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize);
 
     return () => {
       if (matrixRef.current && observerRef.current) {
-        observerRef.current.unobserve(matrixRef.current)
+        observerRef.current.unobserve(matrixRef.current);
       }
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [deviceType, isVisible])
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [deviceType, isVisible]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (titleRef.current && titleContainerRef.current) {
         const { width, height, top, left } =
-          titleContainerRef.current.getBoundingClientRect()
-        const xAxis = (width / 2 - (e.clientX - left)) / 50
-        const yAxis = (height / 2 - (e.clientY - top)) / 50
-        titleRef.current.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`
+          titleContainerRef.current.getBoundingClientRect();
+        const xAxis = (width / 2 - (e.clientX - left)) / 50;
+        const yAxis = (height / 2 - (e.clientY - top)) / 50;
+        titleRef.current.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
       }
-    }
+    };
 
     const handleMouseLeave = () => {
       if (titleRef.current) {
-        titleRef.current.style.transform = 'rotateY(0deg) rotateX(0deg)'
+        titleRef.current.style.transform = 'rotateY(0deg) rotateX(0deg)';
       }
-    }
+    };
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseleave', handleMouseLeave)
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseleave', handleMouseLeave)
-    }
-  }, [])
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
   return (
     <div className="section" style={styles.container}>
@@ -92,8 +92,8 @@ export const Page1 = () => {
         {isVisible && <MatrixRain />}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const styles = {
   container: {
@@ -129,4 +129,4 @@ const styles = {
     justifyContent: 'center',
     zIndex: 10,
   } as CSSProperties,
-}
+};

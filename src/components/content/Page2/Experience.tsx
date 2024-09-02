@@ -20,7 +20,7 @@ export const Experience = ({ balls }: IExperienceProps) => {
       </Physics>
       <Environment preset="park" />
       <EffectComposer>
-        <ASCII color="green" characters={katakana} font="MatrixCode" invert />
+        <ASCII color="green" characters={katakana} font="MatrixCode" />
       </EffectComposer>
     </Canvas>
   );
