@@ -4,7 +4,7 @@ export const Page5 = () => {
   return (
     <div className="section" style={{ backgroundColor: '#c7f9cc' }}>
       <div className="title" style={{ padding: '50px' }}>
-        <p style={{ padding: '50px' }}>Out there</p>
+        <p style={{ padding: '50px' }}>... in progress, so stay tuned</p>
       </div>
       <div className="contact-me">
         <a
