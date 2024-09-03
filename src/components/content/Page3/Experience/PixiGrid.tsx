@@ -13,8 +13,8 @@ import { GameObject } from './GameObject'
 export const PixiGrid = () => {
   return (
     <Stage
-      width={GAME_WIDTH}
-      height={GAME_HEIGHT}
+      width={GAME_WIDTH / 2}
+      height={GAME_HEIGHT / 2}
       options={{
         backgroundAlpha: 0,
         antialias: true,
