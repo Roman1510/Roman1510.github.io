@@ -1,50 +1,50 @@
-import { useEffect, useRef, useState } from 'react'
-import balls from '@/helpers/generateBalls'
-import { Experience } from './Experience'
-import { useDeviceType } from '@/hooks/useDeviceType'
+import { useEffect, useRef, useState } from 'react';
+import balls from '@/helpers/generateBalls';
+import { Experience } from './Experience';
+import { useDeviceType } from '@/hooks/useDeviceType';
 
 export const Page2 = () => {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLDivElement | null>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const deviceType = useDeviceType()
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const deviceType = useDeviceType();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting !== isVisible) {
-          setIsVisible(entry.isIntersecting)
+          setIsVisible(entry.isIntersecting);
         }
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.6,
+        threshold: 0.4,
       }
-    )
+    );
 
-    observerRef.current = observer
+    observerRef.current = observer;
 
     if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+      observer.observe(sectionRef.current);
     }
 
     const handleResize = () => {
       if (sectionRef.current && observerRef.current) {
-        observerRef.current.unobserve(sectionRef.current)
-        observerRef.current.observe(sectionRef.current)
+        observerRef.current.unobserve(sectionRef.current);
+        observerRef.current.observe(sectionRef.current);
       }
-    }
+    };
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize);
 
     return () => {
       if (sectionRef.current && observerRef.current) {
-        observerRef.current.unobserve(sectionRef.current)
+        observerRef.current.unobserve(sectionRef.current);
       }
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [deviceType, isVisible])
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [deviceType, isVisible]);
 
   return (
     <div
@@ -61,8 +61,8 @@ export const Page2 = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 const styles = {
   wrapper: {
@@ -84,4 +84,4 @@ const styles = {
     userSelect: 'none',
     zIndex: 11,
   } as React.CSSProperties,
-}
+};

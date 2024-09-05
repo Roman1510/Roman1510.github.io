@@ -26,7 +26,6 @@ export const Page1 = () => {
 
     observerRef.current = observer;
 
-    // Observe the matrixRef element immediately if it's available
     if (matrixRef.current) {
       observer.observe(matrixRef.current);
     }
@@ -38,7 +37,6 @@ export const Page1 = () => {
       }
     };
 
-    // Handle the first load visibility check
     if (matrixRef.current) {
       observer.observe(matrixRef.current);
     }
