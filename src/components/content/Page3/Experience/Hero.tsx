@@ -15,10 +15,6 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
   const [position, setPosition] = useState<{ x: number; y: number }>({ x, y })
   const animFrameRef = useRef<number | null>(null)
 
-  useEffect(() => {
-    console.log('position', position.x, position.y)
-  }, [position])
-
   const { getDirection } = useHeroControls()
 
   const drawHero = (g: GraphicsImpl) => {
