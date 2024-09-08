@@ -1,13 +1,7 @@
-import { Container, Graphics, Stage, TilingSprite } from '@pixi/react'
-import { drawGrid } from '@/helpers/drawGrid'
-import {
-  COLS,
-  GAME_HEIGHT,
-  GAME_WIDTH,
-  ROWS,
-  TILE_SIZE,
-} from '@/constants/game-world'
+import { Container, Stage, TilingSprite } from '@pixi/react'
+import { GAME_HEIGHT, GAME_WIDTH } from '@/constants/game-world'
 import { Hero } from './Hero'
+import GridHelper from './GridHelper'
 
 export const PixiGrid = () => {
   return (
@@ -22,11 +16,7 @@ export const PixiGrid = () => {
       }}
     >
       <Container>
-        <Graphics
-          draw={(g) =>
-            drawGrid(g, TILE_SIZE, COLS, ROWS, GAME_WIDTH, GAME_HEIGHT)
-          }
-        />
+        <GridHelper />
         <TilingSprite
           image={'/tilemap.png'}
           width={GAME_WIDTH}

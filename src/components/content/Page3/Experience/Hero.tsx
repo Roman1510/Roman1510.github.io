@@ -10,18 +10,21 @@ interface IHeroProps {
 }
 
 const MOVE_SPEED = 0.1
-const TILE_SIZE_DOUBLE = TILE_SIZE * 2
 
-export const Hero = ({ x = 0, y = 0 }: IHeroProps) => {
+export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
   const [position, setPosition] = useState<{ x: number; y: number }>({ x, y })
   const animFrameRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    console.log('position', position.x, position.y)
+  }, [position])
 
   const { getDirection } = useHeroControls()
 
   const drawHero = (g: GraphicsImpl) => {
     g.clear()
     g.beginFill(0x000000)
-    g.drawRect(0, 0, TILE_SIZE_DOUBLE, TILE_SIZE_DOUBLE)
+    g.drawRect(0, 0, TILE_SIZE * 2, TILE_SIZE * 2)
     g.endFill()
   }
 
@@ -45,14 +48,8 @@ export const Hero = ({ x = 0, y = 0 }: IHeroProps) => {
           const newX = prevPosition.x + dx
           const newY = prevPosition.y + dy
 
-          const clampedX = Math.min(
-            Math.max(newX, 0),
-            GAME_WIDTH - TILE_SIZE_DOUBLE
-          )
-          const clampedY = Math.min(
-            Math.max(newY, 0),
-            GAME_HEIGHT - TILE_SIZE_DOUBLE
-          )
+          const clampedX = Math.min(Math.max(newX, 0), GAME_WIDTH - TILE_SIZE)
+          const clampedY = Math.min(Math.max(newY, 0), GAME_HEIGHT - TILE_SIZE)
 
           return { x: clampedX, y: clampedY }
         })
