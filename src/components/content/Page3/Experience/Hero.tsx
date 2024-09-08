@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Graphics } from '@pixi/react'
-import { Graphics as GraphicsImpl } from 'pixi.js'
+import { Sprite, Container } from '@pixi/react'
+
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world'
 import { useHeroControls } from '@/hooks/useControls'
+import { useSpriteAnimation } from '@/hooks/useSpriteAnimation'
 
 interface IHeroProps {
   x?: number
@@ -17,12 +18,18 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
 
   const { getDirection } = useHeroControls()
 
-  const drawHero = (g: GraphicsImpl) => {
-    g.clear()
-    g.beginFill(0x000000)
-    g.drawRect(0, 0, TILE_SIZE * 2, TILE_SIZE * 2)
-    g.endFill()
-  }
+  const { sprite } = useSpriteAnimation({
+    imagePath: '/hero.png',
+    frameWidth: 64,
+    frameHeight: 64,
+  })
+
+  // const drawHero = (g: GraphicsImpl) => {
+  //   g.clear()
+  //   g.beginFill(0x000000)
+  //   g.drawRect(0, 0, TILE_SIZE * 2, TILE_SIZE * 2)
+  //   g.endFill()
+  // }
 
   useEffect(() => {
     const updatePosition = () => {
@@ -71,12 +78,25 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
   }
 
   return (
-    <Graphics
-      x={position.x}
-      y={position.y}
-      draw={drawHero}
-      eventMode="dynamic"
-      pointerdown={heroClickedHandler}
-    />
+    <Container>
+      {sprite && (
+        <Sprite
+          texture={sprite.texture}
+          scale={1.3}
+          x={position.x}
+          y={position.y}
+          anchor={0.5}
+          eventMode="dynamic"
+          pointerdown={heroClickedHandler}
+        />
+      )}
+      {/* <Graphics
+        x={position.x}
+        y={position.y}
+        // draw={drawHero}
+        eventMode="dynamic"
+        pointerdown={heroClickedHandler}
+      /> */}
+    </Container>
   )
 }
