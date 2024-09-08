@@ -8,13 +8,12 @@ import {
   TILE_SIZE,
 } from '@/constants/game-world'
 import { Hero } from './Hero'
-import { GameObject } from './GameObject'
 
 export const PixiGrid = () => {
   return (
     <Stage
-      width={GAME_WIDTH / 2}
-      height={GAME_HEIGHT / 2}
+      width={GAME_WIDTH}
+      height={GAME_HEIGHT}
       options={{
         backgroundAlpha: 0,
         antialias: true,
@@ -35,8 +34,7 @@ export const PixiGrid = () => {
           tilePosition={{ x: 0, y: 0 }}
           tileScale={{ x: 2, y: 2 }}
         />
-        <Hero x={0} y={0} />
-        <GameObject x={TILE_SIZE * 10} y={TILE_SIZE * 5} />
+        <Hero />
       </Container>
     </Stage>
   )
