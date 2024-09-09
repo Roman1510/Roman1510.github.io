@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Sprite, Container } from '@pixi/react'
-
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world'
 import { useHeroControls } from '@/hooks/useControls'
 import { useSpriteAnimation } from '@/hooks/useSpriteAnimation'
@@ -15,25 +14,25 @@ const MOVE_SPEED = 0.1
 export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
   const [position, setPosition] = useState<{ x: number; y: number }>({ x, y })
   const animFrameRef = useRef<number | null>(null)
-
   const { getDirection } = useHeroControls()
+  const [currentDirection, setCurrentDirection] = useState<
+    'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null
+  >(null)
 
   const { sprite } = useSpriteAnimation({
     imagePath: '/hero.png',
     frameWidth: 64,
     frameHeight: 64,
+    direction: currentDirection,
   })
 
-  // const drawHero = (g: GraphicsImpl) => {
-  //   g.clear()
-  //   g.beginFill(0x000000)
-  //   g.drawRect(0, 0, TILE_SIZE * 2, TILE_SIZE * 2)
-  //   g.endFill()
-  // }
-
   useEffect(() => {
-    const updatePosition = () => {
+    const tick = () => {
       const direction = getDirection()
+
+      if (direction !== currentDirection) {
+        setCurrentDirection(direction)
+      }
 
       let xDirection = 0
       let yDirection = 0
@@ -57,10 +56,7 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
           return { x: clampedX, y: clampedY }
         })
       }
-    }
 
-    const tick = () => {
-      updatePosition()
       animFrameRef.current = requestAnimationFrame(tick)
     }
 
@@ -71,7 +67,7 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
         cancelAnimationFrame(animFrameRef.current)
       }
     }
-  }, [getDirection])
+  }, [currentDirection, getDirection])
 
   const heroClickedHandler = () => {
     console.log('Hero clicked')
@@ -85,18 +81,11 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
           scale={1.3}
           x={position.x}
           y={position.y}
-          anchor={0.5}
+          anchor={0}
           eventMode="dynamic"
           pointerdown={heroClickedHandler}
         />
       )}
-      {/* <Graphics
-        x={position.x}
-        y={position.y}
-        // draw={drawHero}
-        eventMode="dynamic"
-        pointerdown={heroClickedHandler}
-      /> */}
     </Container>
   )
 }

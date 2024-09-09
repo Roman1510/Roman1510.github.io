@@ -5,11 +5,13 @@ const RIGHT = 'RIGHT'
 const UP = 'UP'
 const DOWN = 'DOWN'
 
+type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT'
+
 export const useHeroControls = () => {
-  const [heldDirections, setHeldDirections] = useState<string[]>([])
+  const [heldDirections, setHeldDirections] = useState<Direction[]>([])
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    let newDirection = ''
+    let newDirection: Direction | '' = ''
 
     switch (e.code) {
       case 'ArrowUp':
@@ -40,7 +42,7 @@ export const useHeroControls = () => {
   }, [])
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
-    let releasedDirection = ''
+    let releasedDirection: Direction | '' = ''
 
     switch (e.code) {
       case 'ArrowUp':
@@ -78,7 +80,10 @@ export const useHeroControls = () => {
     }
   }, [handleKeyDown, handleKeyUp])
 
-  const getDirection = useCallback(() => heldDirections[0], [heldDirections])
+  const getDirection = useCallback(
+    (): Direction | null => heldDirections[0] || null,
+    [heldDirections]
+  )
 
   return { getDirection }
 }
