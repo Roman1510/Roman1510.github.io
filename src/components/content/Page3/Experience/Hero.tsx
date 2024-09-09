@@ -31,7 +31,7 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
       const direction = getDirection()
 
       if (direction !== currentDirection) {
-        setCurrentDirection(direction)
+        setCurrentDirection(direction!)
       }
 
       let xDirection = 0
