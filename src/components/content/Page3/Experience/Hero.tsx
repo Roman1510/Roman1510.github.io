@@ -9,7 +9,7 @@ interface IHeroProps {
   y?: number;
 }
 
-const MOVE_SPEED = 6; // Adjusted for 60 FPS
+const MOVE_SPEED = 2;
 
 export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
   const [position, setPosition] = useState<{ x: number; y: number }>({ x, y });
@@ -23,9 +23,11 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
     frameWidth: 64,
     frameHeight: 64,
     direction: currentDirection,
+    frameDelay: 5,
   });
 
-  useTick((delta) => {
+  useTick((delta, ticker) => {
+    ticker.deltaMS = 80;
     const direction = getDirection();
 
     if (direction !== currentDirection) {

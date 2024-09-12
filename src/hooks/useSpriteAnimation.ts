@@ -1,13 +1,14 @@
-import { useEffect, useState, useRef } from 'react'
-import * as PIXI from 'pixi.js'
-import { TILE_SIZE } from '@/constants/game-world'
-import { useTick } from '@pixi/react'
+import { useState, useRef } from 'react';
+import * as PIXI from 'pixi.js';
+import { TILE_SIZE } from '@/constants/game-world';
+import { useTick } from '@pixi/react';
 
 interface UseSpriteAnimationProps {
-  imagePath: string
-  frameWidth: number
-  frameHeight: number
-  direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null
+  imagePath: string;
+  frameWidth: number;
+  frameHeight: number;
+  direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null;
+  frameDelay?: number; // Renamed from animationSpeed to frameDelay
 }
 
 export const useSpriteAnimation = ({
@@ -15,66 +16,74 @@ export const useSpriteAnimation = ({
   frameWidth,
   frameHeight,
   direction,
+  frameDelay = 10, // Default value, adjust as needed
 }: UseSpriteAnimationProps) => {
-  const [sprite, setSprite] = useState<PIXI.Sprite | null>(null)
-  const lastDirection = useRef<'UP' | 'DOWN' | 'LEFT' | 'RIGHT'>('DOWN')
-  const frameRef = useRef(0)
+  const [sprite, setSprite] = useState<PIXI.Sprite | null>(null);
+  const lastDirection = useRef<'UP' | 'DOWN' | 'LEFT' | 'RIGHT'>('DOWN');
+  const frameRef = useRef(0);
+  const tickCounterRef = useRef(0);
 
-  const texture = PIXI.Texture.from(imagePath)
+  const texture = PIXI.Texture.from(imagePath);
   const getRowByDirection = (dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
     switch (dir) {
       case 'UP':
-        return 8
+        return 8;
       case 'LEFT':
-        return 9
+        return 9;
       case 'DOWN':
-        return 10
+        return 10;
       case 'RIGHT':
-        return 11
+        return 11;
       default:
-        return 10
+        return 10;
     }
-  }
+  };
 
   useTick((_delta, ticker) => {
-    ticker.maxFPS = 60
-    const currentDirection = direction || lastDirection.current
-    const row = getRowByDirection(currentDirection)
+    ticker.maxFPS = 60;
+    const currentDirection = direction || lastDirection.current;
+    const row = getRowByDirection(currentDirection);
 
-    if (direction) {
-      lastDirection.current = direction
+    tickCounterRef.current += 1;
 
-      frameRef.current = (frameRef.current + 1) % 9
-      const column = frameRef.current
+    if (tickCounterRef.current >= frameDelay) {
+      tickCounterRef.current = 0;
 
-      const frame = new PIXI.Texture(
-        texture.baseTexture,
-        new PIXI.Rectangle(
-          column * frameWidth,
-          row * frameHeight,
-          frameWidth,
-          frameHeight
-        )
-      )
+      if (direction) {
+        lastDirection.current = direction;
 
-      const animatedSprite = new PIXI.Sprite(frame)
-      animatedSprite.width = TILE_SIZE
-      animatedSprite.height = TILE_SIZE
+        frameRef.current = (frameRef.current + 1) % 9;
+        const column = frameRef.current;
 
-      setSprite(animatedSprite)
-    } else {
-      const frame = new PIXI.Texture(
-        texture.baseTexture,
-        new PIXI.Rectangle(0, row * frameHeight, frameWidth, frameHeight)
-      )
+        const frame = new PIXI.Texture(
+          texture.baseTexture,
+          new PIXI.Rectangle(
+            column * frameWidth,
+            row * frameHeight,
+            frameWidth,
+            frameHeight
+          )
+        );
 
-      const staticSprite = new PIXI.Sprite(frame)
-      staticSprite.width = TILE_SIZE
-      staticSprite.height = TILE_SIZE
+        const animatedSprite = new PIXI.Sprite(frame);
+        animatedSprite.width = TILE_SIZE;
+        animatedSprite.height = TILE_SIZE;
 
-      setSprite(staticSprite)
+        setSprite(animatedSprite);
+      } else {
+        const frame = new PIXI.Texture(
+          texture.baseTexture,
+          new PIXI.Rectangle(0, row * frameHeight, frameWidth, frameHeight)
+        );
+
+        const staticSprite = new PIXI.Sprite(frame);
+        staticSprite.width = TILE_SIZE;
+        staticSprite.height = TILE_SIZE;
+
+        setSprite(staticSprite);
+      }
     }
-  })
+  });
 
-  return { sprite }
-}
+  return { sprite };
+};
