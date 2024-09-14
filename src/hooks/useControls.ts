@@ -14,19 +14,15 @@ export const useHeroControls = () => {
     let newDirection: Direction | undefined
 
     switch (e.code) {
-      case 'ArrowUp':
       case 'KeyW':
         newDirection = UP
         break
-      case 'ArrowDown':
       case 'KeyS':
         newDirection = DOWN
         break
-      case 'ArrowLeft':
       case 'KeyA':
         newDirection = LEFT
         break
-      case 'ArrowRight':
       case 'KeyD':
         newDirection = RIGHT
         break
