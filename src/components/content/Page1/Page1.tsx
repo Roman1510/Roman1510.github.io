@@ -3,7 +3,7 @@ import { MatrixRain } from './MatrixRain';
 import { useDeviceType } from '@/hooks/useDeviceType';
 
 export const Page1 = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const matrixRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const titleContainerRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +93,7 @@ export const Page1 = () => {
         </div>
       </div>
       <div style={styles.wrapper} ref={matrixRef}>
-        {isVisible && <MatrixRain />}
+        {isVisible && matrixRef.current && <MatrixRain />}
       </div>
     </div>
   );
