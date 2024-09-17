@@ -95,7 +95,6 @@ export const Hero = ({
       if (distance <= MOVE_SPEED * TILE_SIZE * delta) {
         setPosition(targetPosition.current)
         targetPosition.current = null
-
         setCurrentDirection(direction!)
 
         if (direction) {
