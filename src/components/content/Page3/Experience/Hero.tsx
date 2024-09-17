@@ -9,7 +9,7 @@ interface IHeroProps {
   y?: number
 }
 const DOUBLE_TILE = 64
-const MOVE_SPEED = 0.03
+const MOVE_SPEED = 0.027
 
 export const Hero = ({
   x = DOUBLE_TILE * 4,
@@ -29,7 +29,7 @@ export const Hero = ({
     frameHeight: 64,
     direction: currentDirection,
     isMoving,
-    frameDelay: 3.1,
+    frameDelay: 2.3,
   })
 
   const moveTowards = useCallback(
