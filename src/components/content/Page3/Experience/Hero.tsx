@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { Sprite, Container, useTick } from '@pixi/react'
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world'
 import { useHeroControls } from '@/hooks/useControls'
@@ -9,12 +9,12 @@ interface IHeroProps {
   y?: number
 }
 const DOUBLE_TILE = 64
-const MOVE_SPEED = 0.03
+const MOVE_SPEED = 0.028
 
-export const Hero: React.FC<IHeroProps> = ({
+export const Hero = ({
   x = DOUBLE_TILE * 4,
   y = DOUBLE_TILE * 9,
-}) => {
+}: IHeroProps) => {
   const [position, setPosition] = useState<{ x: number; y: number }>({ x, y })
   const { getCurrentDirection } = useHeroControls()
   const [currentDirection, setCurrentDirection] = useState<
@@ -29,7 +29,7 @@ export const Hero: React.FC<IHeroProps> = ({
     frameHeight: 64,
     direction: currentDirection,
     isMoving,
-    frameDelay: 5,
+    frameDelay: 3,
   })
 
   const moveTowards = useCallback(
@@ -82,6 +82,7 @@ export const Hero: React.FC<IHeroProps> = ({
 
     if (!targetPosition.current && direction) {
       setNextTarget(direction)
+      setCurrentDirection(direction!)
     }
 
     if (targetPosition.current) {
