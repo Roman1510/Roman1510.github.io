@@ -1,66 +1,126 @@
-import { useState } from 'react';
-import { Sprite, Container, useTick } from '@pixi/react';
-import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world';
-import { useHeroControls } from '@/hooks/useControls';
-import { useSpriteAnimation } from '@/hooks/useSpriteAnimation';
+import React, { useState, useRef, useCallback } from 'react'
+import { Sprite, Container, useTick } from '@pixi/react'
+import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world'
+import { useHeroControls } from '@/hooks/useControls'
+import { useSpriteAnimation } from '@/hooks/useSpriteAnimation'
 
 interface IHeroProps {
-  x?: number;
-  y?: number;
+  x?: number
+  y?: number
 }
+const DOUBLE_TILE = 64
+const MOVE_SPEED = 0.03
 
-const MOVE_SPEED = 2;
-
-export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x, y });
-  const { getDirection } = useHeroControls();
+export const Hero: React.FC<IHeroProps> = ({
+  x = DOUBLE_TILE * 4,
+  y = DOUBLE_TILE * 9,
+}) => {
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x, y })
+  const { getCurrentDirection } = useHeroControls()
   const [currentDirection, setCurrentDirection] = useState<
     'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null
-  >(null);
+  >(null)
+  const targetPosition = useRef<{ x: number; y: number } | null>(null)
+  const [isMoving, setIsMoving] = useState(false)
 
   const { sprite } = useSpriteAnimation({
     imagePath: '/hero.png',
     frameWidth: 64,
     frameHeight: 64,
     direction: currentDirection,
+    isMoving,
     frameDelay: 5,
-  });
+  })
 
-  useTick((delta, ticker) => {
-    ticker.deltaMS = 80;
-    const direction = getDirection();
+  const moveTowards = useCallback(
+    (current: number, target: number, maxStep: number) => {
+      const step = Math.min(Math.abs(target - current), maxStep)
+      return current + Math.sign(target - current) * step
+    },
+    []
+  )
 
-    if (direction !== currentDirection) {
-      setCurrentDirection(direction!);
+  const setNextTarget = useCallback(
+    (direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
+      if (targetPosition.current) return
+
+      const newTarget = {
+        x: Math.round(position.x / DOUBLE_TILE) * DOUBLE_TILE,
+        y: Math.round(position.y / DOUBLE_TILE) * DOUBLE_TILE,
+      }
+
+      switch (direction) {
+        case 'UP':
+          newTarget.y -= DOUBLE_TILE
+          break
+        case 'DOWN':
+          newTarget.y += DOUBLE_TILE
+          break
+        case 'LEFT':
+          newTarget.x -= DOUBLE_TILE
+          break
+        case 'RIGHT':
+          newTarget.x += DOUBLE_TILE
+          break
+      }
+
+      newTarget.x = Math.min(Math.max(newTarget.x, 0), GAME_WIDTH - DOUBLE_TILE)
+      newTarget.y = Math.min(
+        Math.max(newTarget.y, 0),
+        GAME_HEIGHT - DOUBLE_TILE
+      )
+
+      if (newTarget.x !== position.x || newTarget.y !== position.y) {
+        targetPosition.current = newTarget
+      }
+    },
+    [position]
+  )
+
+  useTick((delta) => {
+    const direction = getCurrentDirection()
+
+    if (!targetPosition.current && direction) {
+      setNextTarget(direction)
     }
 
-    let xDirection = 0;
-    let yDirection = 0;
+    if (targetPosition.current) {
+      setIsMoving(true)
+      const distance = Math.hypot(
+        targetPosition.current.x - position.x,
+        targetPosition.current.y - position.y
+      )
 
-    if (direction === 'UP') yDirection = -1;
-    if (direction === 'DOWN') yDirection = 1;
-    if (direction === 'LEFT') xDirection = -1;
-    if (direction === 'RIGHT') xDirection = 1;
+      if (distance <= MOVE_SPEED * TILE_SIZE * delta) {
+        setPosition(targetPosition.current)
+        targetPosition.current = null
 
-    if (xDirection !== 0 || yDirection !== 0) {
-      setPosition((prevPosition) => {
-        const dx = xDirection * MOVE_SPEED * delta;
-        const dy = yDirection * MOVE_SPEED * delta;
+        setCurrentDirection(direction!)
 
-        const newX = prevPosition.x + dx;
-        const newY = prevPosition.y + dy;
-
-        const clampedX = Math.min(Math.max(newX, 0), GAME_WIDTH - TILE_SIZE);
-        const clampedY = Math.min(Math.max(newY, 0), GAME_HEIGHT - TILE_SIZE);
-
-        return { x: clampedX, y: clampedY };
-      });
+        if (direction) {
+          setNextTarget(direction)
+        }
+      } else {
+        const newX = moveTowards(
+          position.x,
+          targetPosition.current.x,
+          MOVE_SPEED * DOUBLE_TILE * delta
+        )
+        const newY = moveTowards(
+          position.y,
+          targetPosition.current.y,
+          MOVE_SPEED * DOUBLE_TILE * delta
+        )
+        setPosition({ x: newX, y: newY })
+      }
+    } else {
+      setIsMoving(false)
     }
-  });
+  })
 
   const heroClickedHandler = () => {
-    console.log('Hero clicked');
-  };
+    console.log('Hero clicked')
+  }
 
   return (
     <Container>
@@ -76,5 +136,5 @@ export const Hero = ({ x = TILE_SIZE * 4, y = TILE_SIZE * 9 }: IHeroProps) => {
         />
       )}
     </Container>
-  );
-};
+  )
+}
