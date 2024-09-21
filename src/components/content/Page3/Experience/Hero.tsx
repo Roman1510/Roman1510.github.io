@@ -7,13 +7,15 @@ import { useSpriteAnimation } from '@/hooks/useSpriteAnimation'
 interface IHeroProps {
   x?: number
   y?: number
+  onMove: (x: number, y: number) => void
 }
 const DOUBLE_TILE = 64
-const MOVE_SPEED = 0.027
+const MOVE_SPEED = 0.025
 
 export const Hero = ({
-  x = DOUBLE_TILE * 4,
-  y = DOUBLE_TILE * 9,
+  x = DOUBLE_TILE * 2,
+  y = DOUBLE_TILE * 2,
+  onMove
 }: IHeroProps) => {
   const [position, setPosition] = useState<{ x: number; y: number }>({ x, y })
   const { getCurrentDirection } = useHeroControls()
@@ -29,7 +31,7 @@ export const Hero = ({
     frameHeight: 64,
     direction: currentDirection,
     isMoving,
-    frameDelay: 2.3,
+    frameDelay: 3.5,
   })
 
   const moveTowards = useCallback(
@@ -112,6 +114,7 @@ export const Hero = ({
           MOVE_SPEED * DOUBLE_TILE * delta
         )
         setPosition({ x: newX, y: newY })
+        onMove(newX, newY)
       }
     } else {
       setIsMoving(false)
@@ -127,7 +130,7 @@ export const Hero = ({
       {sprite && (
         <Sprite
           texture={sprite.texture}
-          scale={1.3}
+          scale={1}
           x={position.x}
           y={position.y}
           anchor={0}
