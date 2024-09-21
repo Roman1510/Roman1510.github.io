@@ -5,10 +5,9 @@ export const Page3 = () => {
     <div
       className="section"
       style={{
-        paddingTop: '2rem',
         backgroundColor: '#9fffcb',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
       }}
     >
@@ -16,7 +15,7 @@ export const Page3 = () => {
       <p
         className="title"
         style={{
-          width: '70%',
+          width: '40%',
           fontSize: '3rem',
           textAlign: 'center',
         }}

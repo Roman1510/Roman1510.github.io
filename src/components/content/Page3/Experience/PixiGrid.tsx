@@ -3,19 +3,21 @@ import { Container as ContainerImpl, Graphics as GraphicsImpl } from 'pixi.js'
 import { Container, Stage, Graphics } from '@pixi/react'
 import { Hero } from './Hero'
 import { Level } from './Level'
-import { GAME_HEIGHT, GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
+import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
 
-const SCALE_FACTOR = 1.5
+const SCALE_FACTOR = 1.2
 const VIEW_WIDTH = GAME_WIDTH / SCALE_FACTOR
-const VIEW_HEIGHT = GAME_HEIGHT / SCALE_FACTOR
-const CIRCLE_RADIUS = 280
 const NUM_STARS = 100
 
 const getCenter = () => ({
   x: VIEW_WIDTH / 2 + TILE_SIZE * 1.5,
-  y: VIEW_HEIGHT / 2 + TILE_SIZE * 1.5,
+  y: VIEW_WIDTH / 2 + TILE_SIZE * 1.5,
 })
 
+const getCircleRadius = () => {
+  const isMobile = window.innerWidth < 768;
+  return isMobile ? VIEW_WIDTH : VIEW_WIDTH / 2.3;
+}
 
 const getRandomPositionInCircle = (centerX: number, centerY: number, radius: number) => {
   let x, y, distanceFromCenter
@@ -28,10 +30,12 @@ const getRandomPositionInCircle = (centerX: number, centerY: number, radius: num
 }
 
 export const PixiGrid = () => {
-  const [heroPosition, setHeroPosition] = useState({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 })
+  const [heroPosition, setHeroPosition] = useState({ x: GAME_WIDTH / 2, y: GAME_WIDTH / 2 })
   const containerRef = useRef<ContainerImpl>(null)
   const maskRef = useRef<GraphicsImpl>(null)
   const backgroundRef = useRef<GraphicsImpl>(null)
+
+  const CIRCLE_RADIUS = getCircleRadius();
 
   useEffect(() => {
     if (containerRef.current && maskRef.current) {
@@ -44,12 +48,10 @@ export const PixiGrid = () => {
       const g = backgroundRef.current
       const { x, y } = getCenter()
 
-
       g.clear()
       g.beginFill(0x000000)
       g.drawCircle(x, y, CIRCLE_RADIUS)
       g.endFill()
-
 
       g.beginFill(0xFFFFFF)
       for (let i = 0; i < NUM_STARS; i++) {
@@ -58,7 +60,7 @@ export const PixiGrid = () => {
       }
       g.endFill()
     }
-  }, [])
+  }, [CIRCLE_RADIUS])
 
   const updateHeroPosition = (x: number, y: number) => {
     setHeroPosition({ x, y })
@@ -72,17 +74,17 @@ export const PixiGrid = () => {
       g.drawCircle(x, y, CIRCLE_RADIUS)
       g.endFill()
     },
-    []
+    [CIRCLE_RADIUS]
   )
 
   const containerX = VIEW_WIDTH / 2 - heroPosition.x * SCALE_FACTOR
-  const containerY = VIEW_HEIGHT / 2 - heroPosition.y * SCALE_FACTOR
+  const containerY = VIEW_WIDTH / 2 - heroPosition.y * SCALE_FACTOR
 
   return (
-    <div>
+    <div style={{ height: '105%' }}>
       <Stage
         width={VIEW_WIDTH}
-        height={VIEW_HEIGHT}
+        height={VIEW_WIDTH}
         options={{
           backgroundAlpha: 0,
           antialias: true,
@@ -90,7 +92,6 @@ export const PixiGrid = () => {
           autoDensity: true,
         }}
       >
-
         <Graphics ref={backgroundRef} />
 
         <Container
@@ -101,9 +102,7 @@ export const PixiGrid = () => {
         >
           <Level />
           <Hero onMove={updateHeroPosition} />
-
         </Container>
-
 
         <Graphics draw={drawMask} ref={maskRef} />
       </Stage>
