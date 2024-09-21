@@ -18,6 +18,7 @@ export const Page3 = () => {
           width: '40%',
           fontSize: '3rem',
           textAlign: 'center',
+          userSelect: 'none'
         }}
       >
         [WASD] to control
