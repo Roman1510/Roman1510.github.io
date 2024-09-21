@@ -1,19 +1,26 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
+import { Container as ContainerImpl, Graphics as GraphicsImpl } from 'pixi.js'
 import { Container, Stage, Graphics } from '@pixi/react'
-import { GAME_HEIGHT, GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
 import { Hero } from './Hero'
-import GridHelper from './GridHelper'
 import { Level } from './Level'
-import * as PIXI from 'pixi.js'
+// import GridHelper from './GridHelper'
+import { GAME_HEIGHT, GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
 
 const SCALE_FACTOR = 1.5
 const VIEW_WIDTH = GAME_WIDTH / SCALE_FACTOR
 const VIEW_HEIGHT = GAME_HEIGHT / SCALE_FACTOR
+const CIRCLE_RADIUS = 280
+
+const getCenter = () => ({
+  x: VIEW_WIDTH / 2 + TILE_SIZE * 1.5,
+  y: VIEW_HEIGHT / 2 + TILE_SIZE * 1.5,
+})
 
 export const PixiGrid = () => {
   const [heroPosition, setHeroPosition] = useState({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 })
-  const containerRef = useRef<PIXI.Container>(null)
-  const maskRef = useRef<PIXI.Graphics>(null)
+  const containerRef = useRef<ContainerImpl>(null)
+  const maskRef = useRef<GraphicsImpl>(null)
+
 
   useEffect(() => {
     if (containerRef.current && maskRef.current) {
@@ -26,28 +33,22 @@ export const PixiGrid = () => {
   }
 
 
-  const drawCircleMask = (g: PIXI.Graphics) => {
-    const radius = 280
-
-    g.clear()
-    g.beginFill(0xFFFFFF)
-    g.drawCircle(VIEW_WIDTH / 2 + TILE_SIZE * 1.5, VIEW_HEIGHT / 2 + TILE_SIZE * 1.5, radius)
-    g.endFill()
-  }
+  const drawCircle = useCallback(
+    (g: GraphicsImpl, fillColor: number) => {
+      const { x, y } = getCenter()
+      g.clear()
+      g.beginFill(fillColor)
+      g.drawCircle(x, y, CIRCLE_RADIUS)
+      g.endFill()
+    },
+    []
+  )
 
   const containerX = VIEW_WIDTH / 2 - heroPosition.x * SCALE_FACTOR
   const containerY = VIEW_HEIGHT / 2 - heroPosition.y * SCALE_FACTOR
 
   return (
-    <div
-      style={{
-        width: '80vw',
-        maxWidth: '100%',
-        aspectRatio: '1',
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-    >
+    <div>
       <Stage
         width={VIEW_WIDTH}
         height={VIEW_HEIGHT}
@@ -55,22 +56,26 @@ export const PixiGrid = () => {
           backgroundAlpha: 0,
           antialias: true,
           resolution: 1,
-          autoDensity: false,
+          autoDensity: true,
         }}
-        style={{ width: '100%', height: '100%' }}
       >
+
+        <Graphics draw={(g) => drawCircle(g, 0x000000)} />
+
         <Container
           ref={containerRef}
           scale={SCALE_FACTOR}
           x={containerX}
           y={containerY}
         >
-          <GridHelper />
+
           <Level />
           <Hero onMove={updateHeroPosition} />
+          {/* <GridHelper /> */}
         </Container>
 
-        <Graphics draw={drawCircleMask} ref={maskRef} />
+
+        <Graphics draw={(g) => drawCircle(g, 0xFFFFFF)} ref={maskRef} />
       </Stage>
     </div>
   )

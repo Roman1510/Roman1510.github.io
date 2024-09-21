@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Sprite, Container, useTick } from '@pixi/react'
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world'
 import { useHeroControls } from '@/hooks/useControls'
@@ -24,6 +24,10 @@ export const Hero = ({
   >(null)
   const targetPosition = useRef<{ x: number; y: number } | null>(null)
   const [isMoving, setIsMoving] = useState(false)
+
+  useEffect(() => {
+    onMove(x, y)
+  }, [])
 
   const { sprite } = useSpriteAnimation({
     imagePath: '/hero.png',
