@@ -37,8 +37,8 @@ export const PixiGrid = () => {
 
   const getCenter = useCallback(
     () => ({
-      x: canvasSize / 2 + TILE_SIZE,
-      y: canvasSize / 2 + TILE_SIZE,
+      x: canvasSize / 2,
+      y: canvasSize / 2,
     }),
     [canvasSize]
   )
@@ -77,7 +77,7 @@ export const PixiGrid = () => {
   }, [canvasSize, getCenter, getRandomPositionInCircle])
 
   const updateHeroPosition = (x: number, y: number) => {
-    setHeroPosition({ x, y })
+    setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 })
   }
 
   const drawMask = useCallback(
@@ -91,8 +91,11 @@ export const PixiGrid = () => {
     [canvasSize, getCenter]
   )
 
-  const containerX = canvasSize / 2 - heroPosition.x * SCALE_FACTOR
-  const containerY = canvasSize / 2 - heroPosition.y * SCALE_FACTOR
+  // Calculate the container position to keep the hero centered
+  const containerX =
+    canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR
+  const containerY =
+    canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR
 
   return (
     <div
@@ -105,8 +108,8 @@ export const PixiGrid = () => {
       }}
     >
       <Stage
-        width={canvasSize + TILE_SIZE}
-        height={canvasSize + TILE_SIZE}
+        width={canvasSize}
+        height={canvasSize}
         options={{
           backgroundAlpha: 0,
           antialias: true,
