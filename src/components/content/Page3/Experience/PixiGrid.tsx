@@ -3,7 +3,7 @@ import { Container as ContainerImpl, Graphics as GraphicsImpl } from 'pixi.js'
 import { Container, Stage, Graphics } from '@pixi/react'
 import { Hero } from './Hero'
 import { Level } from './Level'
-import { GAME_WIDTH } from '@/constants/game-world'
+import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
 
 const SCALE_FACTOR = 1.2
 const NUM_STARS = 100
@@ -37,8 +37,8 @@ export const PixiGrid = () => {
 
   const getCenter = useCallback(
     () => ({
-      x: canvasSize / 2,
-      y: canvasSize / 2,
+      x: canvasSize / 2 + TILE_SIZE,
+      y: canvasSize / 2 + TILE_SIZE,
     }),
     [canvasSize]
   )
@@ -105,8 +105,8 @@ export const PixiGrid = () => {
       }}
     >
       <Stage
-        width={canvasSize}
-        height={canvasSize}
+        width={canvasSize + TILE_SIZE}
+        height={canvasSize + TILE_SIZE}
         options={{
           backgroundAlpha: 0,
           antialias: true,
