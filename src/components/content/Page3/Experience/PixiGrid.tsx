@@ -3,30 +3,31 @@ import { Container as ContainerImpl, Graphics as GraphicsImpl } from 'pixi.js'
 import { Container, Stage, Graphics } from '@pixi/react'
 import { Hero } from './Hero'
 import { Level } from './Level'
-import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
+import { GAME_WIDTH } from '@/constants/game-world'
 
 const SCALE_FACTOR = 1.2
-const VIEW_WIDTH = GAME_WIDTH / SCALE_FACTOR
 const NUM_STARS = 100
 
 export const PixiGrid = () => {
-  const [heroPosition, setHeroPosition] = useState({ x: GAME_WIDTH / 2, y: GAME_WIDTH / 2 })
-  const [circleRadius, setCircleRadius] = useState(window.innerWidth / 4.5)
+  const [heroPosition, setHeroPosition] = useState({
+    x: GAME_WIDTH / 2,
+    y: GAME_WIDTH / 2,
+  })
+  const [canvasSize, setCanvasSize] = useState(0)
   const containerRef = useRef<ContainerImpl>(null)
   const maskRef = useRef<GraphicsImpl>(null)
   const backgroundRef = useRef<GraphicsImpl>(null)
 
-  useEffect(() => {
-    const handleResize = () => {
-      setCircleRadius(window.innerWidth / 4.5)
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
+  const updateCanvasSize = useCallback(() => {
+    const size = Math.min(window.innerWidth, window.innerHeight) * 0.9
+    setCanvasSize(size)
   }, [])
+
+  useEffect(() => {
+    updateCanvasSize()
+    window.addEventListener('resize', updateCanvasSize)
+    return () => window.removeEventListener('resize', updateCanvasSize)
+  }, [updateCanvasSize])
 
   useEffect(() => {
     if (containerRef.current && maskRef.current) {
@@ -34,39 +35,46 @@ export const PixiGrid = () => {
     }
   }, [])
 
-  const getCenter = useCallback(() => ({
-    x: VIEW_WIDTH / 2 + TILE_SIZE * 1.5,
-    y: VIEW_WIDTH / 2 + TILE_SIZE * 1.5,
-  }), [])
+  const getCenter = useCallback(
+    () => ({
+      x: canvasSize / 2,
+      y: canvasSize / 2,
+    }),
+    [canvasSize]
+  )
 
-  const getRandomPositionInCircle = useCallback((centerX: number, centerY: number, radius: number) => {
-    let x, y, distanceFromCenter
-    do {
-      x = Math.random() * radius * 2 - radius
-      y = Math.random() * radius * 2 - radius
-      distanceFromCenter = Math.sqrt(x * x + y * y)
-    } while (distanceFromCenter > radius)
-    return { x: centerX + x, y: centerY + y }
-  }, [])
+  const getRandomPositionInCircle = useCallback(
+    (centerX: number, centerY: number, radius: number) => {
+      let x, y, distanceFromCenter
+      do {
+        x = Math.random() * radius * 2 - radius
+        y = Math.random() * radius * 2 - radius
+        distanceFromCenter = Math.sqrt(x * x + y * y)
+      } while (distanceFromCenter > radius)
+      return { x: centerX + x, y: centerY + y }
+    },
+    []
+  )
 
   useEffect(() => {
     if (backgroundRef.current) {
       const g = backgroundRef.current
       const { x, y } = getCenter()
+      const radius = canvasSize / 2
 
       g.clear()
       g.beginFill(0x000000)
-      g.drawCircle(x, y, circleRadius)
+      g.drawCircle(x, y, radius)
       g.endFill()
 
-      g.beginFill(0xFFFFFF)
+      g.beginFill(0xffffff)
       for (let i = 0; i < NUM_STARS; i++) {
-        const { x: starX, y: starY } = getRandomPositionInCircle(x, y, circleRadius)
+        const { x: starX, y: starY } = getRandomPositionInCircle(x, y, radius)
         g.drawCircle(starX, starY, Math.random() * 2 + 1)
       }
       g.endFill()
     }
-  }, [circleRadius])
+  }, [canvasSize, getCenter, getRandomPositionInCircle])
 
   const updateHeroPosition = (x: number, y: number) => {
     setHeroPosition({ x, y })
@@ -76,25 +84,33 @@ export const PixiGrid = () => {
     (g: GraphicsImpl) => {
       const { x, y } = getCenter()
       g.clear()
-      g.beginFill(0xFFFFFF)
-      g.drawCircle(x, y, circleRadius)
+      g.beginFill(0xffffff)
+      g.drawCircle(x, y, canvasSize / 2)
       g.endFill()
     },
-    [circleRadius]
+    [canvasSize, getCenter]
   )
 
-  const containerX = VIEW_WIDTH / 2 - heroPosition.x * SCALE_FACTOR
-  const containerY = VIEW_WIDTH / 2 - heroPosition.y * SCALE_FACTOR
+  const containerX = canvasSize / 2 - heroPosition.x * SCALE_FACTOR
+  const containerY = canvasSize / 2 - heroPosition.y * SCALE_FACTOR
 
   return (
-    <div style={{ height: '105%' }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Stage
-        width={VIEW_WIDTH}
-        height={VIEW_WIDTH}
+        width={canvasSize}
+        height={canvasSize}
         options={{
           backgroundAlpha: 0,
           antialias: true,
-          resolution: 1,
+          resolution: window.devicePixelRatio || 1,
           autoDensity: true,
         }}
       >

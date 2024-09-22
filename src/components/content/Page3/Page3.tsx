@@ -1,13 +1,16 @@
+import { useDeviceType } from '@/hooks/useDeviceType'
 import { PixiGrid } from './Experience/PixiGrid'
 
 export const Page3 = () => {
+  const device = useDeviceType()
+
   return (
     <div
       className="section"
       style={{
         backgroundColor: '#9fffcb',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: device === 'desktop' ? 'row' : 'column',
         alignItems: 'center',
       }}
     >
@@ -18,7 +21,7 @@ export const Page3 = () => {
           width: '40%',
           fontSize: '3rem',
           textAlign: 'center',
-          userSelect: 'none'
+          userSelect: 'none',
         }}
       >
         [WASD] to control
