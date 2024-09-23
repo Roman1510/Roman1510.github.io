@@ -9,7 +9,7 @@ interface UseSpriteAnimationProps {
   frameHeight: number;
   direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null;
   isMoving: boolean;
-  animationSpeed?: number; // Optionally allow customization of animation speed
+  animationSpeed?: number;
 }
 
 export const useSpriteAnimation = ({
@@ -18,7 +18,7 @@ export const useSpriteAnimation = ({
   frameHeight,
   direction,
   isMoving,
-  animationSpeed = 0.15, // Default animation speed
+  animationSpeed = 0.15,
 }: UseSpriteAnimationProps) => {
   const [sprite, setSprite] = useState<PIXI.Sprite | null>(null);
   const lastDirection = useRef<'UP' | 'DOWN' | 'LEFT' | 'RIGHT'>('DOWN');
@@ -27,7 +27,6 @@ export const useSpriteAnimation = ({
 
   const texture = PIXI.Texture.from(imagePath);
 
-  // Get row number based on direction
   const getRowByDirection = (dir: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
     switch (dir) {
       case 'UP':
@@ -52,7 +51,7 @@ export const useSpriteAnimation = ({
 
       if (elapsedTimeRef.current >= 1) {
         elapsedTimeRef.current = 0;
-        frameRef.current = (frameRef.current + 1) % 9; // Loop through 9 frames
+        frameRef.current = (frameRef.current + 1) % 9;
       }
 
       const column = frameRef.current;
@@ -72,9 +71,8 @@ export const useSpriteAnimation = ({
       animatedSprite.height = TILE_SIZE;
 
       setSprite(animatedSprite);
-      lastDirection.current = currentDirection; // Save the last direction
+      lastDirection.current = currentDirection;
     } else {
-      // If not moving, show the static frame (first frame of the current row)
       const frame = new PIXI.Texture(
         texture.baseTexture,
         new PIXI.Rectangle(0, row * frameHeight, frameWidth, frameHeight)

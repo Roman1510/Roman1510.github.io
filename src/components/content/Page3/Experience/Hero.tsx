@@ -35,7 +35,7 @@ export const Hero = ({
     frameHeight: 64,
     direction: currentDirection,
     isMoving,
-    animationSpeed: 0.15,
+    animationSpeed: 0.3,
   });
 
   const moveTowards = useCallback(
