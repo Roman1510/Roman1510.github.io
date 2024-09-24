@@ -1,24 +1,13 @@
-import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import {
-  Container as ContainerImpl,
-  Graphics as GraphicsImpl,
-  Texture,
-} from 'pixi.js';
-import { Container, Stage, Graphics } from '@pixi/react';
-import { Hero } from './Hero';
-import { Level } from './Level';
-import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { Graphics as GraphicsImpl } from 'pixi.js';
+import { Stage, Graphics } from '@pixi/react';
+import MainContainer from './MainContainer';
 
-const SCALE_FACTOR = 1.2;
 const NUM_STARS = 100;
 
 export const PixiGrid = () => {
-  const [heroPosition, setHeroPosition] = useState({
-    x: GAME_WIDTH / 2,
-    y: GAME_WIDTH / 2,
-  });
   const [canvasSize, setCanvasSize] = useState(0);
-  const containerRef = useRef<ContainerImpl>(null);
+
   const maskRef = useRef<GraphicsImpl>(null);
   const backgroundRef = useRef<GraphicsImpl>(null);
 
@@ -32,12 +21,6 @@ export const PixiGrid = () => {
     window.addEventListener('resize', updateCanvasSize);
     return () => window.removeEventListener('resize', updateCanvasSize);
   }, [updateCanvasSize]);
-
-  useEffect(() => {
-    if (containerRef.current && maskRef.current) {
-      containerRef.current.mask = maskRef.current;
-    }
-  }, []);
 
   const getCenter = useCallback(
     () => ({
@@ -80,11 +63,6 @@ export const PixiGrid = () => {
     }
   }, [canvasSize, getCenter, getRandomPositionInCircle]);
 
-  const updateHeroPosition = (x: number, y: number) => {
-    console.log('position changed');
-    setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 });
-  };
-
   const drawMask = useCallback(
     (g: GraphicsImpl) => {
       const { x, y } = getCenter();
@@ -95,19 +73,6 @@ export const PixiGrid = () => {
     },
     [canvasSize, getCenter]
   );
-
-  // Calculate the container position to keep the hero centered
-  const containerX =
-    canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR;
-  const containerY =
-    canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR;
-
-  const texture = useMemo(() => {
-    const imagePath = '/hero.png';
-
-    return Texture.from(imagePath);
-  }, []);
-
   return (
     <div
       style={{
@@ -129,18 +94,8 @@ export const PixiGrid = () => {
         }}
       >
         <Graphics ref={backgroundRef} />
-
-        <Container
-          ref={containerRef}
-          scale={SCALE_FACTOR}
-          x={containerX}
-          y={containerY}
-        >
-          <Level />
-          <Hero texture={texture} onMove={updateHeroPosition} />
-        </Container>
-
         <Graphics draw={drawMask} ref={maskRef} />
+        <MainContainer canvasSize={canvasSize} />
       </Stage>
     </div>
   );
