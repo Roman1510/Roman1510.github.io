@@ -1,39 +1,43 @@
-import { useRef, useEffect, useState, useCallback } from 'react'
-import { Container as ContainerImpl, Graphics as GraphicsImpl } from 'pixi.js'
-import { Container, Stage, Graphics } from '@pixi/react'
-import { Hero } from './Hero'
-import { Level } from './Level'
-import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world'
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import {
+  Container as ContainerImpl,
+  Graphics as GraphicsImpl,
+  Texture,
+} from 'pixi.js';
+import { Container, Stage, Graphics } from '@pixi/react';
+import { Hero } from './Hero';
+import { Level } from './Level';
+import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world';
 
-const SCALE_FACTOR = 1.2
-const NUM_STARS = 100
+const SCALE_FACTOR = 1.2;
+const NUM_STARS = 100;
 
 export const PixiGrid = () => {
   const [heroPosition, setHeroPosition] = useState({
     x: GAME_WIDTH / 2,
     y: GAME_WIDTH / 2,
-  })
-  const [canvasSize, setCanvasSize] = useState(0)
-  const containerRef = useRef<ContainerImpl>(null)
-  const maskRef = useRef<GraphicsImpl>(null)
-  const backgroundRef = useRef<GraphicsImpl>(null)
+  });
+  const [canvasSize, setCanvasSize] = useState(0);
+  const containerRef = useRef<ContainerImpl>(null);
+  const maskRef = useRef<GraphicsImpl>(null);
+  const backgroundRef = useRef<GraphicsImpl>(null);
 
   const updateCanvasSize = useCallback(() => {
-    const size = Math.min(window.innerWidth, window.innerHeight) * 0.9
-    setCanvasSize(size)
-  }, [])
+    const size = Math.min(window.innerWidth, window.innerHeight) * 0.9;
+    setCanvasSize(size);
+  }, []);
 
   useEffect(() => {
-    updateCanvasSize()
-    window.addEventListener('resize', updateCanvasSize)
-    return () => window.removeEventListener('resize', updateCanvasSize)
-  }, [updateCanvasSize])
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, [updateCanvasSize]);
 
   useEffect(() => {
     if (containerRef.current && maskRef.current) {
-      containerRef.current.mask = maskRef.current
+      containerRef.current.mask = maskRef.current;
     }
-  }, [])
+  }, []);
 
   const getCenter = useCallback(
     () => ({
@@ -41,61 +45,68 @@ export const PixiGrid = () => {
       y: canvasSize / 2,
     }),
     [canvasSize]
-  )
+  );
 
   const getRandomPositionInCircle = useCallback(
     (centerX: number, centerY: number, radius: number) => {
-      let x, y, distanceFromCenter
+      let x, y, distanceFromCenter;
       do {
-        x = Math.random() * radius * 2 - radius
-        y = Math.random() * radius * 2 - radius
-        distanceFromCenter = Math.sqrt(x * x + y * y)
-      } while (distanceFromCenter > radius)
-      return { x: centerX + x, y: centerY + y }
+        x = Math.random() * radius * 2 - radius;
+        y = Math.random() * radius * 2 - radius;
+        distanceFromCenter = Math.sqrt(x * x + y * y);
+      } while (distanceFromCenter > radius);
+      return { x: centerX + x, y: centerY + y };
     },
     []
-  )
+  );
 
   useEffect(() => {
     if (backgroundRef.current) {
-      const g = backgroundRef.current
-      const { x, y } = getCenter()
-      const radius = canvasSize / 2
+      const g = backgroundRef.current;
+      const { x, y } = getCenter();
+      const radius = canvasSize / 2;
 
-      g.clear()
-      g.beginFill(0x000000)
-      g.drawCircle(x, y, radius)
-      g.endFill()
+      g.clear();
+      g.beginFill(0x000000);
+      g.drawCircle(x, y, radius);
+      g.endFill();
 
-      g.beginFill(0xffffff)
+      g.beginFill(0xffffff);
       for (let i = 0; i < NUM_STARS; i++) {
-        const { x: starX, y: starY } = getRandomPositionInCircle(x, y, radius)
-        g.drawCircle(starX, starY, Math.random() * 2 + 1)
+        const { x: starX, y: starY } = getRandomPositionInCircle(x, y, radius);
+        g.drawCircle(starX, starY, Math.random() * 2 + 1);
       }
-      g.endFill()
+      g.endFill();
     }
-  }, [canvasSize, getCenter, getRandomPositionInCircle])
+  }, [canvasSize, getCenter, getRandomPositionInCircle]);
 
   const updateHeroPosition = (x: number, y: number) => {
-    setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 })
-  }
+    console.log('position changed');
+    setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 });
+  };
 
   const drawMask = useCallback(
     (g: GraphicsImpl) => {
-      const { x, y } = getCenter()
-      g.clear()
-      g.beginFill(0xffffff)
-      g.drawCircle(x, y, canvasSize / 2)
-      g.endFill()
+      const { x, y } = getCenter();
+      g.clear();
+      g.beginFill(0xffffff);
+      g.drawCircle(x, y, canvasSize / 2);
+      g.endFill();
     },
     [canvasSize, getCenter]
-  )
+  );
 
   // Calculate the container position to keep the hero centered
   const containerX =
-    canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR
+    canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR;
   const containerY =
-    canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR
+    canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR;
+
+  const texture = useMemo(() => {
+    const imagePath = '/hero.png';
+
+    return Texture.from(imagePath);
+  }, []);
 
   return (
     <div
@@ -126,11 +137,11 @@ export const PixiGrid = () => {
           y={containerY}
         >
           <Level />
-          <Hero onMove={updateHeroPosition} />
+          <Hero texture={texture} onMove={updateHeroPosition} />
         </Container>
 
         <Graphics draw={drawMask} ref={maskRef} />
       </Stage>
     </div>
-  )
-}
+  );
+};

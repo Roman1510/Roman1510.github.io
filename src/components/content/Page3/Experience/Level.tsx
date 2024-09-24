@@ -1,5 +1,5 @@
-import { GAME_HEIGHT, GAME_WIDTH } from '@/constants/game-world'
-import { TilingSprite } from '@pixi/react'
+import { GAME_HEIGHT, GAME_WIDTH } from '@/constants/game-world';
+import { TilingSprite } from '@pixi/react';
 
 export const Level = () => {
   return (
@@ -10,5 +10,5 @@ export const Level = () => {
       tilePosition={{ x: 0, y: 0 }}
       tileScale={{ x: 2, y: 2 }}
     />
-  )
-}
+  );
+};
