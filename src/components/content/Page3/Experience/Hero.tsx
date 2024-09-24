@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect, useState } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { Sprite, Container, useTick } from '@pixi/react';
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world';
 import { useHeroControls } from '@/hooks/useControls';
@@ -30,10 +30,6 @@ export const Hero = ({
   const targetPosition = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
 
-  useEffect(() => {
-    onMove(position.current.x, position.current.y);
-  }, []);
-
   const { sprite, updateSprite } = useSpriteAnimation({
     texture,
     frameWidth: 64,
@@ -48,6 +44,7 @@ export const Hero = ({
     []
   );
 
+  console.log('hero rerendere');
   const setNextTarget = useCallback(
     (direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
       if (targetPosition.current) return;
@@ -91,8 +88,8 @@ export const Hero = ({
     []
   );
 
-  useTick((_, ticker) => {
-    ticker.maxFPS = 30;
+  useTick((delta, ticker) => {
+    ticker.maxFPS = 24;
     const direction = getCurrentDirection();
 
     if (!targetPosition.current && direction) {
@@ -107,7 +104,7 @@ export const Hero = ({
         targetPosition.current.y - position.current.y
       );
 
-      if (distance <= MOVE_SPEED * TILE_SIZE) {
+      if (distance <= MOVE_SPEED * TILE_SIZE * delta) {
         position.current = targetPosition.current;
         targetPosition.current = null;
 
@@ -119,12 +116,12 @@ export const Hero = ({
         const newX = moveTowards(
           position.current.x,
           targetPosition.current.x,
-          MOVE_SPEED * DOUBLE_TILE
+          MOVE_SPEED * DOUBLE_TILE * delta
         );
         const newY = moveTowards(
           position.current.y,
           targetPosition.current.y,
-          MOVE_SPEED * DOUBLE_TILE
+          MOVE_SPEED * DOUBLE_TILE * delta
         );
         position.current = { x: newX, y: newY };
         onMove(newX, newY);
@@ -136,7 +133,6 @@ export const Hero = ({
     updateSprite(currentDirection, isMoving.current, ANIMATION_SPEED);
   });
 
-  console.log('hero rerendered');
   const heroClickedHandler = () => {
     console.log('Hero clicked');
   };
