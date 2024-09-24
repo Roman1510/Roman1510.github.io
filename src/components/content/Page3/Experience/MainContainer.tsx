@@ -24,14 +24,17 @@ const MainContainer = ({ canvasSize }: IMainContainerProps) => {
     setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 });
   };
 
-  const containerX =
-    canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR;
-  const containerY =
-    canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR;
+  const containerPosition = useMemo(() => {
+    const containerX =
+      canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR;
+    const containerY =
+      canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR;
+
+    return { containerX, containerY };
+  }, [canvasSize, heroPosition]);
 
   const texture = useMemo(() => {
     const imagePath = '/hero.png';
-
     return Texture.from(imagePath);
   }, []);
 
@@ -39,8 +42,8 @@ const MainContainer = ({ canvasSize }: IMainContainerProps) => {
     <Container
       ref={containerRef}
       scale={SCALE_FACTOR}
-      x={containerX}
-      y={containerY}
+      x={containerPosition.containerX}
+      y={containerPosition.containerY}
     >
       <Level />
       <Hero texture={texture} onMove={updateHeroPosition} />
