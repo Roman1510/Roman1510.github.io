@@ -1,4 +1,10 @@
-import { useRef, useState, useMemo } from 'react';
+import {
+  useRef,
+  useState,
+  useMemo,
+  PropsWithChildren,
+  useCallback,
+} from 'react';
 import { Container as ContainerImpl, Texture } from 'pixi.js';
 import { Container } from '@pixi/react';
 import { Hero } from './Hero';
@@ -11,7 +17,10 @@ interface IMainContainerProps {
 
 const SCALE_FACTOR = 1.2;
 
-const MainContainer = ({ canvasSize }: IMainContainerProps) => {
+const MainContainer = ({
+  canvasSize,
+  children,
+}: PropsWithChildren<IMainContainerProps>) => {
   const [heroPosition, setHeroPosition] = useState({
     x: GAME_WIDTH / 2,
     y: GAME_WIDTH / 2,
@@ -19,10 +28,9 @@ const MainContainer = ({ canvasSize }: IMainContainerProps) => {
 
   const containerRef = useRef<ContainerImpl>(null);
 
-  const updateHeroPosition = (x: number, y: number) => {
-    console.log('position changed');
+  const updateHeroPosition = useCallback((x: number, y: number) => {
     setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 });
-  };
+  }, []);
 
   const containerPosition = useMemo(() => {
     const containerX =
@@ -45,6 +53,7 @@ const MainContainer = ({ canvasSize }: IMainContainerProps) => {
       x={containerPosition.containerX}
       y={containerPosition.containerY}
     >
+      {children}
       <Level />
       <Hero texture={texture} onMove={updateHeroPosition} />
     </Container>
