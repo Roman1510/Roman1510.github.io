@@ -44,7 +44,6 @@ export const Hero = ({
     []
   );
 
-  console.log('hero rerendere');
   const setNextTarget = useCallback(
     (direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
       if (targetPosition.current) return;
@@ -89,7 +88,7 @@ export const Hero = ({
   );
 
   useTick((delta, ticker) => {
-    ticker.maxFPS = 24;
+    ticker.maxFPS = 30;
     const direction = getCurrentDirection();
 
     if (!targetPosition.current && direction) {

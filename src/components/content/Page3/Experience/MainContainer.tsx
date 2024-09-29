@@ -1,61 +1,59 @@
-import {
-  useRef,
-  useState,
-  useMemo,
-  PropsWithChildren,
-  useCallback,
-} from 'react';
-import { Container as ContainerImpl, Texture } from 'pixi.js';
+import { useState, useMemo, PropsWithChildren, useCallback } from 'react';
+import { Texture } from 'pixi.js';
 import { Container } from '@pixi/react';
 import { Hero } from './Hero';
 import { Level } from './Level';
-import { GAME_WIDTH, TILE_SIZE } from '@/constants/game-world';
+import { TILE_SIZE } from '@/constants/game-world';
+import { FollowingCamera } from './FollowingCamera';
 
 interface IMainContainerProps {
   canvasSize: number;
 }
 
-const SCALE_FACTOR = 1.2;
+const CAMERA_RADIUS = 300;
+const INITIAL_ZOOM = 1;
+const DOUBLE_TILE = TILE_SIZE * 2;
 
 const MainContainer = ({
   canvasSize,
   children,
 }: PropsWithChildren<IMainContainerProps>) => {
   const [heroPosition, setHeroPosition] = useState({
-    x: GAME_WIDTH / 2,
-    y: GAME_WIDTH / 2,
+    x: DOUBLE_TILE * 2,
+    y: DOUBLE_TILE * 2,
   });
-
-  const containerRef = useRef<ContainerImpl>(null);
+  const [zoom, setZoom] = useState(INITIAL_ZOOM);
 
   const updateHeroPosition = useCallback((x: number, y: number) => {
-    setHeroPosition({ x: x + TILE_SIZE / 2, y: y + TILE_SIZE / 2 });
+    setHeroPosition({ x, y });
   }, []);
-
-  const containerPosition = useMemo(() => {
-    const containerX =
-      canvasSize / 2 - (heroPosition.x + TILE_SIZE / 2) * SCALE_FACTOR;
-    const containerY =
-      canvasSize / 2 - (heroPosition.y + TILE_SIZE / 2) * SCALE_FACTOR;
-
-    return { containerX, containerY };
-  }, [canvasSize, heroPosition]);
 
   const texture = useMemo(() => {
     const imagePath = '/hero.png';
     return Texture.from(imagePath);
   }, []);
 
+  const handleZoomChange = useCallback((delta: number) => {
+    setZoom((prevZoom) => Math.max(0.5, Math.min(2, prevZoom + delta)));
+  }, []);
+
   return (
-    <Container
-      ref={containerRef}
-      scale={SCALE_FACTOR}
-      x={containerPosition.containerX}
-      y={containerPosition.containerY}
-    >
+    <Container>
       {children}
-      <Level />
-      <Hero texture={texture} onMove={updateHeroPosition} />
+      <FollowingCamera
+        radius={CAMERA_RADIUS}
+        zoom={zoom}
+        heroPosition={heroPosition}
+        canvasSize={canvasSize}
+      >
+        <Level />
+        <Hero
+          texture={texture}
+          onMove={updateHeroPosition}
+          x={heroPosition.x}
+          y={heroPosition.y}
+        />
+      </FollowingCamera>
     </Container>
   );
 };
