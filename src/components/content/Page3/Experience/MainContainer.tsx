@@ -11,7 +11,7 @@ interface IMainContainerProps {
 }
 
 const CAMERA_RADIUS = 300;
-const INITIAL_ZOOM = 1;
+const INITIAL_ZOOM = 1.3;
 const DOUBLE_TILE = TILE_SIZE * 2;
 
 const MainContainer = ({
