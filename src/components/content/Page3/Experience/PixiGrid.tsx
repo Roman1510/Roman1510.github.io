@@ -33,7 +33,6 @@ export const PixiGrid = () => {
         options={{
           backgroundAlpha: 0,
           antialias: true,
-          resolution: window.devicePixelRatio || 1,
           autoDensity: true,
         }}
       >

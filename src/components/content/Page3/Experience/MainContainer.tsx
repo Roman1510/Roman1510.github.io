@@ -10,7 +10,6 @@ interface IMainContainerProps {
   canvasSize: number;
 }
 
-const CAMERA_RADIUS = 300;
 const INITIAL_ZOOM = 1.3;
 const DOUBLE_TILE = TILE_SIZE * 2;
 
@@ -37,11 +36,14 @@ const MainContainer = ({
     setZoom((prevZoom) => Math.max(0.5, Math.min(2, prevZoom + delta)));
   }, []);
 
+ 
+  const viewportRadius = useMemo(() => canvasSize * 0.5, [canvasSize]);
+
   return (
     <Container>
       {children}
       <FollowingCamera
-        radius={CAMERA_RADIUS}
+        radius={viewportRadius}
         zoom={zoom}
         heroPosition={heroPosition}
         canvasSize={canvasSize}
