@@ -51,7 +51,7 @@ const MainContainer = ({
         heroPosition={heroPosition}
         canvasSize={canvasSize}
       >
-        <StarBackground width={levelSize} height={levelSize} starCount={1100} scale={10} />
+        <StarBackground width={levelSize} height={levelSize} starCount={1100} scale={5} offset={{x:levelSize,y:levelSize}}/>
         <Level />
         <Hero
           texture={texture}

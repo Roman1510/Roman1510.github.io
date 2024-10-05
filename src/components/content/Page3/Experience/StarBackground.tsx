@@ -7,13 +7,16 @@ interface StarBackgroundProps {
   height: number;
   starCount: number;
   scale?: number;
+  offset?:{x:number, y:number};
 }
 
 const StarBackground: React.FC<StarBackgroundProps> = ({ 
   width, 
   height, 
   starCount,
-  scale = 1
+  scale = 1,
+  offset
+  
 }) => {
   const stars = useMemo(() => {
     const maxDimension = Math.max(width, height);
@@ -35,7 +38,7 @@ const StarBackground: React.FC<StarBackgroundProps> = ({
     const scaledSize = maxDimension * scale;
     g.clear();
     g.beginFill(0x000000);  
-    g.drawCircle(0, 0, scaledSize / 2);
+    g.drawCircle(offset!.x, offset!.y, scaledSize / 2);
     g.endFill();
   }
 
@@ -43,7 +46,7 @@ const StarBackground: React.FC<StarBackgroundProps> = ({
     g.clear();
     stars.forEach((star) => {
       g.beginFill(0xF0F0F0, star.alpha);
-      g.drawCircle(star.x, star.y, star.radius);
+      g.drawCircle(offset!.x+star.x, offset!.y+star.y, star.radius);
       g.endFill();
     });
   };
