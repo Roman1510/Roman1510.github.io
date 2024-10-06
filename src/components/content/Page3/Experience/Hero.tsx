@@ -14,13 +14,16 @@ interface IHeroProps {
 const MOVE_SPEED = 0.03;
 const ANIMATION_SPEED = 0.45;
 
+const X_POS = TILE_SIZE * 10
+const Y_POS = TILE_SIZE * 15
+
 export const Hero = ({
   texture,
   onMove,
 }: IHeroProps) => {
 
   const gridPosition = useRef<{ gridX: number; gridY: number }>({ gridX: 0, gridY: 0 });
-  const position = useRef<{ x: number; y: number }>({ x: 3 * TILE_SIZE, y: 5 * TILE_SIZE });
+  const position = useRef<{ x: number; y: number }>({ x: X_POS, y: Y_POS });
   const { getCurrentDirection } = useHeroControls();
   const [currentDirection, setCurrentDirection] = useState<'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null>(null);
   const targetPosition = useRef<{ x: number; y: number } | null>(null);
