@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Stage } from '@pixi/react';
 import MainContainer from './MainContainer';
 
+
 export const PixiGrid = () => {
   const [canvasSize, setCanvasSize] = useState(0);
 

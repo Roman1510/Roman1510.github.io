@@ -7,18 +7,19 @@ import { TILE_SIZE } from '@/constants/game-world';
 import { FollowingCamera } from './FollowingCamera';
 import StarBackground from './StarBackground';
 
+
 interface IMainContainerProps {
   canvasSize: number;
 }
 
 const INITIAL_ZOOM = 2.5;
-const LEVEL_SIZE = 20; 
+const LEVEL_SIZE = 20;
 
 const MainContainer = ({
   canvasSize,
   children,
 }: PropsWithChildren<IMainContainerProps>) => {
-  const [heroPosition, setHeroPosition] = useState({x:0,y:0});
+  const [heroPosition, setHeroPosition] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
 
   const updateHeroPosition = useCallback((x: number, y: number) => {
@@ -47,12 +48,12 @@ const MainContainer = ({
         heroPosition={heroPosition}
         canvasSize={canvasSize}
       >
-        <StarBackground width={levelSize} height={levelSize} starCount={1100} scale={5} offset={{x:levelSize,y:levelSize}}/>
+        <StarBackground width={levelSize} height={levelSize} starCount={1100} scale={5} offset={{ x: levelSize, y: levelSize }} />
         <Level />
         <Hero
           texture={texture}
           onMove={updateHeroPosition}
-         
+
         />
       </FollowingCamera>
     </Container>

@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 import { Sprite, Container, useTick } from '@pixi/react';
 import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world';
 import { useHeroControls } from '@/hooks/useControls';
@@ -8,7 +8,7 @@ import { canWalk } from './collisionMap';
 
 interface IHeroProps {
   texture: Texture;
-  onMove: (gridX: number, gridY: number) => void; 
+  onMove: (gridX: number, gridY: number) => void;
 }
 
 const MOVE_SPEED = 0.03;
@@ -18,13 +18,21 @@ export const Hero = ({
   texture,
   onMove,
 }: IHeroProps) => {
- 
+
   const gridPosition = useRef<{ gridX: number; gridY: number }>({ gridX: 0, gridY: 0 });
-  const position = useRef<{ x: number; y: number }>({ x: 0, y: 0 }); 
+  const position = useRef<{ x: number; y: number }>({ x: 3 * TILE_SIZE, y: 5 * TILE_SIZE });
   const { getCurrentDirection } = useHeroControls();
   const [currentDirection, setCurrentDirection] = useState<'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | null>(null);
   const targetPosition = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
+
+  //initializing =>
+  useEffect(() => {
+    gridPosition.current.gridX = Math.floor(position.current.x / TILE_SIZE);
+    gridPosition.current.gridY = Math.floor(position.current.y / TILE_SIZE);
+    onMove?.(gridPosition.current.gridX, gridPosition.current.gridY);
+  }, [])
+
 
   const { sprite, updateSprite } = useSpriteAnimation({
     texture,
@@ -66,20 +74,20 @@ export const Hero = ({
 
       newTarget.x = Math.min(
         Math.max(newTarget.x, 0),
-        GAME_WIDTH - TILE_SIZE
+        GAME_WIDTH
       );
       newTarget.y = Math.min(
         Math.max(newTarget.y, 0),
-        GAME_HEIGHT - (TILE_SIZE+TILE_SIZE/2)
+        GAME_HEIGHT
       );
 
       if (
         canWalk(
-          Math.floor(newTarget.y / TILE_SIZE), 
-          Math.floor(newTarget.x / TILE_SIZE)  
+          Math.floor(newTarget.y / TILE_SIZE),
+          Math.floor(newTarget.x / TILE_SIZE)
         ) &&
         (newTarget.x !== position.current.x ||
-        newTarget.y !== position.current.y)
+          newTarget.y !== position.current.y)
       ) {
         targetPosition.current = newTarget;
       }
@@ -89,19 +97,19 @@ export const Hero = ({
 
   useTick((delta) => {
     const direction = getCurrentDirection();
-  
+
     if (!targetPosition.current && direction) {
       setNextTarget(direction);
       setCurrentDirection(direction);
     }
-  
+
     if (targetPosition.current) {
       isMoving.current = true;
       const distance = Math.hypot(
         targetPosition.current.x - position.current.x,
         targetPosition.current.y - position.current.y
       );
-  
+
       if (distance <= MOVE_SPEED * TILE_SIZE * delta) {
         position.current = { ...targetPosition.current };
         targetPosition.current = null;
@@ -147,7 +155,7 @@ export const Hero = ({
           scale={0.5}
           x={position.current.x}
           y={position.current.y}
-          anchor={0}
+          anchor={[0, 0.5]}
           eventMode="dynamic"
           pointerdown={heroClickedHandler}
         />
