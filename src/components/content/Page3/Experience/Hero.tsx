@@ -72,15 +72,6 @@ export const Hero = ({
           break;
       }
 
-      newTarget.x = Math.min(
-        Math.max(newTarget.x, 0),
-        GAME_WIDTH
-      );
-      newTarget.y = Math.min(
-        Math.max(newTarget.y, 0),
-        GAME_HEIGHT
-      );
-
       if (
         canWalk(
           Math.floor(newTarget.y / TILE_SIZE),

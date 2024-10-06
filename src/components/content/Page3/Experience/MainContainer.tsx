@@ -40,7 +40,7 @@ const MainContainer = ({
   const levelSize = LEVEL_SIZE * TILE_SIZE;
 
   return (
-    <Container>
+    <Container >
       {children}
       <FollowingCamera
         radius={viewportRadius}
