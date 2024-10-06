@@ -1,6 +1,6 @@
 import { useRef, useCallback, useState, useEffect } from 'react';
 import { Sprite, Container, useTick } from '@pixi/react';
-import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from '@/constants/game-world';
+import { TILE_SIZE, } from '@/constants/game-world';
 import { useHeroControls } from '@/hooks/useControls';
 import { useSpriteAnimation } from '@/hooks/useSpriteAnimation';
 import { Texture } from 'pixi.js';

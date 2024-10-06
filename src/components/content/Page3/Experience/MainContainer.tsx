@@ -30,7 +30,7 @@ const MainContainer = ({
     const imagePath = '/hero.png';
     return Texture.from(imagePath);
   }, []);
-
+  // @ts-ignore
   const handleZoomChange = useCallback((delta: number) => {
     setZoom((prevZoom) => Math.max(0.5, Math.min(2, prevZoom + delta)));
   }, []);
