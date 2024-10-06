@@ -12,13 +12,13 @@ interface IHeroProps {
   onMove: (x: number, y: number) => void;
 }
 
-const DOUBLE_TILE = 64;
+
 const MOVE_SPEED = 0.04;
-const ANIMATION_SPEED = 0.5;
+const ANIMATION_SPEED = 0.55;
 
 export const Hero = ({
-  x = DOUBLE_TILE * 2,
-  y = DOUBLE_TILE * 2,
+  x=0,
+  y=0,
   texture,
   onMove,
 }: IHeroProps) => {
@@ -39,7 +39,7 @@ export const Hero = ({
   const moveTowards = useCallback(
     (current: number, target: number, maxStep: number) => {
       const step = Math.min(Math.abs(target - current), maxStep);
-      return current + Math.sign(target - current) * step;
+      return Math.round(current + Math.sign(target - current) * step); 
     },
     []
   );
@@ -49,32 +49,32 @@ export const Hero = ({
       if (targetPosition.current) return;
 
       const newTarget = {
-        x: Math.round(position.current.x / DOUBLE_TILE) * DOUBLE_TILE,
-        y: Math.round(position.current.y / DOUBLE_TILE) * DOUBLE_TILE,
+        x: Math.round(position.current.x / TILE_SIZE) * TILE_SIZE,
+        y: Math.round(position.current.y / TILE_SIZE) * TILE_SIZE,
       };
 
       switch (direction) {
         case 'UP':
-          newTarget.y -= DOUBLE_TILE;
+          newTarget.y -= TILE_SIZE;
           break;
         case 'DOWN':
-          newTarget.y += DOUBLE_TILE;
+          newTarget.y += TILE_SIZE;
           break;
         case 'LEFT':
-          newTarget.x -= DOUBLE_TILE;
+          newTarget.x -= TILE_SIZE;
           break;
         case 'RIGHT':
-          newTarget.x += DOUBLE_TILE;
+          newTarget.x += TILE_SIZE;
           break;
       }
 
       newTarget.x = Math.min(
         Math.max(newTarget.x, 0),
-        GAME_WIDTH - DOUBLE_TILE
+        GAME_WIDTH - TILE_SIZE
       );
       newTarget.y = Math.min(
         Math.max(newTarget.y, 0),
-        GAME_HEIGHT - DOUBLE_TILE
+        GAME_HEIGHT - TILE_SIZE
       );
 
       if (
@@ -88,39 +88,41 @@ export const Hero = ({
   );
 
   useTick((delta, ticker) => {
-    ticker.maxFPS = 30;
+    ticker.maxFPS = 30;  
     const direction = getCurrentDirection();
-
+  
     if (!targetPosition.current && direction) {
       setNextTarget(direction);
       setCurrentDirection(direction);
     }
-
+  
     if (targetPosition.current) {
       isMoving.current = true;
       const distance = Math.hypot(
         targetPosition.current.x - position.current.x,
         targetPosition.current.y - position.current.y
       );
-
+  
       if (distance <= MOVE_SPEED * TILE_SIZE * delta) {
-        position.current = targetPosition.current;
+       
+        position.current = { ...targetPosition.current };
         targetPosition.current = null;
-
+  
         if (direction) {
           setCurrentDirection(direction);
           setNextTarget(direction);
         }
       } else {
+        
         const newX = moveTowards(
           position.current.x,
           targetPosition.current.x,
-          MOVE_SPEED * DOUBLE_TILE * delta
+          MOVE_SPEED * TILE_SIZE * delta
         );
         const newY = moveTowards(
           position.current.y,
           targetPosition.current.y,
-          MOVE_SPEED * DOUBLE_TILE * delta
+          MOVE_SPEED * TILE_SIZE * delta
         );
         position.current = { x: newX, y: newY };
         onMove(newX, newY);
@@ -128,9 +130,10 @@ export const Hero = ({
     } else {
       isMoving.current = false;
     }
-
+  
     updateSprite(currentDirection, isMoving.current, ANIMATION_SPEED);
   });
+  
 
   const heroClickedHandler = () => {
     console.log('Hero clicked');
@@ -141,7 +144,7 @@ export const Hero = ({
       {sprite && (
         <Sprite
           texture={sprite.texture}
-          scale={1}
+          scale={0.5}
           x={position.current.x}
           y={position.current.y}
           anchor={0}

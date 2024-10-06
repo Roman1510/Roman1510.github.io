@@ -11,8 +11,7 @@ interface IMainContainerProps {
   canvasSize: number;
 }
 
-const INITIAL_ZOOM = 1.3;
-const DOUBLE_TILE = TILE_SIZE * 2;
+const INITIAL_ZOOM = 2.5;
 const LEVEL_SIZE = 20; 
 
 const MainContainer = ({
@@ -20,8 +19,8 @@ const MainContainer = ({
   children,
 }: PropsWithChildren<IMainContainerProps>) => {
   const [heroPosition, setHeroPosition] = useState({
-    x: DOUBLE_TILE * 2,
-    y: DOUBLE_TILE * 2,
+    x: TILE_SIZE * 2,
+    y: TILE_SIZE * 2,
   });
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
 
