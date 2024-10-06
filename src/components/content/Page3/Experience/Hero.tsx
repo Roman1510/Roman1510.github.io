@@ -72,6 +72,7 @@ export const Hero = ({
           break;
       }
 
+
       if (
         canWalk(
           Math.floor(newTarget.y / TILE_SIZE),
