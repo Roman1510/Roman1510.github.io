@@ -70,7 +70,7 @@ export const Hero = ({
       );
       newTarget.y = Math.min(
         Math.max(newTarget.y, 0),
-        GAME_HEIGHT - TILE_SIZE
+        GAME_HEIGHT - (TILE_SIZE+TILE_SIZE/2)
       );
 
       if (
