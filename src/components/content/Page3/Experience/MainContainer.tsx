@@ -18,10 +18,7 @@ const MainContainer = ({
   canvasSize,
   children,
 }: PropsWithChildren<IMainContainerProps>) => {
-  const [heroPosition, setHeroPosition] = useState({
-    x: TILE_SIZE * 2,
-    y: TILE_SIZE * 2,
-  });
+  const [heroPosition, setHeroPosition] = useState({x:0,y:0});
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
 
   const updateHeroPosition = useCallback((x: number, y: number) => {
@@ -55,8 +52,7 @@ const MainContainer = ({
         <Hero
           texture={texture}
           onMove={updateHeroPosition}
-          x={heroPosition.x}
-          y={heroPosition.y}
+         
         />
       </FollowingCamera>
     </Container>
