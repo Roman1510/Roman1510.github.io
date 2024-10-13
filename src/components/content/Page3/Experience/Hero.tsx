@@ -150,7 +150,7 @@ export const Hero = ({
           scale={0.5}
           x={position.current.x}
           y={position.current.y}
-          anchor={[0, 0.5]}
+          anchor={[0, 0.4]}
           eventMode="dynamic"
           pointerdown={heroClickedHandler}
         />
