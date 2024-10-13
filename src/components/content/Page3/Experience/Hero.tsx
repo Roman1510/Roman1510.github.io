@@ -2,9 +2,9 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 import { Sprite, Container, useTick } from '@pixi/react';
 import { TILE_SIZE, } from '@/constants/game-world';
 import { useHeroControls } from '@/hooks/useControls';
-import { useSpriteAnimation } from '@/hooks/useSpriteAnimation';
 import { Texture } from 'pixi.js';
 import { canWalk } from './collisionMap';
+import { useHeroAnimation } from '@/hooks/useHeroAnimation';
 
 interface IHeroProps {
   texture: Texture;
@@ -37,7 +37,7 @@ export const Hero = ({
   }, [])
 
 
-  const { sprite, updateSprite } = useSpriteAnimation({
+  const { sprite, updateSprite } = useHeroAnimation({
     texture,
     frameWidth: 64,
     frameHeight: 64,

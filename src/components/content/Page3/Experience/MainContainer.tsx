@@ -6,6 +6,7 @@ import { Level } from './Level';
 import { TILE_SIZE } from '@/constants/game-world';
 import { FollowingCamera } from './FollowingCamera';
 import StarBackground from './StarBackground';
+import { Coin } from './Coin';
 
 
 interface IMainContainerProps {
@@ -30,6 +31,12 @@ const MainContainer = ({
     const imagePath = '/hero.png';
     return Texture.from(imagePath);
   }, []);
+
+  const coinTexture = useMemo(() => {
+    const imagePath = '/MonedaR.png';
+    return Texture.from(imagePath);
+  }, []);
+
   // @ts-ignore
   const handleZoomChange = useCallback((delta: number) => {
     setZoom((prevZoom) => Math.max(0.5, Math.min(2, prevZoom + delta)));
@@ -55,6 +62,8 @@ const MainContainer = ({
           onMove={updateHeroPosition}
 
         />
+        <Coin texture={coinTexture} x={5} y={10} />
+
       </FollowingCamera>
     </Container>
   );
