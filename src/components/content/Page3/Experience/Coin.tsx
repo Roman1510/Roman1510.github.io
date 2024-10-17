@@ -10,11 +10,10 @@ interface ICoinProps {
   y: number;
 }
 
-const ANIMATION_SPEED = 60;
+const ANIMATION_SPEED = 0.15;
 
 export const Coin = ({ texture, x, y }: ICoinProps) => {
   const rotation = useRef(0);
-  const frameCount = useRef(0);
 
   const { sprite, updateSprite } = useAnimation({
     texture,
@@ -25,8 +24,7 @@ export const Coin = ({ texture, x, y }: ICoinProps) => {
   });
 
   useTick((delta) => {
-    frameCount.current += delta * 60;
-    updateSprite(Math.floor(frameCount.current));
+    updateSprite(delta);
   });
 
   return (

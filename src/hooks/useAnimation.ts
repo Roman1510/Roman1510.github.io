@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Sprite, Texture, Rectangle } from 'pixi.js'
 
 interface UseAnimationProps {
@@ -16,33 +16,41 @@ export const useAnimation = ({
   totalFrames,
   animationSpeed,
 }: UseAnimationProps) => {
-  const spriteRef = useRef<Sprite>(
-    new Sprite(
-      new Texture(
-        texture.baseTexture,
-        new Rectangle(0, 0, frameWidth, frameHeight)
-      )
+  const [currentTexture, setCurrentTexture] = useState(
+    new Texture(
+      texture.baseTexture,
+      new Rectangle(0, 0, frameWidth, frameHeight)
     )
   )
 
-  const lastFrameRef = useRef(-1)
+  const spriteRef = useRef<Sprite>(new Sprite(currentTexture))
+  const frameRef = useRef(0)
+  const elapsedTimeRef = useRef(0)
 
-  const updateSprite = (frameCount: number) => {
-    const currentFrame =
-      Math.floor(frameCount / (60 / animationSpeed)) % totalFrames
+  const updateSprite = (delta: number) => {
+    elapsedTimeRef.current += delta
 
-    if (currentFrame !== lastFrameRef.current) {
+    const frameDuration = 1 / animationSpeed
+
+    if (elapsedTimeRef.current >= frameDuration) {
+      elapsedTimeRef.current = 0
+      frameRef.current = (frameRef.current + 1) % totalFrames
+
       const newFrame = new Rectangle(
-        currentFrame * frameWidth,
+        frameRef.current * frameWidth,
         0,
         frameWidth,
         frameHeight
       )
 
-      spriteRef.current.texture = new Texture(texture.baseTexture, newFrame)
-      lastFrameRef.current = currentFrame
+      const newTexture = new Texture(texture.baseTexture, newFrame)
+      spriteRef.current.texture = newTexture
+      setCurrentTexture(newTexture)
     }
   }
 
-  return { sprite: spriteRef.current, updateSprite }
+  return {
+    sprite: spriteRef.current,
+    updateSprite,
+  }
 }

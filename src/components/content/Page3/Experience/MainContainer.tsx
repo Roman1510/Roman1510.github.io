@@ -63,6 +63,8 @@ const MainContainer = ({
 
         />
         <Coin texture={coinTexture} x={5} y={10} />
+        <Coin texture={coinTexture} x={6} y={11} />
+        <Coin texture={coinTexture} x={7} y={12} />
 
       </FollowingCamera>
     </Container>
