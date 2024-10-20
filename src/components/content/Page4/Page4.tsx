@@ -1,39 +1,47 @@
-import Experience from "./Experience"
+import { Play, Pause, FastForward, SkipForward } from "lucide-react";
+import Experience from "./Experience";
+import "./Page4.css";
+import { useState } from "react";
 
-export const Page4 = () => {
+export function Page4() {
+  const [playing, setPlaying] = useState(false);
+
+  const handleTogglePlay = () => {
+    setPlaying(prevState => !prevState);
+  };
+
   return (
-    <div className="section" style={{ backgroundColor: '#c8b1e4', height: '100vh' }}>
-      <div className="title" >
-        <p style={{ padding: '50px' }}>This page is...</p>
-      </div>
-      <div style={styles.wrapper}>
-        <div style={{ height: '50%' }}>
-          <Experience />
-        </div>
+    <div className="section">
+      <Experience />
+      <div className="player-container">
+        <button
+          className="player-button"
+          aria-label={playing ? "Pause" : "Play"}
+          onClick={handleTogglePlay}
+        >
+          {playing ? (
+            <Pause size={32} className="player-icon" />
+          ) : (
+            <Play size={32} className="player-icon" />
+          )}
+        </button>
+        <button
+          className="player-button"
+          aria-label={playing ? "Pause" : "Play"}
+          onClick={handleTogglePlay}
+        >
+          <FastForward size={32} className="player-icon" />
+        </button>
+        <button
+          className="player-button"
+          aria-label={playing ? "Pause" : "Play"}
+          onClick={handleTogglePlay}
+        >
+          <SkipForward size={32} className="player-icon" />
+        </button>
       </div>
     </div>
-  )
+  );
 }
 
-
-const styles = {
-  wrapper: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    bottom: 0,
-  } as React.CSSProperties,
-
-  headerText: {
-    position: 'absolute',
-    top: '10%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    fontSize: '64px',
-    fontFamily: "'YourFontName', sans-serif",
-    color: 'white',
-    textAlign: 'center',
-    userSelect: 'none',
-    zIndex: 11,
-  } as React.CSSProperties,
-};
+export default Page4;

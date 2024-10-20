@@ -1,0 +1,44 @@
+.section {
+  position: relative;
+  height: 100vh;
+  background-color: #c8b1e4;
+  overflow: hidden;
+}
+
+.player-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  bottom: 20px;
+  position: absolute;
+  z-index: 10;
+}
+
+.player-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.player-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.player-icon {
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.player-button:hover .player-icon {
+  transform: scale(1.1);
+}
