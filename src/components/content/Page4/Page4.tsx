@@ -20,9 +20,9 @@ export function Page4() {
           onClick={handleTogglePlay}
         >
           {playing ? (
-            <Pause size={32} className="player-icon" />
+            <Pause size={16} className="player-icon" />
           ) : (
-            <Play size={32} className="player-icon" />
+            <Play size={16} className="player-icon" />
           )}
         </button>
         <button
@@ -30,14 +30,14 @@ export function Page4() {
           aria-label={playing ? "Pause" : "Play"}
           onClick={handleTogglePlay}
         >
-          <FastForward size={32} className="player-icon" />
+          <FastForward size={16} className="player-icon" />
         </button>
         <button
           className="player-button"
           aria-label={playing ? "Pause" : "Play"}
           onClick={handleTogglePlay}
         >
-          <SkipForward size={32} className="player-icon" />
+          <SkipForward size={16} className="player-icon" />
         </button>
       </div>
     </div>
