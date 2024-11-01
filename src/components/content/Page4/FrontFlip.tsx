@@ -15,27 +15,48 @@ type GLTFResult = GLTF & {
   }
 }
 
-export function FrontFlip(props: JSX.IntrinsicElements['group']) {
+interface FrontFlipProps {
+  isPlaying?: boolean;
+  isSlowMotion?: boolean;
+}
+
+export function FrontFlip({ isPlaying = true, isSlowMotion = false, ...props }: FrontFlipProps) {
   const group = useRef<THREE.Group>(null)
   const { nodes, materials, animations } = useGLTF('/front-flip.glb') as GLTFResult
   const { actions } = useAnimations(animations, group)
+  const actionRef = useRef<THREE.AnimationAction | null>(null)
 
-
+  // Initial setup - only runs once
   useEffect(() => {
-
     const flipAction = actions['Armature|mixamo.com|Layer0']
 
     if (flipAction) {
-
-      flipAction.reset()
-
+      actionRef.current = flipAction
+      flipAction.setLoop(THREE.LoopRepeat, Infinity)
       flipAction.play()
 
-      flipAction.setLoop(THREE.LoopRepeat, Infinity)
-
-      flipAction.setEffectiveTimeScale(1)
+      // Cleanup
+      return () => {
+        flipAction.stop()
+      }
     }
   }, [actions])
+
+  // Handle play/pause
+  useEffect(() => {
+    const action = actionRef.current
+    if (action) {
+      action.paused = !isPlaying
+    }
+  }, [isPlaying])
+
+  // Handle speed changes
+  useEffect(() => {
+    const action = actionRef.current
+    if (action) {
+      action.setEffectiveTimeScale(isSlowMotion ? 0.2 : 1)
+    }
+  }, [isSlowMotion])
 
   return (
     <group ref={group} {...props} dispose={null}>

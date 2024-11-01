@@ -1,25 +1,55 @@
 import { Play, Pause, FastForward, SkipForward } from "lucide-react";
 import Experience from "./Experience";
 import "./Page4.css";
-import { useState } from "react";
+import { useRef, useState, } from "react";
+
+type Controls = {
+  togglePlay: () => void;
+  toggleSpeed: () => void;
+  reset: () => void;
+  getState: () => {
+    isPlaying: boolean;
+    isSlowMotion: boolean;
+  };
+};
 
 export function Page4() {
-  const [playing, setPlaying] = useState(false);
+  const controls = useRef<Controls | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const handleControlsMount = (experienceControls: Controls) => {
+    controls.current = experienceControls;
+    const state = experienceControls.getState();
+    setIsPlaying(state.isPlaying);
+  };
 
   const handleTogglePlay = () => {
-    setPlaying(prevState => !prevState);
+    controls.current?.togglePlay();
+    const newState = controls.current?.getState();
+    if (newState) {
+      setIsPlaying(newState.isPlaying);
+    }
+  };
+
+  const handleToggleSpeed = () => {
+    controls.current?.toggleSpeed();
+  };
+
+  const handleReset = () => {
+    controls.current?.reset();
+    setIsPlaying(true);
   };
 
   return (
     <div className="section">
-      <Experience />
+      <Experience onControlsMount={handleControlsMount} />
       <div className="player-container">
         <button
           className="player-button"
-          aria-label={playing ? "Pause" : "Play"}
+          aria-label="Play/Pause"
           onClick={handleTogglePlay}
         >
-          {playing ? (
+          {isPlaying ? (
             <Pause size={16} className="player-icon" />
           ) : (
             <Play size={16} className="player-icon" />
@@ -27,15 +57,15 @@ export function Page4() {
         </button>
         <button
           className="player-button"
-          aria-label={playing ? "Pause" : "Play"}
-          onClick={handleTogglePlay}
+          aria-label="Speed"
+          onClick={handleReset}
         >
           <FastForward size={16} className="player-icon" />
         </button>
         <button
           className="player-button"
-          aria-label={playing ? "Pause" : "Play"}
-          onClick={handleTogglePlay}
+          aria-label="Reset"
+          onClick={handleToggleSpeed}
         >
           <SkipForward size={16} className="player-icon" />
         </button>
