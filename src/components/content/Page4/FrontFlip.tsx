@@ -16,17 +16,26 @@ type GLTFResult = GLTF & {
 }
 
 interface FrontFlipProps {
-  isPlaying?: boolean;
-  isSlowMotion?: boolean;
+  isPlaying?: boolean
+  isSlowMotion?: boolean
+  offset?: number
+  onOffsetChange?: (currentOffset: number) => void
 }
 
-export function FrontFlip({ isPlaying = true, isSlowMotion = false, ...props }: FrontFlipProps) {
+export function FrontFlip({
+  isPlaying = true,
+  isSlowMotion = false,
+  offset = 0,
+  onOffsetChange,
+  ...props
+}: FrontFlipProps) {
   const group = useRef<THREE.Group>(null)
-  const { nodes, materials, animations } = useGLTF('/front-flip.glb') as GLTFResult
+  const { nodes, materials, animations } = useGLTF(
+    '/front-flip.glb'
+  ) as GLTFResult
   const { actions } = useAnimations(animations, group)
   const actionRef = useRef<THREE.AnimationAction | null>(null)
 
-  // Initial setup - only runs once
   useEffect(() => {
     const flipAction = actions['Armature|mixamo.com|Layer0']
 
@@ -35,14 +44,12 @@ export function FrontFlip({ isPlaying = true, isSlowMotion = false, ...props }: 
       flipAction.setLoop(THREE.LoopRepeat, Infinity)
       flipAction.play()
 
-      // Cleanup
       return () => {
         flipAction.stop()
       }
     }
   }, [actions])
 
-  // Handle play/pause
   useEffect(() => {
     const action = actionRef.current
     if (action) {
@@ -50,13 +57,39 @@ export function FrontFlip({ isPlaying = true, isSlowMotion = false, ...props }: 
     }
   }, [isPlaying])
 
-  // Handle speed changes
   useEffect(() => {
     const action = actionRef.current
     if (action) {
       action.setEffectiveTimeScale(isSlowMotion ? 0.2 : 1)
     }
   }, [isSlowMotion])
+
+  useEffect(() => {
+    const action = actionRef.current
+    if (action && action.getClip()) {
+      const clipDuration = action.getClip().duration
+      action.time = offset * clipDuration
+      action.paused = !isPlaying
+      action.play()
+    }
+  }, [offset])
+
+  // New useEffect to update the parent with the current offset
+  useEffect(() => {
+    const action = actionRef.current
+    if (!action || !onOffsetChange) return
+
+    const updateOffset = () => {
+      const clipDuration = action.getClip().duration
+      const currentOffset = action.time / clipDuration
+      onOffsetChange(currentOffset)
+    }
+
+    // Update offset on each frame
+    const interval = setInterval(updateOffset, 50) // adjust the interval as needed
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <group ref={group} {...props} dispose={null}>
