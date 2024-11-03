@@ -60,7 +60,7 @@ export function FrontFlip({
   useEffect(() => {
     const action = actionRef.current
     if (action) {
-      action.setEffectiveTimeScale(isSlowMotion ? 0.2 : 1)
+      action.setEffectiveTimeScale(isSlowMotion ? 0.012 : 1)
     }
   }, [isSlowMotion])
 
