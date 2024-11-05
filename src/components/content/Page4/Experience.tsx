@@ -37,14 +37,14 @@ const CameraController = () => {
   }, []);
 
   useFrame(({ camera }) => {
-    const angleX = mousePosition.x * Math.PI * 0.2;
-    const angleY = mousePosition.y * Math.PI * 0.1;
+    const angleX = mousePosition.x * Math.PI * 0.04;
+    const angleY = mousePosition.y * Math.PI * 0.01;
 
     camera.position.x = radius * Math.sin(angleX) * Math.cos(angleY);
     camera.position.z = radius * Math.cos(angleX) * Math.cos(angleY);
     camera.position.y = radius * Math.sin(angleY);
 
-    camera.lookAt(new Vector3(0, 0, 0));
+    camera.lookAt(new Vector3(0, 2, -2));
   });
 
   return null;
@@ -89,7 +89,7 @@ const Experience = ({
 
   return (
     <div style={{ width: '100%', height: '100%', backgroundColor: '#c8b1e4' }}>
-      <Canvas camera={{ position: [0, 2.1, 8.5] }} shadows>
+      <Canvas camera={{ position: [0, 13.1, 0] }} shadows>
         <CameraController />
         <Suspense fallback={null}>
           <FrontFlip
