@@ -1,7 +1,7 @@
-import { Play, Pause, FastForward, SkipForward } from "lucide-react";
-import Experience from "./Experience";
-import "./Page4.css";
-import { useRef, useState, } from "react";
+import { Play, Pause, FastForward, Snail } from 'lucide-react';
+import Experience from './Experience';
+import './Page4.css';
+import { useRef, useState } from 'react';
 
 type Controls = {
   togglePlay: () => void;
@@ -67,7 +67,7 @@ export function Page4() {
           aria-label="Reset"
           onClick={handleToggleSpeed}
         >
-          <SkipForward size={16} className="player-icon" />
+          <Snail size={16} className="player-icon" />
         </button>
       </div>
     </div>
