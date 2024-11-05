@@ -20,6 +20,8 @@
     "@react-three/postprocessing": "^2.16.2",
     "@react-three/rapier": "^1.4.0",
     "@types/three": "^0.155.0",
+    "babel-plugin-glsl": "^1.0.0",
+    "babel-plugin-macros": "3.1.0",
     "gsap": "^3.12.2",
     "leva": "^0.9.35",
     "lucide-react": "^0.453.0",

@@ -1,7 +1,9 @@
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { FrontFlip } from './FrontFlip';
 import { Vector3 } from 'three';
+import { Plane } from './Plane';
+import { Box } from '@react-three/drei';
 
 export type AnimationType = 'frontFlip' | 'backFlip' | 'cartwheel' | 'dance';
 
@@ -92,6 +94,7 @@ const Experience = ({
       <Canvas camera={{ position: [0, 13.1, 0] }} shadows>
         <CameraController />
         <Suspense fallback={null}>
+          <Plane position={[0, 1, 1]} />
           <FrontFlip
             isPlaying={isPlaying}
             isSlowMotion={isSlowMotion}
