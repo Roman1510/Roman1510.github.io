@@ -1,8 +1,7 @@
-import { Canvas } from '@react-three/fiber';
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { OrbitControls } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { FrontFlip } from './FrontFlip';
+import { Vector3 } from 'three';
 
 export type AnimationType = 'frontFlip' | 'backFlip' | 'cartwheel' | 'dance';
 
@@ -21,6 +20,36 @@ export interface ExperienceProps {
   initialAnimation?: AnimationType;
 }
 
+const CameraController = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const radius = 10;
+
+  const handleMouseMove = (event: MouseEvent) => {
+    setMousePosition({
+      x: (event.clientX / window.innerWidth) * 2 - 1,
+      y: (event.clientY / window.innerHeight) * 2 - 1,
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useFrame(({ camera }) => {
+    const angleX = mousePosition.x * Math.PI * 0.2;
+    const angleY = mousePosition.y * Math.PI * 0.1;
+
+    camera.position.x = radius * Math.sin(angleX) * Math.cos(angleY);
+    camera.position.z = radius * Math.cos(angleX) * Math.cos(angleY);
+    camera.position.y = radius * Math.sin(angleY);
+
+    camera.lookAt(new Vector3(0, 0, 0));
+  });
+
+  return null;
+};
+
 const Experience = ({
   onControlsMount,
   initialAnimation = 'frontFlip',
@@ -28,9 +57,9 @@ const Experience = ({
   const offsetRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isSlowMotion, setIsSlowMotion] = useState(false);
+
   const [currentAnimation, setCurrentAnimation] =
     useState<AnimationType>(initialAnimation);
-  const orbitControlsRef = useRef<OrbitControlsImpl>(null);
 
   const controls = {
     togglePlay: () => setIsPlaying((prev) => !prev),
@@ -61,12 +90,8 @@ const Experience = ({
   return (
     <div style={{ width: '100%', height: '100%', backgroundColor: '#c8b1e4' }}>
       <Canvas camera={{ position: [0, 2.1, 8.5] }} shadows>
+        <CameraController />
         <Suspense fallback={null}>
-          <OrbitControls
-            ref={orbitControlsRef}
-            enableZoom={false}
-            enablePan={false}
-          />
           <FrontFlip
             isPlaying={isPlaying}
             isSlowMotion={isSlowMotion}
