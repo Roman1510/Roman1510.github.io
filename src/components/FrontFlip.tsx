@@ -20,6 +20,7 @@ type GLTFResult = GLTF & {
 interface FrontFlipProps {
   isPlaying?: boolean;
   isSlowMotion?: boolean;
+  onReady?: () => void;
   position?: [number, number, number];
   rotation?: [number, number, number];
   contacts: React.MutableRefObject<FootContacts>;
@@ -123,6 +124,7 @@ const random01 = (seed: number) => {
 export function FrontFlip({
   isPlaying = true,
   isSlowMotion = false,
+  onReady,
   position = [-0.6, 0, -3.3],
   rotation = [
     THREE.MathUtils.degToRad(-11),
@@ -291,6 +293,7 @@ export function FrontFlip({
     });
 
     particleSystems.current = systems;
+    onReady?.();
 
     return () => {
       systems.forEach(({ source, points }) => {
@@ -301,7 +304,7 @@ export function FrontFlip({
       });
       particleSystems.current = [];
     };
-  }, [nodes]);
+  }, [nodes, onReady]);
 
   useEffect(() => {
     const characterGroup = group.current;

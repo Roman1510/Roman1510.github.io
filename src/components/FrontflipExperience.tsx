@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react';
 // import { Leva } from 'leva';
 import FrontflipScene from './FrontflipScene';
 import './FrontflipExperience.css';
@@ -20,10 +20,22 @@ const getTutorialVisibility = () => {
 
 export function FrontflipExperience() {
   const [isSlowMotion, setIsSlowMotion] = useState(false);
+  const [isSceneReady, setIsSceneReady] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false });
   const [showTutorial, setShowTutorial] = useState(getTutorialVisibility);
   const [clickWaves, setClickWaves] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const nextClickWaveId = useRef(0);
+
+  const handleSceneReady = useCallback(() => {
+    setIsSceneReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isSceneReady) return undefined;
+    const timeout = window.setTimeout(() => setShowLoader(false), 700);
+    return () => window.clearTimeout(timeout);
+  }, [isSceneReady]);
 
   useEffect(() => {
     const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
@@ -84,7 +96,7 @@ export function FrontflipExperience() {
           onPointerCancel={() => setIsSlowMotion(false)}
           onLostPointerCapture={() => setIsSlowMotion(false)}
         >
-          <FrontflipScene isSlowMotion={isSlowMotion} />
+          <FrontflipScene isSlowMotion={isSlowMotion} onReady={handleSceneReady} />
         </div>
         {showTutorial && (
           <div className="interaction-tutorial">
@@ -196,6 +208,30 @@ export function FrontflipExperience() {
           className="custom-cursor"
           style={{ left: cursor.x, top: cursor.y }}
         />
+      )}
+      {showLoader && (
+        <div
+          aria-live="polite"
+          className={`scene-loader${isSceneReady ? ' scene-loader-ready' : ''}`}
+          role="status"
+        >
+          <div className="loader-panel">
+            <div className="loader-orb" aria-hidden="true">
+              <span className="loader-orb-core" />
+              <span className="loader-orbit loader-orbit-one" />
+              <span className="loader-orbit loader-orbit-two" />
+            </div>
+            <span className="loader-eyebrow">VINNIE / INTERACTIVE</span>
+            <p className="loader-title">{isSceneReady ? 'Ready to move.' : 'Building the scene.'}</p>
+            <p className="loader-caption">
+              {isSceneReady ? 'Your frontflip is ready' : 'Preparing particles and motion'}
+            </p>
+            <div className="loader-track" aria-hidden="true"><span /></div>
+            <span className="loader-footnote">
+              {isSceneReady ? 'EXPERIENCE LOADED' : 'PLEASE WAIT'}
+            </span>
+          </div>
+        </div>
       )}
     </div>
   );

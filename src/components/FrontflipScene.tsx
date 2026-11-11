@@ -138,7 +138,13 @@ const CameraController = () => {
   return null;
 };
 
-const FrontflipScene = ({ isSlowMotion }: { isSlowMotion: boolean }) => {
+const FrontflipScene = ({
+  isSlowMotion,
+  onReady,
+}: {
+  isSlowMotion: boolean;
+  onReady: () => void;
+}) => {
   const contacts = useRef<FootContacts>({
     left: new Vector4(-0.6, -3.3, 0, 0),
     right: new Vector4(-0.6, -3.3, 0, 0),
@@ -166,6 +172,7 @@ const FrontflipScene = ({ isSlowMotion }: { isSlowMotion: boolean }) => {
           <FrontFlip
             isPlaying
             isSlowMotion={isSlowMotion}
+            onReady={onReady}
             contacts={contacts}
             position={[
               character.positionX,
