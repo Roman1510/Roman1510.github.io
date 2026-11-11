@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
-import { Leva } from 'leva';
+// import { Leva } from 'leva';
 import FrontflipScene from './FrontflipScene';
 import './FrontflipExperience.css';
 
@@ -180,7 +180,7 @@ export function FrontflipExperience() {
         </nav>
         <span className="profile-index">Both links open in a new tab</span>
       </section>
-      <Leva collapsed />
+      {/* <Leva collapsed /> */}
       {clickWaves.map((wave) => (
         <div
           key={wave.id}
