@@ -41,8 +41,22 @@ interface ParticleSystem {
   hasEffectOrigin: boolean;
 }
 
+interface ArmTrail {
+  bone: THREE.Bone;
+  points: THREE.Points<THREE.BufferGeometry, THREE.ShaderMaterial>;
+  positions: Float32Array;
+  timestamps: Float32Array;
+  count: number;
+  nextSampleAt: number;
+  position: THREE.Vector3;
+}
+
 const MAX_PARTICLES_PER_MESH = 1500;
+const ARM_TRAIL_CAPACITY = 36;
+const ARM_TRAIL_SAMPLE_INTERVAL = 0.022;
+const ARM_TRAIL_LIFETIME = 0.58;
 const PARTICLE_COLORS = [0xffe9a6, 0xffc85c];
+const ARM_TRAIL_COLORS = [0xb895ff, 0xffc875];
 const DISSOLVE_START = 0.84;
 const CLOUD_START = 0.91;
 const ASSEMBLY_END = 0.16;
@@ -72,6 +86,30 @@ const particleFragmentShader = `
   }
 `;
 
+const armTrailVertexShader = `
+  attribute float aAlpha;
+  uniform float uSize;
+  varying float vAlpha;
+
+  void main() {
+    vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * viewPosition;
+    gl_PointSize = uSize * (0.55 + aAlpha * 0.8);
+    vAlpha = aAlpha;
+  }
+`;
+
+const armTrailFragmentShader = `
+  uniform vec3 uColor;
+  varying float vAlpha;
+
+  void main() {
+    float distanceFromCenter = length(gl_PointCoord - vec2(0.5));
+    float glow = 1.0 - smoothstep(0.08, 0.5, distanceFromCenter);
+    gl_FragColor = vec4(uColor, vAlpha * glow * 0.82);
+  }
+`;
+
 type ParticlePhase = 'character' | 'dissolving' | 'cloud' | 'assembling';
 
 const random01 = (seed: number) => {
@@ -95,6 +133,11 @@ export function FrontFlip({
   const jointsRef = useRef<THREE.SkinnedMesh>(null);
   const surfaceRef = useRef<THREE.SkinnedMesh>(null);
   const particleSystems = useRef<ParticleSystem[]>([]);
+  const armBones = useRef<{ left: THREE.Bone | null; right: THREE.Bone | null }>({
+    left: null,
+    right: null,
+  });
+  const armTrails = useRef<ArmTrail[]>([]);
   const footBones = useRef<{ left: THREE.Bone | null; right: THREE.Bone | null }>({
     left: null,
     right: null,
@@ -116,6 +159,10 @@ export function FrontFlip({
         footBones.current.left = object as THREE.Bone;
       } else if (object.name.endsWith('RightToe_End')) {
         footBones.current.right = object as THREE.Bone;
+      } else if (object.name.endsWith('LeftHand')) {
+        armBones.current.left = object as THREE.Bone;
+      } else if (object.name.endsWith('RightHand')) {
+        armBones.current.right = object as THREE.Bone;
       }
     });
 
@@ -251,6 +298,64 @@ export function FrontFlip({
     };
   }, [nodes]);
 
+  useEffect(() => {
+    const characterGroup = group.current;
+    if (!characterGroup) return;
+
+    const trails: ArmTrail[] = [];
+    [armBones.current.left, armBones.current.right].forEach((bone, index) => {
+      if (!bone) return;
+
+      const positions = new Float32Array(ARM_TRAIL_CAPACITY * 3);
+      const alphas = new Float32Array(ARM_TRAIL_CAPACITY);
+      const timestamps = new Float32Array(ARM_TRAIL_CAPACITY);
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute(
+        'position',
+        new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage)
+      );
+      geometry.setAttribute(
+        'aAlpha',
+        new THREE.BufferAttribute(alphas, 1).setUsage(THREE.DynamicDrawUsage)
+      );
+      const material = new THREE.ShaderMaterial({
+        uniforms: {
+          uColor: { value: new THREE.Color(ARM_TRAIL_COLORS[index]) },
+          uSize: { value: 13 },
+        },
+        vertexShader: armTrailVertexShader,
+        fragmentShader: armTrailFragmentShader,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        toneMapped: false,
+      });
+      const points = new THREE.Points(geometry, material);
+      points.frustumCulled = false;
+      characterGroup.add(points);
+      trails.push({
+        bone,
+        points,
+        positions,
+        timestamps,
+        count: 0,
+        nextSampleAt: 0,
+        position: new THREE.Vector3(),
+      });
+    });
+
+    armTrails.current = trails;
+
+    return () => {
+      trails.forEach(({ points }) => {
+        characterGroup.remove(points);
+        points.geometry.dispose();
+        points.material.dispose();
+      });
+      armTrails.current = [];
+    };
+  }, [nodes]);
+
   useFrame(({ clock }, delta) => {
     const action = actionRef.current;
     const duration = action?.getClip().duration ?? 0;
@@ -382,6 +487,42 @@ export function FrontFlip({
     });
 
     group.current?.updateMatrixWorld(true);
+    const trailTime = clock.elapsedTime;
+    const characterGroup = group.current;
+    if (characterGroup) {
+      armTrails.current.forEach((trail) => {
+        if (
+          particlePhase.current === 'character' &&
+          trailTime >= trail.nextSampleAt
+        ) {
+          trail.bone.getWorldPosition(trail.position);
+          characterGroup.worldToLocal(trail.position);
+
+          if (trail.count === ARM_TRAIL_CAPACITY) {
+            trail.positions.copyWithin(0, 3);
+            trail.timestamps.copyWithin(0, 1);
+            trail.count -= 1;
+          }
+
+          const index = trail.count;
+          trail.positions[index * 3] = trail.position.x;
+          trail.positions[index * 3 + 1] = trail.position.y;
+          trail.positions[index * 3 + 2] = trail.position.z;
+          trail.timestamps[index] = trailTime;
+          trail.count += 1;
+          trail.nextSampleAt = trailTime + ARM_TRAIL_SAMPLE_INTERVAL;
+        }
+
+        const alphas = trail.points.geometry.getAttribute('aAlpha') as THREE.BufferAttribute;
+        for (let index = 0; index < trail.count; index += 1) {
+          const age = trailTime - trail.timestamps[index];
+          alphas.setX(index, THREE.MathUtils.clamp(1 - age / ARM_TRAIL_LIFETIME, 0, 1));
+        }
+        (trail.points.geometry.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
+        alphas.needsUpdate = true;
+      });
+    }
+
     const floorY = 0.45;
     const contactRange = 0.8;
     const leftFoot = footBones.current.left;
