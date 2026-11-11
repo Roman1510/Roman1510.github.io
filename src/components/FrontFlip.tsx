@@ -30,11 +30,28 @@ interface ParticleSystem {
   points: THREE.Points;
   vertexIndices: Uint32Array;
   positions: Float32Array;
+  effectOrigins: Float32Array;
+  cloudPositions: Float32Array;
+  scatterDirections: Float32Array;
+  scatterDistances: Float32Array;
   vertex: THREE.Vector3;
+  hasEffectOrigin: boolean;
 }
 
 const MAX_PARTICLES_PER_MESH = 2500;
-const PARTICLE_COLORS = [0x9fffe0, 0xd7b5ff];
+const PARTICLE_COLORS = [0xffe9a6, 0xffc85c];
+const DISSOLVE_START = 0.84;
+const CLOUD_START = 0.91;
+const ASSEMBLY_END = 0.16;
+const CLOUD_RADIUS_MIN = 12;
+const CLOUD_RADIUS_RANGE = 28;
+
+type ParticlePhase = 'character' | 'dissolving' | 'cloud' | 'assembling';
+
+const random01 = (seed: number) => {
+  const value = Math.sin(seed * 127.1) * 43758.5453;
+  return value - Math.floor(value);
+};
 
 export function FrontFlip({
   isPlaying = true,
@@ -59,6 +76,8 @@ export function FrontFlip({
   const previousFootContact = useRef({ left: 0, right: 0 });
   const footPulse = useRef({ left: 0, right: 0 });
   const previousAnimationTime = useRef(0);
+  const particlePhase = useRef<ParticlePhase>('character');
+  const animationSpeed = useRef(0.8);
   const { nodes, materials, animations } = useGLTF(
     '/front-flip.glb'
   ) as GLTFResult;
@@ -97,9 +116,12 @@ export function FrontFlip({
   useEffect(() => {
     const action = actionRef.current;
     if (action) {
-      action.setEffectiveTimeScale(isSlowMotion ? 0.012 : 0.8);
+      const speed =
+        isSlowMotion && particlePhase.current === 'character' ? 0.012 : 0.8;
+      action.setEffectiveTimeScale(speed);
+      animationSpeed.current = speed;
     }
-  }, [isSlowMotion]);
+  }, [isSlowMotion, actions]);
 
   useEffect(() => {
     const systems: ParticleSystem[] = [];
@@ -115,9 +137,22 @@ export function FrontFlip({
       const stride = Math.max(1, Math.ceil(positionAttribute.count / MAX_PARTICLES_PER_MESH));
       const vertexIndices = new Uint32Array(Math.ceil(positionAttribute.count / stride));
       const positions = new Float32Array(vertexIndices.length * 3);
+      const effectOrigins = new Float32Array(vertexIndices.length * 3);
+      const cloudPositions = new Float32Array(vertexIndices.length * 3);
+      const scatterDirections = new Float32Array(vertexIndices.length * 3);
+      const scatterDistances = new Float32Array(vertexIndices.length);
 
       for (let particle = 0; particle < vertexIndices.length; particle += 1) {
         vertexIndices[particle] = particle * stride;
+
+        const vertical = random01(particle + color) * 2 - 1;
+        const angle = random01(particle + color + 1) * Math.PI * 2;
+        const horizontal = Math.sqrt(1 - vertical * vertical);
+        scatterDirections[particle * 3] = horizontal * Math.cos(angle);
+        scatterDirections[particle * 3 + 1] = vertical;
+        scatterDirections[particle * 3 + 2] = horizontal * Math.sin(angle);
+        scatterDistances[particle] =
+          CLOUD_RADIUS_MIN + random01(particle + color + 2) * CLOUD_RADIUS_RANGE;
       }
 
       const geometry = new THREE.BufferGeometry();
@@ -127,11 +162,12 @@ export function FrontFlip({
       );
       const material = new THREE.PointsMaterial({
         color,
-        size: 3,
+        size: 3.5,
         sizeAttenuation: false,
         transparent: true,
         opacity: 0.9,
         depthWrite: false,
+        blending: THREE.AdditiveBlending,
       });
       const points = new THREE.Points(geometry, material);
       points.position.copy(mesh.position);
@@ -146,7 +182,12 @@ export function FrontFlip({
         points,
         vertexIndices,
         positions,
+        effectOrigins,
+        cloudPositions,
+        scatterDirections,
+        scatterDistances,
         vertex: new THREE.Vector3(),
+        hasEffectOrigin: false,
       });
     });
 
@@ -164,7 +205,61 @@ export function FrontFlip({
   }, [nodes]);
 
   useFrame((_, delta) => {
-    particleSystems.current.forEach(({ source, points, vertexIndices, positions, vertex }) => {
+    const action = actionRef.current;
+    const duration = action?.getClip().duration ?? 0;
+    const animationTime = duration > 0 ? (action?.time ?? 0) % duration : 0;
+    const animationProgress = duration > 0 ? animationTime / duration : 0;
+    const wrapped = duration > 0 &&
+      previousAnimationTime.current > duration * CLOUD_START &&
+      animationTime < duration * ASSEMBLY_END;
+
+    if (particlePhase.current === 'character' && animationProgress >= DISSOLVE_START) {
+      particlePhase.current = 'dissolving';
+    } else if (
+      particlePhase.current === 'dissolving' &&
+      animationProgress >= CLOUD_START
+    ) {
+      particlePhase.current = 'cloud';
+    } else if (particlePhase.current === 'cloud' && wrapped) {
+      particlePhase.current = 'assembling';
+    } else if (
+      particlePhase.current === 'assembling' &&
+      animationProgress >= ASSEMBLY_END
+    ) {
+      particlePhase.current = 'character';
+    }
+
+    const speed =
+      isSlowMotion && particlePhase.current === 'character' ? 0.012 : 0.8;
+    if (action && animationSpeed.current !== speed) {
+      action.setEffectiveTimeScale(speed);
+      animationSpeed.current = speed;
+    }
+
+    const dissolveProgress = THREE.MathUtils.clamp(
+      (animationProgress - DISSOLVE_START) / (CLOUD_START - DISSOLVE_START),
+      0,
+      1
+    );
+    const assemblyProgress = THREE.MathUtils.clamp(
+      animationProgress / ASSEMBLY_END,
+      0,
+      1
+    );
+    const ease = (value: number) => value * value * (3 - 2 * value);
+
+    particleSystems.current.forEach((system) => {
+      const {
+        source,
+        points,
+        vertexIndices,
+        positions,
+        effectOrigins,
+        cloudPositions,
+        scatterDirections,
+        scatterDistances,
+        vertex,
+      } = system;
       const positionAttribute = source.geometry.getAttribute('position');
       source.skeleton.update();
 
@@ -176,11 +271,55 @@ export function FrontFlip({
         positions[particle * 3 + 2] = vertex.z;
       }
 
+      if (particlePhase.current === 'character') {
+        system.hasEffectOrigin = false;
+        (points.material as THREE.PointsMaterial).opacity = 0.9;
+        (points.material as THREE.PointsMaterial).size = 3.5;
+      } else if (particlePhase.current === 'dissolving') {
+        if (!system.hasEffectOrigin) {
+          effectOrigins.set(positions);
+          system.hasEffectOrigin = true;
+        }
+
+        const spread = ease(dissolveProgress);
+        for (let particle = 0; particle < vertexIndices.length; particle += 1) {
+          const index = particle * 3;
+          const scatterDistance = scatterDistances[particle] * spread;
+          for (let axis = 0; axis < 3; axis += 1) {
+            positions[index + axis] =
+              effectOrigins[index + axis] +
+              scatterDirections[index + axis] * scatterDistance;
+          }
+        }
+        cloudPositions.set(positions);
+        (points.material as THREE.PointsMaterial).opacity = 0.9 - spread * 0.28;
+        (points.material as THREE.PointsMaterial).size = 3 + spread * 1.2;
+      } else if (particlePhase.current === 'cloud') {
+        positions.set(cloudPositions);
+        (points.material as THREE.PointsMaterial).opacity = 0.62;
+        (points.material as THREE.PointsMaterial).size = 4.2;
+      } else {
+        const reassembly = ease(assemblyProgress);
+        for (let particle = 0; particle < vertexIndices.length; particle += 1) {
+          const index = particle * 3;
+          for (let axis = 0; axis < 3; axis += 1) {
+            positions[index + axis] = THREE.MathUtils.lerp(
+              cloudPositions[index + axis],
+              positions[index + axis],
+              reassembly
+            );
+          }
+        }
+
+        (points.material as THREE.PointsMaterial).opacity = 0.62 + reassembly * 0.28;
+        (points.material as THREE.PointsMaterial).size = 4.2 - reassembly * 1.2;
+      }
+
       (points.geometry.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
     });
 
     group.current?.updateMatrixWorld(true);
-    const floorY = 0.25;
+    const floorY = 0.45;
     const contactRange = 0.8;
     const leftFoot = footBones.current.left;
     const rightFoot = footBones.current.right;
@@ -224,11 +363,8 @@ export function FrontFlip({
         footPulse.current.right
       );
 
-      const action = actionRef.current;
       if (action) {
-        const duration = action.getClip().duration;
         const landingStart = duration * 0.88;
-        const animationTime = action.time % duration;
 
         if (
           animationTime >= landingStart &&
@@ -239,10 +375,9 @@ export function FrontFlip({
           contacts.current.left.w = 1;
           contacts.current.right.w = 1;
         }
-
-        previousAnimationTime.current = animationTime;
       }
     }
+    previousAnimationTime.current = animationTime;
   });
 
   return (

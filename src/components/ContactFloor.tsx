@@ -73,7 +73,7 @@ export const ContactFloor = ({ contacts }: ContactFloorProps) => {
   });
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.25, 0]}>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.45, 0]}>
       <planeGeometry args={[160, 160]} />
       <primitive object={material} attach="material" />
     </mesh>
