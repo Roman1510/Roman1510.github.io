@@ -28,23 +28,49 @@ interface FrontFlipProps {
 interface ParticleSystem {
   source: THREE.SkinnedMesh;
   points: THREE.Points;
+  material: THREE.ShaderMaterial;
   vertexIndices: Uint32Array;
   positions: Float32Array;
   effectOrigins: Float32Array;
   cloudPositions: Float32Array;
   scatterDirections: Float32Array;
   scatterDistances: Float32Array;
+  cloudDrift: Float32Array;
+  cloudPhases: Float32Array;
   vertex: THREE.Vector3;
   hasEffectOrigin: boolean;
 }
 
-const MAX_PARTICLES_PER_MESH = 2500;
+const MAX_PARTICLES_PER_MESH = 1500;
 const PARTICLE_COLORS = [0xffe9a6, 0xffc85c];
 const DISSOLVE_START = 0.84;
 const CLOUD_START = 0.91;
 const ASSEMBLY_END = 0.16;
-const CLOUD_RADIUS_MIN = 12;
-const CLOUD_RADIUS_RANGE = 28;
+const CLOUD_RADIUS_MIN = 72;
+const CLOUD_RADIUS_RANGE = 144;
+const CLOUD_DRIFT_MIN = 8;
+const CLOUD_DRIFT_RANGE = 20;
+
+const particleVertexShader = `
+  uniform float uSize;
+
+  void main() {
+    vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * viewPosition;
+    gl_PointSize = uSize;
+  }
+`;
+
+const particleFragmentShader = `
+  uniform vec3 uColor;
+  uniform float uOpacity;
+
+  void main() {
+    float distanceFromCenter = length(gl_PointCoord - vec2(0.5));
+    float alpha = 1.0 - smoothstep(0.38, 0.5, distanceFromCenter);
+    gl_FragColor = vec4(uColor, uOpacity * alpha);
+  }
+`;
 
 type ParticlePhase = 'character' | 'dissolving' | 'cloud' | 'assembling';
 
@@ -141,6 +167,8 @@ export function FrontFlip({
       const cloudPositions = new Float32Array(vertexIndices.length * 3);
       const scatterDirections = new Float32Array(vertexIndices.length * 3);
       const scatterDistances = new Float32Array(vertexIndices.length);
+      const cloudDrift = new Float32Array(vertexIndices.length * 3);
+      const cloudPhases = new Float32Array(vertexIndices.length);
 
       for (let particle = 0; particle < vertexIndices.length; particle += 1) {
         vertexIndices[particle] = particle * stride;
@@ -153,6 +181,18 @@ export function FrontFlip({
         scatterDirections[particle * 3 + 2] = horizontal * Math.sin(angle);
         scatterDistances[particle] =
           CLOUD_RADIUS_MIN + random01(particle + color + 2) * CLOUD_RADIUS_RANGE;
+
+        const driftVertical = random01(particle + color + 3) * 2 - 1;
+        const driftAngle = random01(particle + color + 4) * Math.PI * 2;
+        const driftHorizontal = Math.sqrt(1 - driftVertical * driftVertical);
+        const driftMagnitude =
+          CLOUD_DRIFT_MIN + random01(particle + color + 5) * CLOUD_DRIFT_RANGE;
+        cloudDrift[particle * 3] =
+          driftHorizontal * Math.cos(driftAngle) * driftMagnitude;
+        cloudDrift[particle * 3 + 1] = driftVertical * driftMagnitude;
+        cloudDrift[particle * 3 + 2] =
+          driftHorizontal * Math.sin(driftAngle) * driftMagnitude;
+        cloudPhases[particle] = random01(particle + color + 6) * Math.PI * 2;
       }
 
       const geometry = new THREE.BufferGeometry();
@@ -160,14 +200,18 @@ export function FrontFlip({
         'position',
         new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage)
       );
-      const material = new THREE.PointsMaterial({
-        color,
-        size: 3.5,
-        sizeAttenuation: false,
+      const material = new THREE.ShaderMaterial({
+        uniforms: {
+          uColor: { value: new THREE.Color(color) },
+          uOpacity: { value: 0.9 },
+          uSize: { value: 2.8 },
+        },
+        vertexShader: particleVertexShader,
+        fragmentShader: particleFragmentShader,
         transparent: true,
-        opacity: 0.9,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
+        toneMapped: false,
       });
       const points = new THREE.Points(geometry, material);
       points.position.copy(mesh.position);
@@ -180,12 +224,15 @@ export function FrontFlip({
       systems.push({
         source: mesh,
         points,
+        material,
         vertexIndices,
         positions,
         effectOrigins,
         cloudPositions,
         scatterDirections,
         scatterDistances,
+        cloudDrift,
+        cloudPhases,
         vertex: new THREE.Vector3(),
         hasEffectOrigin: false,
       });
@@ -204,7 +251,7 @@ export function FrontFlip({
     };
   }, [nodes]);
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     const action = actionRef.current;
     const duration = action?.getClip().duration ?? 0;
     const animationTime = duration > 0 ? (action?.time ?? 0) % duration : 0;
@@ -247,6 +294,7 @@ export function FrontFlip({
       1
     );
     const ease = (value: number) => value * value * (3 - 2 * value);
+    const cloudTime = clock.elapsedTime;
 
     particleSystems.current.forEach((system) => {
       const {
@@ -258,6 +306,9 @@ export function FrontFlip({
         cloudPositions,
         scatterDirections,
         scatterDistances,
+        cloudDrift,
+        cloudPhases,
+        material,
         vertex,
       } = system;
       const positionAttribute = source.geometry.getAttribute('position');
@@ -273,8 +324,8 @@ export function FrontFlip({
 
       if (particlePhase.current === 'character') {
         system.hasEffectOrigin = false;
-        (points.material as THREE.PointsMaterial).opacity = 0.9;
-        (points.material as THREE.PointsMaterial).size = 3.5;
+        material.uniforms.uOpacity.value = 0.9;
+        material.uniforms.uSize.value = 2.8;
       } else if (particlePhase.current === 'dissolving') {
         if (!system.hasEffectOrigin) {
           effectOrigins.set(positions);
@@ -292,27 +343,39 @@ export function FrontFlip({
           }
         }
         cloudPositions.set(positions);
-        (points.material as THREE.PointsMaterial).opacity = 0.9 - spread * 0.28;
-        (points.material as THREE.PointsMaterial).size = 3 + spread * 1.2;
+        material.uniforms.uOpacity.value = 0.9 - spread * 0.22;
+        material.uniforms.uSize.value = 2.8 + spread * 0.6;
       } else if (particlePhase.current === 'cloud') {
-        positions.set(cloudPositions);
-        (points.material as THREE.PointsMaterial).opacity = 0.62;
-        (points.material as THREE.PointsMaterial).size = 4.2;
+        for (let particle = 0; particle < vertexIndices.length; particle += 1) {
+          const index = particle * 3;
+          const drift =
+            Math.sin(cloudTime * 2.4 + cloudPhases[particle]) * 0.72 +
+            Math.sin(cloudTime * 1.35 + cloudPhases[particle] * 1.7) * 0.28;
+          for (let axis = 0; axis < 3; axis += 1) {
+            positions[index + axis] =
+              cloudPositions[index + axis] + cloudDrift[index + axis] * drift;
+          }
+        }
+        material.uniforms.uOpacity.value = 0.68;
+        material.uniforms.uSize.value = 3.4;
       } else {
         const reassembly = ease(assemblyProgress);
         for (let particle = 0; particle < vertexIndices.length; particle += 1) {
           const index = particle * 3;
+          const drift =
+            Math.sin(cloudTime * 2.4 + cloudPhases[particle]) * 0.72 +
+            Math.sin(cloudTime * 1.35 + cloudPhases[particle] * 1.7) * 0.28;
           for (let axis = 0; axis < 3; axis += 1) {
             positions[index + axis] = THREE.MathUtils.lerp(
-              cloudPositions[index + axis],
+              cloudPositions[index + axis] + cloudDrift[index + axis] * drift,
               positions[index + axis],
               reassembly
             );
           }
         }
 
-        (points.material as THREE.PointsMaterial).opacity = 0.62 + reassembly * 0.28;
-        (points.material as THREE.PointsMaterial).size = 4.2 - reassembly * 1.2;
+        material.uniforms.uOpacity.value = 0.68 + reassembly * 0.22;
+        material.uniforms.uSize.value = 3.4 - reassembly * 0.6;
       }
 
       (points.geometry.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
