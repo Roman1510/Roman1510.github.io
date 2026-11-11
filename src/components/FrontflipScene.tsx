@@ -10,7 +10,8 @@ const CameraController = () => {
   const radius = 5.8;
   const target = useMemo(() => new Vector3(0, 1, -2), []);
 
-  const handleMouseMove = (event: MouseEvent) => {
+  const handlePointerMove = (event: PointerEvent) => {
+    if (event.pointerType === 'touch' && event.buttons === 0) return;
     setMousePosition({
       x: (event.clientX / window.innerWidth) * 2 - 1,
       y: (event.clientY / window.innerHeight) * 2 - 1,
@@ -18,8 +19,8 @@ const CameraController = () => {
   };
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('pointermove', handlePointerMove);
+    return () => window.removeEventListener('pointermove', handlePointerMove);
   }, []);
 
   useFrame(({ camera }) => {

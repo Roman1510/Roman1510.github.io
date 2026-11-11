@@ -1,13 +1,49 @@
-import { useRef, useState, type PointerEvent } from 'react';
+import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { Leva } from 'leva';
 import FrontflipScene from './FrontflipScene';
 import './FrontflipExperience.css';
 
+const tutorialStorageKey = 'frontflip-interaction-guide-dismissed';
+const faviconColors = {
+  normal: ['#eadfff', '#bd91ff', '#8b45f6', '#5520b4', '#a86bff'],
+  slowMotion: ['#ffe2e2', '#ff8585', '#f04444', '#a9132b', '#ff3b4e'],
+};
+
+const getTutorialVisibility = () => {
+  try {
+    return window.localStorage.getItem(tutorialStorageKey) !== 'true';
+  } catch (error) {
+    console.error('Unable to read the interaction guide preference.', error);
+    return true;
+  }
+};
+
 export function FrontflipExperience() {
   const [isSlowMotion, setIsSlowMotion] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0, visible: false });
+  const [showTutorial, setShowTutorial] = useState(getTutorialVisibility);
   const [clickWaves, setClickWaves] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const nextClickWaveId = useRef(0);
+
+  useEffect(() => {
+    const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!favicon) return;
+
+    const [highlight, light, mid, dark, glow] = isSlowMotion
+      ? faviconColors.slowMotion
+      : faviconColors.normal;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><radialGradient id="sphere" cx="34%" cy="28%" r="70%"><stop offset="0" stop-color="${highlight}"/><stop offset=".28" stop-color="${light}"/><stop offset=".68" stop-color="${mid}"/><stop offset="1" stop-color="${dark}"/></radialGradient><radialGradient id="glow"><stop offset="0" stop-color="${glow}" stop-opacity=".5"/><stop offset="1" stop-color="${glow}" stop-opacity="0"/></radialGradient><filter id="blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5"/></filter></defs><circle cx="32" cy="32" r="30" fill="url(#glow)" filter="url(#blur)"/><circle cx="32" cy="32" r="19" fill="url(#sphere)"/><ellipse cx="25" cy="23" rx="6" ry="3.5" fill="#fff" opacity=".48" transform="rotate(-35 25 23)"/></svg>`;
+    favicon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  }, [isSlowMotion]);
+
+  const dismissTutorial = () => {
+    setShowTutorial(false);
+    try {
+      window.localStorage.setItem(tutorialStorageKey, 'true');
+    } catch (error) {
+      console.error('Unable to save the interaction guide preference.', error);
+    }
+  };
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
@@ -42,7 +78,7 @@ export function FrontflipExperience() {
       <section className="scene-page" aria-label="Interactive frontflip scene">
         <div
           className="frontflip-canvas"
-          style={{ touchAction: 'pan-x pan-y' }}
+          style={{ touchAction: 'pan-y' }}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
           onPointerCancel={() => setIsSlowMotion(false)}
@@ -50,6 +86,54 @@ export function FrontflipExperience() {
         >
           <FrontflipScene isSlowMotion={isSlowMotion} />
         </div>
+        {showTutorial && (
+          <div className="interaction-tutorial">
+            <svg
+              aria-hidden="true"
+              className="tutorial-connector"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <path d="M 24 19 C 38 25, 45 39, 64 61" />
+            </svg>
+            <div className="tutorial-card">
+              <div className="tutorial-card-topline">
+                <span className="tutorial-kicker"><span /> QUICK GUIDE</span>
+                <button
+                  type="button"
+                  className="tutorial-dismiss"
+                  aria-label="Dismiss interaction guide"
+                  onClick={dismissTutorial}
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <p className="tutorial-title">The scene is interactive.</p>
+              <div className="tutorial-instruction">
+                <span className="tutorial-number">01</span>
+                <span>
+                  <strong>Hold anywhere</strong>
+                  <small>Slow motion while you press</small>
+                </span>
+                <span className="tutorial-key" aria-hidden="true">HOLD</span>
+              </div>
+              <div className="tutorial-instruction">
+                <span className="tutorial-number">02</span>
+                <span>
+                  <strong>Move or drag sideways</strong>
+                  <small>Nudge the camera angle</small>
+                </span>
+                <span className="tutorial-key tutorial-key-move" aria-hidden="true">↔</span>
+              </div>
+              <span className="tutorial-footnote">TRY IT ON THE SCENE</span>
+            </div>
+            <div className="hold-target" aria-hidden="true">
+              <span className="hold-target-ring" />
+              <span className="hold-target-core" />
+              <span className="hold-target-label">HOLD TO SLOW</span>
+            </div>
+          </div>
+        )}
         <a className="scroll-cue" href="#profile-links">
           <span>Scroll to connect</span>
           <span aria-hidden="true">↓</span>

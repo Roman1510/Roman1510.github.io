@@ -1,6 +1,6 @@
-# 3D Frontflip Experience
+# Vinnie
 
-A React, Three.js, and React Three Fiber scene that renders a looping frontflip as animated particles. Press and hold anywhere in the scene to view the animation in slow motion.
+Hi! here's my github page
 
 ## Development
 
