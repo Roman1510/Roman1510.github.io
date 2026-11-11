@@ -10,9 +10,151 @@
   overflow: hidden;
 }
 
+.scene-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .frontflip-canvas {
   height: 100%;
   width: 100%;
+}
+
+.scroll-cue {
+  display: none;
+}
+
+.profile-section {
+  position: absolute;
+  z-index: 2;
+  left: clamp(24px, 5vw, 76px);
+  bottom: clamp(28px, 6vh, 68px);
+  width: min(340px, calc(100vw - 48px));
+  padding: 22px;
+  border: 1px solid rgba(202, 195, 255, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(20, 21, 43, 0.82), rgba(11, 13, 27, 0.72));
+  box-shadow: 0 18px 70px rgba(2, 4, 14, 0.3), inset 0 1px rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+}
+
+.profile-heading {
+  margin-bottom: 18px;
+}
+
+.profile-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa6c7;
+  font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.15em;
+}
+
+.profile-eyebrow > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a78bfa;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+}
+
+.profile-heading h1 {
+  margin: 12px 0 5px;
+  color: #f5f3ff;
+  font: 500 25px/1.1 system-ui, sans-serif;
+  letter-spacing: -0.045em;
+}
+
+.profile-heading p {
+  margin: 0;
+  color: #a5a3b8;
+  font: 400 12px/1.5 system-ui, sans-serif;
+}
+
+.profile-links {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-link {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  gap: 13px;
+  padding: 10px 12px;
+  border: 1px solid rgba(206, 199, 255, 0.11);
+  border-radius: 12px;
+  color: #f4f2ff;
+  background: rgba(255, 255, 255, 0.035);
+  cursor: none;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.profile-link:hover,
+.profile-link:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(183, 162, 255, 0.5);
+  background: rgba(151, 129, 233, 0.12);
+  outline: none;
+}
+
+.profile-icon {
+  display: grid;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(203, 192, 255, 0.16);
+  border-radius: 10px;
+  color: #d7ceff;
+  background: rgba(163, 140, 255, 0.1);
+}
+
+.linkedin-icon {
+  font: 700 17px/1 Arial, sans-serif;
+  letter-spacing: -0.06em;
+}
+
+.github-icon {
+  padding: 8px;
+}
+
+.profile-link-copy {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+}
+
+.profile-link-name {
+  font: 600 13px/1.2 system-ui, sans-serif;
+}
+
+.profile-link-detail {
+  color: #a5a3b8;
+  font: 400 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.profile-link-arrow {
+  align-self: flex-start;
+  color: #a78bfa;
+  font: 400 17px/1 system-ui, sans-serif;
+  transition: transform 180ms ease;
+}
+
+.profile-link:hover .profile-link-arrow,
+.profile-link:focus-visible .profile-link-arrow {
+  transform: translate(2px, -2px);
+}
+
+.profile-index {
+  display: block;
+  margin-top: 16px;
+  color: rgba(172, 168, 198, 0.62);
+  font: 400 10px/1.4 system-ui, sans-serif;
+  text-align: right;
 }
 
 .custom-cursor {
@@ -55,5 +197,164 @@
 @media (prefers-reduced-motion: reduce) {
   .click-wave {
     animation-duration: 200ms;
+  }
+
+  .profile-link,
+  .profile-link-arrow {
+    transition: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .frontflip-experience {
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-y: contain;
+  }
+
+  .scene-page {
+    height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .profile-section {
+    position: relative;
+    inset: auto;
+    display: flex;
+    width: 100%;
+    height: 100dvh;
+    min-height: 560px;
+    flex-direction: column;
+    justify-content: center;
+    padding: max(32px, env(safe-area-inset-top)) 24px max(32px, env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 0;
+    background:
+      radial-gradient(ellipse at 92% 10%, rgba(108, 80, 177, 0.2), transparent 42%),
+      linear-gradient(155deg, #0d1020 0%, #111329 55%, #090d18 100%);
+    box-shadow: none;
+    backdrop-filter: none;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .profile-heading {
+    margin-bottom: 30px;
+  }
+
+  .profile-heading h1 {
+    margin-top: 18px;
+    font-size: clamp(34px, 9vw, 46px);
+  }
+
+  .profile-heading p {
+    max-width: 260px;
+    margin-top: 9px;
+    font-size: 14px;
+  }
+
+  .profile-links {
+    gap: 12px;
+  }
+
+  .profile-link {
+    min-height: 76px;
+    gap: 16px;
+    padding: 14px;
+    border-radius: 15px;
+  }
+
+  .profile-icon {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .github-icon {
+    padding: 10px;
+  }
+
+  .profile-link-name {
+    font-size: 15px;
+  }
+
+  .profile-link-detail {
+    font-size: 11px;
+  }
+
+  .profile-link-arrow {
+    align-self: center;
+    font-size: 21px;
+  }
+
+  .profile-index {
+    margin-top: 24px;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    z-index: 1;
+    right: 24px;
+    bottom: max(24px, env(safe-area-inset-bottom));
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid rgba(202, 195, 255, 0.2);
+    border-radius: 999px;
+    color: #d5d0ed;
+    background: rgba(12, 14, 30, 0.58);
+    cursor: none;
+    font: 600 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+
+  .scroll-cue > span:last-child {
+    color: #b6a4ff;
+    font-size: 14px;
+  }
+
+}
+
+@media (max-width: 700px) and (max-height: 600px) {
+  .profile-section {
+    min-height: 100dvh;
+  }
+
+  .profile-heading {
+    margin-bottom: 18px;
+  }
+
+  .profile-heading h1 {
+    font-size: 32px;
+  }
+
+  .profile-link {
+    min-height: 64px;
+  }
+}
+
+@media (hover: none) {
+  .frontflip-experience {
+    cursor: auto;
+  }
+
+  .profile-link,
+  .scroll-cue {
+    cursor: pointer;
+  }
+}
+
+@media (hover: hover) {
+  .frontflip-experience {
+    cursor: none;
   }
 }
