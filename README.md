@@ -1,5 +1,12 @@
-# Hi there
+# 3D Frontflip Experience
 
-Here I present my matrix themed page `ThreeJS, React, Vite`
+A React, Three.js, and React Three Fiber scene that renders a looping frontflip as animated particles. Press and hold anywhere in the scene to view the animation in slow motion.
 
-You can scroll with whatever means, whether it's arrow keys or touchbar/mouse, it's always going to work :) (well, 99% cases hehe)
+## Development
+
+```sh
+npm install
+npm run dev
+```
+
+Create a production build with `npm run build`.

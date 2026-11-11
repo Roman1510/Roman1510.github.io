@@ -1,0 +1,15 @@
+.frontflip-experience {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(65, 52, 118, 0.42), transparent 58%),
+    radial-gradient(ellipse at 14% 82%, rgba(19, 86, 116, 0.2), transparent 44%),
+    linear-gradient(145deg, #090b18 0%, #111329 48%, #080d18 100%);
+  overflow: hidden;
+}
+
+.frontflip-canvas {
+  height: 100%;
+  width: 100%;
+}
