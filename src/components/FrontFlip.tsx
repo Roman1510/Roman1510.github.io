@@ -57,13 +57,16 @@ const ARM_TRAIL_SAMPLE_INTERVAL = 0.022;
 const ARM_TRAIL_LIFETIME = 0.58;
 const PARTICLE_COLORS = [0xffe9a6, 0xffc85c];
 const ARM_TRAIL_COLORS = [0xb895ff, 0xffc875];
-const DISSOLVE_START = 0.84;
-const CLOUD_START = 0.91;
-const ASSEMBLY_END = 0.16;
+const DISSOLVE_START = 0.78;
+const DISSOLVE_FADE_START = 0.28;
+const CLOUD_START = 0.94;
+const ASSEMBLY_END = 0.22;
 const CLOUD_RADIUS_MIN = 72;
 const CLOUD_RADIUS_RANGE = 144;
-const CLOUD_DRIFT_MIN = 8;
-const CLOUD_DRIFT_RANGE = 20;
+const CLOUD_DRIFT_MIN = 10;
+const CLOUD_DRIFT_RANGE = 26;
+const NORMAL_ANIMATION_SPEED = 0.76;
+const SLOW_MOTION_ANIMATION_SPEED = 0.0132;
 
 const particleVertexShader = `
   uniform float uSize;
@@ -146,7 +149,7 @@ export function FrontFlip({
   const footPulse = useRef({ left: 0, right: 0 });
   const previousAnimationTime = useRef(0);
   const particlePhase = useRef<ParticlePhase>('character');
-  const animationSpeed = useRef(0.8);
+  const animationSpeed = useRef(NORMAL_ANIMATION_SPEED);
   const { nodes, materials, animations } = useGLTF(
     '/front-flip.glb'
   ) as GLTFResult;
@@ -190,7 +193,9 @@ export function FrontFlip({
     const action = actionRef.current;
     if (action) {
       const speed =
-        isSlowMotion && particlePhase.current === 'character' ? 0.012 : 0.8;
+        isSlowMotion && particlePhase.current === 'character'
+          ? SLOW_MOTION_ANIMATION_SPEED
+          : NORMAL_ANIMATION_SPEED;
       action.setEffectiveTimeScale(speed);
       animationSpeed.current = speed;
     }
@@ -382,7 +387,9 @@ export function FrontFlip({
     }
 
     const speed =
-      isSlowMotion && particlePhase.current === 'character' ? 0.012 : 0.8;
+      isSlowMotion && particlePhase.current === 'character'
+        ? SLOW_MOTION_ANIMATION_SPEED
+        : NORMAL_ANIMATION_SPEED;
     if (action && animationSpeed.current !== speed) {
       action.setEffectiveTimeScale(speed);
       animationSpeed.current = speed;
@@ -438,6 +445,13 @@ export function FrontFlip({
         }
 
         const spread = ease(dissolveProgress);
+        const fadeProgress = ease(
+          THREE.MathUtils.clamp(
+            (dissolveProgress - DISSOLVE_FADE_START) / (1 - DISSOLVE_FADE_START),
+            0,
+            1
+          )
+        );
         for (let particle = 0; particle < vertexIndices.length; particle += 1) {
           const index = particle * 3;
           const scatterDistance = scatterDistances[particle] * spread;
@@ -448,28 +462,28 @@ export function FrontFlip({
           }
         }
         cloudPositions.set(positions);
-        material.uniforms.uOpacity.value = 0.9 - spread * 0.22;
+        material.uniforms.uOpacity.value = 0.9 * (1 - fadeProgress);
         material.uniforms.uSize.value = 2.8 + spread * 0.6;
       } else if (particlePhase.current === 'cloud') {
         for (let particle = 0; particle < vertexIndices.length; particle += 1) {
           const index = particle * 3;
           const drift =
-            Math.sin(cloudTime * 2.4 + cloudPhases[particle]) * 0.72 +
-            Math.sin(cloudTime * 1.35 + cloudPhases[particle] * 1.7) * 0.28;
+            Math.sin(cloudTime * 1.8 + cloudPhases[particle]) * 0.72 +
+            Math.sin(cloudTime * 0.95 + cloudPhases[particle] * 1.7) * 0.28;
           for (let axis = 0; axis < 3; axis += 1) {
             positions[index + axis] =
               cloudPositions[index + axis] + cloudDrift[index + axis] * drift;
           }
         }
-        material.uniforms.uOpacity.value = 0.68;
+        material.uniforms.uOpacity.value = 0;
         material.uniforms.uSize.value = 3.4;
       } else {
         const reassembly = ease(assemblyProgress);
         for (let particle = 0; particle < vertexIndices.length; particle += 1) {
           const index = particle * 3;
           const drift =
-            Math.sin(cloudTime * 2.4 + cloudPhases[particle]) * 0.72 +
-            Math.sin(cloudTime * 1.35 + cloudPhases[particle] * 1.7) * 0.28;
+            Math.sin(cloudTime * 1.8 + cloudPhases[particle]) * 0.72 +
+            Math.sin(cloudTime * 0.95 + cloudPhases[particle] * 1.7) * 0.28;
           for (let axis = 0; axis < 3; axis += 1) {
             positions[index + axis] = THREE.MathUtils.lerp(
               cloudPositions[index + axis] + cloudDrift[index + axis] * drift,
@@ -479,7 +493,7 @@ export function FrontFlip({
           }
         }
 
-        material.uniforms.uOpacity.value = 0.68 + reassembly * 0.22;
+        material.uniforms.uOpacity.value = 0.9 * reassembly;
         material.uniforms.uSize.value = 3.4 - reassembly * 0.6;
       }
 
