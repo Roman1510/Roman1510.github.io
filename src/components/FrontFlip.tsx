@@ -148,6 +148,7 @@ export function FrontFlip({
   const previousFootContact = useRef({ left: 0, right: 0 });
   const footPulse = useRef({ left: 0, right: 0 });
   const previousAnimationTime = useRef(0);
+  const particleElapsedTime = useRef(0);
   const particlePhase = useRef<ParticlePhase>('character');
   const animationSpeed = useRef(NORMAL_ANIMATION_SPEED);
   const { nodes, materials, animations } = useGLTF(
@@ -192,10 +193,9 @@ export function FrontFlip({
   useEffect(() => {
     const action = actionRef.current;
     if (action) {
-      const speed =
-        isSlowMotion && particlePhase.current === 'character'
-          ? SLOW_MOTION_ANIMATION_SPEED
-          : NORMAL_ANIMATION_SPEED;
+      const speed = isSlowMotion
+        ? SLOW_MOTION_ANIMATION_SPEED
+        : NORMAL_ANIMATION_SPEED;
       action.setEffectiveTimeScale(speed);
       animationSpeed.current = speed;
     }
@@ -386,14 +386,15 @@ export function FrontFlip({
       particlePhase.current = 'character';
     }
 
-    const speed =
-      isSlowMotion && particlePhase.current === 'character'
-        ? SLOW_MOTION_ANIMATION_SPEED
-        : NORMAL_ANIMATION_SPEED;
+    const speed = isSlowMotion
+      ? SLOW_MOTION_ANIMATION_SPEED
+      : NORMAL_ANIMATION_SPEED;
     if (action && animationSpeed.current !== speed) {
       action.setEffectiveTimeScale(speed);
       animationSpeed.current = speed;
     }
+    particleElapsedTime.current +=
+      delta * (isSlowMotion ? SLOW_MOTION_ANIMATION_SPEED / NORMAL_ANIMATION_SPEED : 1);
 
     const dissolveProgress = THREE.MathUtils.clamp(
       (animationProgress - DISSOLVE_START) / (CLOUD_START - DISSOLVE_START),
@@ -406,7 +407,7 @@ export function FrontFlip({
       1
     );
     const ease = (value: number) => value * value * (3 - 2 * value);
-    const cloudTime = clock.elapsedTime;
+    const cloudTime = particleElapsedTime.current;
 
     particleSystems.current.forEach((system) => {
       const {
